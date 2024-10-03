@@ -1,0 +1,44 @@
+; Simple Night Vision 2.3 - Stentorious
+
+; Check for requirements
+if eval (IsModLoaded "Enhanced Vision.esp" || IsModLoaded "Advanced Recon Tech.esm" || GetPluginVersion "JohnnyGuitarNVSE" < 360 || GetPluginVersion "ShowOffNVSE Plugin" < 165) || (GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 2) == 0 
+	return
+endif
+
+Goo1.AuxVarSetFlt "*SNV_FLAG" 0 0
+Goo1.AuxVarSetFlt "*SNV_FLAG" 1 1
+Goo1.AuxVarErase "*SNV_REF"
+Goo1.AuxVarErase "*SNV_CACHE"
+SetUIFloatAlt "HudMainMenu\_SNV+A" 0
+SetUIFloatAlt "HudMainMenu\_SNV+M" 0
+
+rimod NVDLC03GhostNightvisionISFX
+rimod NVDLC04RedNightvisionISFX
+
+; Remove Cyberware vision mode on load
+if IsModLoaded "Cyberware.esm" && GetINIFloat "General:bOverrideCyberware" "SimpleNightVision.ini" == 1
+
+	ref stR1 = EditorIDToFormID "CWxVisionModeLevel"
+	ref stR2 = EditorIDToFormID "CWxBionicEyesQuest"
+
+	float stF1 = GetGlobalVariable stR1
+	if stF1 > 0
+		if stF1 == 1
+			SetStage stR2 2
+		elseif stF1 == 2
+			SetStage stR2 4
+		elseif stF1 == 3
+			SetStage stR2 6
+		endif
+		SetGlobalVariable stR1 0
+		SetStage stR2 0
+		SetStage (EditorIDToFormID "CWxBionicEyesGrainQuest") 0
+	endif
+
+endif
+
+SetJohnnyOnDyingEventHandler 1 (CompileScript "SimpleNightVision/OnDeath.gek") 0
+SetEventHandlerAlt "OnActorUnequip" (CompileScript "SimpleNightVision/OnUnequip.gek") 1::Player
+SetOnAuxTimerStopHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStop.gek") "*SNV_TIMER0"
+SetOnAuxTimerStopHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStop1.gek") "*SNV_TIMER1"
+SetOnAuxTimerStartHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStartTher.gek") "*SNV_TIMER2"

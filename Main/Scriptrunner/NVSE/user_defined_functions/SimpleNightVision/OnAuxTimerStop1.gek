@@ -1,0 +1,31 @@
+string_var sTimerName
+ref rOwnerForm
+ref stR1
+ref stR2
+array_var stA1
+
+begin Function {sTimerName, rOwnerForm}
+	
+	stR1 = player.GetEqObj 10
+	stR2 = player.GetEqObj 11
+	if eval (IsFormValid stR1 && isPA stR1 == 0 && HasKeyword stR1 "SimpleNightVision" == 0)
+		MessageBoxExAlt (begin function {int stL1}
+			if stL1 == 0
+				stA1 = GetINISection "SimpleNightVision" "..\KEYWORDS\SimpleNightVision.ini" 1
+				SetINIString ("SimpleNightVision:" + $(ar_size stA1)) (GetEditorID stR1) "..\KEYWORDS\SimpleNightVision.ini"
+				AssignKeyword stR1 "SimpleNightVision"
+			endif
+		end) "^Simple Night Vision^Add support to %z?|Ok|Cancel" (LNGetName stR1)
+	elseif eval (IsFormValid stR2 && isPA stR2 == 0 && HasKeyword stR2 "SimpleNightVision" == 0)
+		MessageBoxExAlt (begin function {int stL1}
+			if stL1 == 0
+				stA1 = GetINISection "SimpleNightVision" "..\KEYWORDS\SimpleNightVision.ini" 1
+				SetINIString ("SimpleNightVision:" + $(ar_size stA1)) (GetEditorID stR2) "..\KEYWORDS\SimpleNightVision.ini"
+				AssignKeyword stR2 "SimpleNightVision"
+			endif
+		end) "^Simple Night Vision^Add support to %z?|Ok|Cancel" (LNGetName stR2)
+	endif
+
+	stA1 = ar_null
+
+end

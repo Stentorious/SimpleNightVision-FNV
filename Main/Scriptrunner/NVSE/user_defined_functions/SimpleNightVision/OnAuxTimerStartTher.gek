@@ -1,0 +1,37 @@
+string_var sTimerName
+ref rOwnerForm
+ref stR1
+array_var stA1
+array_var stA2
+array_var aForE
+
+begin Function {sTimerName, rOwnerForm}
+
+	stA1 = Goo1.AuxVarGetAsArr "*SNV_CACHE" 
+	stA2 = GetActorsByProcessingLevel 0
+	
+	if stA1 != stA2
+		Goo1.AuxVarErase "*SNV_CACHE"
+		if stA1
+			foreach aForE <- stA1
+				stR1 = *aForE
+				if IsFormValid stR1
+					stR1.SMS effectAbsorb
+				endif
+			loop
+		endif
+		if stA2
+			aForE = Ar_Null
+			foreach aForE <- stA2
+				stR1 = *aForE
+				if IsFormValid stR1 && stR1.GetCreatureType != 6 && stR1.GetDead == 0 && stR1.GetDisabled == 0
+					stR1.PMS effectAbsorb
+					Goo1.AuxVarSetRef "*SNV_CACHE" stR1 -1
+				endif
+			loop
+		endif
+	endif
+	
+	stA1 = stA2 = aForE = Ar_Null
+	
+end

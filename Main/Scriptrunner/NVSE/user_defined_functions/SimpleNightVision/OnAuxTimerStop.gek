@@ -1,0 +1,11 @@
+string_var sTimerName
+ref rOwnerForm
+
+begin Function {sTimerName, rOwnerForm}
+
+	if Goo1.AuxVarGetFlt "*SNV_FLAG" 0 != 0
+		PlaySound UIPipBoyLightOff
+		Call (CompileScript "SimpleNightVision/ToggleOff.gek")
+	endif
+	
+end

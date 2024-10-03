@@ -1,0 +1,23 @@
+int	iKeyID
+ref stR1
+ref stR2
+
+begin Function {iKeyID}
+	
+	AuxTimerStop "*SNV_TIMER1"
+	if eval (!MenuMode && player.GetDead == 0 && AuxTimerTimeLeft "*SNV_TIMER0" != -1)
+		AuxTimerStop "*SNV_TIMER0"
+		stR1 = player.GetEqObj 10
+		stR2 = player.GetEqObj 11
+		if player.HasPerk (EditorIDToFormID "CWxImplantVisionModePerk")
+			Call (CompileScript "SimpleNightVision/ToggleOn.gek")
+		elseif eval (IsFormValid stR1 && (IsPA stR1 || HasKeyword stR1 "SimpleNightVision"))
+			Goo1.AuxVarSetRef "*SNV_REF" stR1
+			Call (CompileScript "SimpleNightVision/ToggleOn.gek")
+		elseif eval (IsFormValid stR2 && (IsPA stR2 || HasKeyword stR2 "SimpleNightVision"))
+			Goo1.AuxVarSetRef "*SNV_REF" stR2
+			Call (CompileScript "SimpleNightVision/ToggleOn.gek")
+		endif
+	endif	
+	
+end

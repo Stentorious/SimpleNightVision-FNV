@@ -1,0 +1,4 @@
+Stentorious\SimpleNightVision_Preload.xml::HUDMainMenu
+!#Stentorious\RadiationVisuals.xml
+Stentorious\SimpleNightVision.xml::HUDMainMenu
+true

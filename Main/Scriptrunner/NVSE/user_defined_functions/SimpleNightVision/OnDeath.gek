@@ -1,0 +1,16 @@
+ref rActor
+
+begin Function {rActor}
+
+	if eval (IsFormValid rActor && Goo1.AuxVarGetFlt "*SNV_FLAG" 0 != 0)
+		
+		if rActor == player
+			AuxTimerStop "*SNV_TIMER0"
+			AuxTimerStop "*SNV_TIMER1"
+			Call (CompileScript "SimpleNightVision/ToggleOff.gek")
+		elseif Goo1.AuxVarGetFlt "*SNV_FLAG" 1 == 2 && rActor.HasEffectShader effectAbsorb == 1
+			rActor.SMS effectAbsorb
+		endif
+	endif
+	
+end

@@ -1,0 +1,45 @@
+<_SNV+0> 0 </_SNV+0>
+<_SNV+R> 0 </_SNV+R>
+<_SNV+G> 0 </_SNV+G>
+<_SNV+B> 0 </_SNV+B>
+<_SNV+A> 0 </_SNV+A>
+<_SNV+M> 0 </_SNV+M>
+
+<rect name="SimpleNightVision">
+
+	<visible>1</visible>
+	
+	<width><copy src="screen()" trait="width" /></width>
+	<height><copy src="screen()" trait="height" /></height>
+
+	<image name="Static">
+		<depth> -5000 </depth>
+		<zoom> -1 </zoom>
+		<systemcolor> 0 </systemcolor>
+		<width><copy src="parent()" trait="width" /></width>
+		<height><copy src="parent()" trait="height" /></height>
+		<red><copy src="io()" trait="_SNV+R" /></red>
+		<green><copy src="io()" trait="_SNV+G" /></green>
+		<blue><copy src="io()" trait="_SNV+B" /></blue>			
+		<alpha><copy src="io()" trait="_SNV+A" /></alpha>
+		
+		<visible>1</visible>
+		
+		<_Tile_0>Stentorious\Interface\static\0.dds</_Tile_0>
+		<_Tile_1>Stentorious\Interface\static\1.dds</_Tile_1>
+		<_Tile_2>Stentorious\Interface\static\2.dds</_Tile_2>
+		<_Tile_3>Stentorious\Interface\static\3.dds</_Tile_3>
+		<_Tile_4>Stentorious\Interface\static\4.dds</_Tile_4>
+		<_Tile_5>Stentorious\Interface\static\5.dds</_Tile_5>
+		<_Tile_6>Stentorious\Interface\static\6.dds</_Tile_6>
+		<_Tile_7>Stentorious\Interface\static\7.dds</_Tile_7>
+		<_Tile_8>Stentorious\Interface\static\8.dds</_Tile_8>
+		<_Tile_9>Stentorious\Interface\static\9.dds</_Tile_9>
+		
+		<filename>
+			<copy src="io()" trait="_SNV+0"/>
+			<copy src="me()" trait="_Tile_"/>
+		</filename>
+	</image>
+
+</rect>

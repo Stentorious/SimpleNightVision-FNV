@@ -1,0 +1,8 @@
+ref	rQuest
+int	iStageIdx
+
+begin Function {rQuest, iStageIdx}
+	SetStage (EditorIDToFormID "CWxBionicEyesQuest") 0
+	SetStage (EditorIDToFormID "CWxBionicEyesGrainQuest") 0
+	CallAfterFrames 1 ({} => SetGlobalVariable (EditorIDToFormID "CWxVisionModeLevel") 0)
+end

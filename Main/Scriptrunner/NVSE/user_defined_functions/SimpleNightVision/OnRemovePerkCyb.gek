@@ -1,0 +1,10 @@
+ref rPerk
+
+begin Function {rPerk} 
+
+	if this == PlayerREF
+		AuxTimerStop "*SNV_TIMER0"
+		Call (CompileScript "SimpleNightVision/ToggleOff.gek")
+	endif
+
+end

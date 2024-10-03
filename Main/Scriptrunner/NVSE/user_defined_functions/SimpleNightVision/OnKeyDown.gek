@@ -1,0 +1,8 @@
+int	iKeyID
+
+begin Function {iKeyID}
+	if eval !MenuMode
+		AuxTimerStart "*SNV_TIMER0" 0.5 14
+		AuxTimerStart "*SNV_TIMER1" 3 14
+	endif
+end

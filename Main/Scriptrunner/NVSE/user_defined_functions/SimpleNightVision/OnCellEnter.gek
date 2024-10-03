@@ -1,0 +1,9 @@
+ref	 rEnteredCell
+
+begin Function {rEnteredCell}
+
+	if Goo1.AuxVarGetFlt "*SNV_FLAG" 0 != 0 && Goo1.AuxVarGetFlt "*SNV_FLAG" 1 == 2
+		AuxTimerStart "*SNV_TIMER2" 5 30
+	endif
+
+end

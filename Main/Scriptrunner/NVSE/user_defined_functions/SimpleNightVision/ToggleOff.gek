@@ -1,0 +1,31 @@
+ref stR1
+array_var stA1
+array_var aForE
+
+begin Function {}
+
+	Goo1.AuxVarErase "*SNV_REF"
+	SetUIFloatAlt "HudMainMenu\_SNV+M" 0
+	SetUIFloatGradual "HudMainMenu\_SNV+A" 0
+	
+	if Goo1.AuxVarGetFlt "*SNV_FLAG" 1 == 1
+		rimod NVDLC03GhostNightvisionISFX
+	else
+		rimod NVDLC04RedNightvisionISFX
+		AuxTimerStop "*SNV_TIMER2"
+		stA1 = Goo1.AuxVarGetAsArr "*SNV_CACHE" 
+		if stA1
+			foreach aForE <- stA1
+				stR1 = *aForE
+				if IsFormValid stR1
+					stR1.SMS effectAbsorb
+				endif
+			loop
+		endif
+	endif
+	Goo1.AuxVarSetFlt "*SNV_FLAG" 0 0
+
+	Goo1.AuxVarErase "*SNV_CACHE"
+	stA1 = aForE = ar_Null
+
+end

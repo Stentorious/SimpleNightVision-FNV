@@ -1,0 +1,166 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://qconsulting.ca/fo3/ModConfig5.0.xsd">
+	<moduleName>Simple Night Vision</moduleName>
+	<requiredInstallFiles>
+		<folder source="Required" destination="" />
+	</requiredInstallFiles>
+	<installSteps order="Explicit">
+		<installStep name="Simple Night Vision">
+			<optionalFileGroups order="Explicit">
+				<group name="Main File" type="SelectExactlyOne">
+					<plugins order="Explicit">
+						<plugin name="Plugin">
+							<description>Select if you want Simple Night Vision in plugin form. (ESP)</description>
+							<files>
+								<folder source="Main\Plugin" destination="" priority="0" />
+							</files>
+							<typeDescriptor>
+								<type name="Optional"/>
+							</typeDescriptor>
+						</plugin>
+						<plugin name="Scriptrunner">
+							<description>Select if you want Simple Night Vision in scriptrunner form. (ESPless)</description>
+							<files>
+								<folder source="Main\Scriptrunner" destination="" priority="0" />
+							</files>
+							<typeDescriptor>
+								<type name="Optional"/>
+							</typeDescriptor>
+						</plugin>
+					</plugins>
+				</group>
+				<group name="Add-ons" type="SelectAny">
+					<plugins order="Explicit">
+						<plugin name="HUD Overlay">
+							<description>Adds optional HUD overlays to the vision modes.</description>
+							<files>
+								<folder source="Conditional\Overlay\Required" destination="" priority="1" />
+							</files>
+							<conditionFlags>
+								<flag name="Overlay">Active</flag>
+							</conditionFlags>
+							<typeDescriptor>
+								<type name="Optional"/>
+							</typeDescriptor>
+						</plugin>
+					</plugins>
+				</group>
+				<group name="Texture Quality" type="SelectExactlyOne">
+					<plugins order="Explicit">
+						<plugin name="2k">
+							<description>Select if you want Simple Night Vision to use high quality textures.</description>
+							<conditionFlags>
+								<flag name="Texture 2k">Active</flag>
+							</conditionFlags>
+							<typeDescriptor>
+								<type name="Optional"/>
+							</typeDescriptor>
+						</plugin>
+						<plugin name="1k">
+							<description>Select if you want Simple Night Vision to use low quality textures.</description>
+							<conditionFlags>
+								<flag name="Texture 1k">Active</flag>
+							</conditionFlags>
+							<typeDescriptor>
+								<type name="Optional"/>
+							</typeDescriptor>
+						</plugin>
+					</plugins>
+				</group>
+				<group name="Texture Options" type="SelectAny">
+					<plugins order="Explicit">
+						<plugin name="Compress Textures">
+							<description>- Lower memory usage&#13;
+- Longer preload time</description>
+							<conditionFlags>
+								<flag name="Texture Compress">Active</flag>
+							</conditionFlags>
+							<typeDescriptor>
+								<type name="Recommended"/>
+							</typeDescriptor>
+						</plugin>
+					</plugins>
+				</group>
+			</optionalFileGroups>
+		</installStep>
+	</installSteps>
+	<conditionalFileInstalls>
+		<patterns>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 1k" value="Active"/>
+					<flagDependency flag="Texture Compress" value=""/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Textures\Uncompressed\1k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 1k" value="Active"/>
+					<flagDependency flag="Texture Compress" value="Active"/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Textures\Compressed\1k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 2k" value="Active"/>
+					<flagDependency flag="Texture Compress" value=""/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Textures\Uncompressed\2k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 2k" value="Active"/>
+					<flagDependency flag="Texture Compress" value="Active"/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Textures\Compressed\2k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 1k" value="Active"/>
+					<flagDependency flag="Texture Compress" value=""/>
+					<flagDependency flag="Overlay" value="Active"/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Overlay\Textures\Uncompressed\1k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 1k" value="Active"/>
+					<flagDependency flag="Texture Compress" value="Active"/>
+					<flagDependency flag="Overlay" value="Active"/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Overlay\Textures\Compressed\1k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 2k" value="Active"/>
+					<flagDependency flag="Texture Compress" value=""/>
+					<flagDependency flag="Overlay" value="Active"/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Overlay\Textures\Uncompressed\2k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Texture 2k" value="Active"/>
+					<flagDependency flag="Texture Compress" value="Active"/>
+					<flagDependency flag="Overlay" value="Active"/>
+				</dependencies>
+				<files>
+					<folder source="Conditional\Overlay\Textures\Compressed\2k" destination="" priority="0" />
+				</files>
+			</pattern>
+		</patterns>
+	</conditionalFileInstalls>
+</config>
