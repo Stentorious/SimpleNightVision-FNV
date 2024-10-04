@@ -8,21 +8,21 @@
 - Automatically adds support to TTW's Night Vision Goggles, Lonesome Road's Riot Gear, etc...
 - [KEYWORDS](https://www.nexusmods.com/newvegas/mods/83088) framework allows vision modes to be easily added to any armor.
 
-## Night Vision
+### Night Vision
 - Brightens the environment based on ambient light sources.
 - Hard to discern enemies against the background.
 
-## Thermal Imaging
+### Thermal Imaging
 - Highlights thermal signatures.
 - Hard to discern surroundings in low light environments.
 
-## Controls
+### Controls
 - Default Key Bind: N
 - Tap key bind to turn on/toggle vision modes.
 - Hold key bind to turn off vision modes.
 - Hold key bind for 3 secs to add support to current head gear.
 
-## Hud Overlay
+### Hud Overlay
 - Optional add-on supporting unique HUD overlays for each vision mode.
 
 ## Configuration
