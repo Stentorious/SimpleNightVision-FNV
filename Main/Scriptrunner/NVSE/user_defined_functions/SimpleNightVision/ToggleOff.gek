@@ -1,31 +1,39 @@
-ref stR1
-array_var stA1
+ref rActor
+array_var aShaderRefs
 array_var aForE
 
 begin Function {}
 
-	Goo1.AuxVarErase "*SNV_REF"
-	SetUIFloatAlt "HudMainMenu\_SNV+M" 0
-	SetUIFloatGradual "HudMainMenu\_SNV+A" 0
-	
-	if Goo1.AuxVarGetFlt "*SNV_FLAG" 1 == 1
-		rimod NVDLC03GhostNightvisionISFX
+	; Disable night vision
+	if Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
+		RIMOD NVDLC03GhostNightvisionISFX
+
+	; Disable thermal vision
 	else
-		rimod NVDLC04RedNightvisionISFX
-		AuxTimerStop "*SNV_TIMER2"
-		stA1 = Goo1.AuxVarGetAsArr "*SNV_CACHE" 
-		if stA1
-			foreach aForE <- stA1
-				stR1 = *aForE
-				if IsFormValid stR1
-					stR1.SMS effectAbsorb
+		RIMOD NVDLC04RedNightvisionISFX
+
+		; Remove effect shader from all refs
+		AuxTimerStop "*SNV_Thermal"
+		aShaderRefs = Goo1.AuxVarGetAsArr "*SNV_Shader"
+		if aShaderRefs
+			foreach aForE <- aShaderRefs
+				rActor = *aForE
+				if IsFormValid rActor
+					rActor.SMS effectAbsorb
 				endif
 			loop
 		endif
 	endif
-	Goo1.AuxVarSetFlt "*SNV_FLAG" 0 0
 
-	Goo1.AuxVarErase "*SNV_CACHE"
-	stA1 = aForE = ar_Null
+	; Reset aux
+	Goo1.AuxVarSetFlt "SNV_Mode" 0 0
+	Goo1.AuxVarErase "*SNV_Shader"
+	Goo1.AuxVarErase "SNV_Armor"
+
+	; Reset HUD
+	SetUIFloatAlt "HudMainMenu\_SNV+M" 0
+	SetUIFloatGradual "HudMainMenu\_SNV+A" 0
+
+	aShaderRefs = aForE = Ar_Null
 
 end

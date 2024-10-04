@@ -1,23 +1,27 @@
 int	iKeyID
-ref stR1
-ref stR2
+
+ref rHat
+ref rGlasses
 
 begin Function {iKeyID}
-	
-	AuxTimerStop "*SNV_TIMER1"
-	if eval (!MenuMode && player.GetDead == 0 && AuxTimerTimeLeft "*SNV_TIMER0" != -1)
-		AuxTimerStop "*SNV_TIMER0"
-		stR1 = player.GetEqObj 10
-		stR2 = player.GetEqObj 11
-		if player.HasPerk (EditorIDToFormID "CWxImplantVisionModePerk")
+
+	; Reset support timer
+	AuxTimerStop "*SNV_KeySupport"
+
+	; Toggle vision mode
+	if eval (!MenuMode && Player.GetDead == 0 && AuxTimerTimeLeft "*SNV_KeyToggle" != -1)
+		AuxTimerStop "*SNV_KeyToggle"
+		rHat = Player.GetEqObj 10
+		rGlasses = Player.GetEqObj 11
+		if eval Player.HasPerk (EditorIDToFormID "CWxImplantVisionModePerk")
 			Call (CompileScript "SimpleNightVision/ToggleOn.gek")
-		elseif eval (IsFormValid stR1 && (IsPA stR1 || HasKeyword stR1 "SimpleNightVision"))
-			Goo1.AuxVarSetRef "*SNV_REF" stR1
+		elseif eval IsFormValid rHat && (IsPA rHat || HasKeyword rHat "SimpleNightVision")
+			Goo1.AuxVarSetRef "SNV_Armor" rHat
 			Call (CompileScript "SimpleNightVision/ToggleOn.gek")
-		elseif eval (IsFormValid stR2 && (IsPA stR2 || HasKeyword stR2 "SimpleNightVision"))
-			Goo1.AuxVarSetRef "*SNV_REF" stR2
+		elseif eval IsFormValid rGlasses && (IsPA rGlasses || HasKeyword rGlasses "SimpleNightVision")
+			Goo1.AuxVarSetRef "SNV_Armor" rGlasses
 			Call (CompileScript "SimpleNightVision/ToggleOn.gek")
 		endif
-	endif	
-	
+	endif
+
 end

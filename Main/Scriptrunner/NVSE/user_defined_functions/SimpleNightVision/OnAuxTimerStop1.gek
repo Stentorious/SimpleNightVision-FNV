@@ -1,31 +1,35 @@
-string_var sTimerName
 ref rOwnerForm
-ref stR1
-ref stR2
-array_var stA1
+string_var sTimerName
+
+ref rHat
+ref rGlasses
+array_var aINISections
 
 begin Function {sTimerName, rOwnerForm}
-	
-	stR1 = player.GetEqObj 10
-	stR2 = player.GetEqObj 11
-	if eval (IsFormValid stR1 && isPA stR1 == 0 && HasKeyword stR1 "SimpleNightVision" == 0)
-		MessageBoxExAlt (begin function {int stL1}
-			if stL1 == 0
-				stA1 = GetINISection "SimpleNightVision" "..\KEYWORDS\SimpleNightVision.ini" 1
-				SetINIString ("SimpleNightVision:" + $(ar_size stA1)) (GetEditorID stR1) "..\KEYWORDS\SimpleNightVision.ini"
-				AssignKeyword stR1 "SimpleNightVision"
+
+	; Get headgear
+	rHat = Player.GetEqObj 10
+	rGlasses = Player.GetEqObj 11
+
+	; Display message box if valid headgear can support vision modes
+	if eval IsFormValid rHat && IsPA rHat == 0 && HasKeyword rHat "SimpleNightVision" == 0
+		MessageBoxExAlt (begin function {int iButton}
+			if iButton == 0
+				aINISections = GetINISection "SimpleNightVision" "..\KEYWORDS\SimpleNightVision.ini" 1
+				SetINIString ("SimpleNightVision:" + $(Ar_Size aINISections)) (GetEditorID rHat) "..\KEYWORDS\SimpleNightVision.ini"
+				AssignKeyword rHat "SimpleNightVision"
 			endif
-		end) "^Simple Night Vision^Add support to %z?|Ok|Cancel" (LNGetName stR1)
-	elseif eval (IsFormValid stR2 && isPA stR2 == 0 && HasKeyword stR2 "SimpleNightVision" == 0)
-		MessageBoxExAlt (begin function {int stL1}
-			if stL1 == 0
-				stA1 = GetINISection "SimpleNightVision" "..\KEYWORDS\SimpleNightVision.ini" 1
-				SetINIString ("SimpleNightVision:" + $(ar_size stA1)) (GetEditorID stR2) "..\KEYWORDS\SimpleNightVision.ini"
-				AssignKeyword stR2 "SimpleNightVision"
+		end) "^Simple Night Vision^Add support to %n?|Ok|Cancel" rHat
+	elseif eval IsFormValid rGlasses && IsPA rGlasses == 0 && HasKeyword rGlasses "SimpleNightVision" == 0
+		MessageBoxExAlt (begin function {int iButton}
+			if iButton == 0
+				aINISections = GetINISection "SimpleNightVision" "..\KEYWORDS\SimpleNightVision.ini" 1
+				SetINIString ("SimpleNightVision:" + $(Ar_Size aINISections)) (GetEditorID rGlasses) "..\KEYWORDS\SimpleNightVision.ini"
+				AssignKeyword rGlasses "SimpleNightVision"
 			endif
-		end) "^Simple Night Vision^Add support to %z?|Ok|Cancel" (LNGetName stR2)
+		end) "^Simple Night Vision^Add support to %n?|Ok|Cancel" rGlasses
 	endif
 
-	stA1 = ar_null
+	aINISections = Ar_Null
 
 end

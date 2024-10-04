@@ -6,13 +6,16 @@
 	<installSteps order="Explicit">
 		<installStep name="Simple Night Vision">
 			<optionalFileGroups order="Explicit">
-				<group name="Main File" type="SelectExactlyOne">
+				<group name="Main Files" type="SelectExactlyOne">
 					<plugins order="Explicit">
 						<plugin name="Plugin">
 							<description>Select if you want Simple Night Vision in plugin form. (ESP)</description>
 							<files>
-								<folder source="Main\Plugin" destination="" priority="0" />
+								<folder source="Main\Plugin\Default" destination="" priority="0" />
 							</files>
+							<conditionFlags>
+								<flag name="Plugin">Active</flag>
+							</conditionFlags>
 							<typeDescriptor>
 								<type name="Optional"/>
 							</typeDescriptor>
@@ -22,8 +25,21 @@
 							<files>
 								<folder source="Main\Scriptrunner" destination="" priority="0" />
 							</files>
+							<conditionFlags>
+								<flag name="Scriptrunner">Active</flag>
+							</conditionFlags>
 							<typeDescriptor>
-								<type name="Optional"/>
+								<dependencyType>
+									<defaultType name="Optional"/>
+									<patterns>
+										<pattern>
+											<dependencies operator="And">
+												<fileDependency file="STAR TTW 2.esp" state="Active"/>
+											</dependencies>
+											<type name="NotUsable"/>
+										</pattern>
+									</patterns>
+								</dependencyType>
 							</typeDescriptor>
 						</plugin>
 					</plugins>
@@ -40,6 +56,38 @@
 							</conditionFlags>
 							<typeDescriptor>
 								<type name="Optional"/>
+							</typeDescriptor>
+						</plugin>
+					</plugins>
+				</group>
+				<group name="Mod Patches" type="SelectAny">
+					<plugins order="Explicit">
+						<plugin name="STARS TTW">
+							<description>Required if you use STARS TTW.</description>
+							<files>
+								<folder source="Main\Plugin\STARS TTW" destination="" priority="1" />
+							</files>
+							<conditionFlags>
+								<flag name="Patch STARS">Active</flag>
+							</conditionFlags>
+							<typeDescriptor>
+								<dependencyType>
+									<defaultType name="Optional"/>
+									<patterns>
+										<pattern>
+											<dependencies operator="And">
+												<fileDependency file="STAR TTW 2.esp" state="Active"/>
+											</dependencies>
+											<type name="Required"/>
+										</pattern>
+										<pattern>
+											<dependencies operator="And">
+												<fileDependency file="STAR TTW 2.esp" state="Missing"/>
+											</dependencies>
+											<type name="NotUsable"/>
+										</pattern>
+									</patterns>
+								</dependencyType>
 							</typeDescriptor>
 						</plugin>
 					</plugins>
@@ -159,6 +207,35 @@
 				</dependencies>
 				<files>
 					<folder source="Conditional\Overlay\Textures\Compressed\2k" destination="" priority="0" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Overlay" value="Active"/>
+					<flagDependency flag="Scriptrunner" value="Active"/>
+				</dependencies>
+				<files>
+					<file source="Conditional\Overlay\Config\Scriptrunner\SimpleNightVision.ini" destination="Config\SimpleNightVision.ini" priority="1" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Overlay" value="Active"/>
+					<flagDependency flag="Plugin" value="Active"/>
+					<flagDependency flag="Patch STARS" value=""/>
+				</dependencies>
+				<files>
+					<file source="Conditional\Overlay\Config\Plugin\Default\SimpleNightVision.ini" destination="Config\SimpleNightVision.ini" priority="1" />
+				</files>
+			</pattern>
+			<pattern>
+				<dependencies operator="And">
+					<flagDependency flag="Overlay" value="Active"/>
+					<flagDependency flag="Plugin" value="Active"/>
+					<flagDependency flag="Patch STARS" value="Active"/>
+				</dependencies>
+				<files>
+					<file source="Conditional\Overlay\Config\Plugin\STARS TTW\SimpleNightVision.ini" destination="Config\SimpleNightVision.ini" priority="1" />
 				</files>
 			</pattern>
 		</patterns>

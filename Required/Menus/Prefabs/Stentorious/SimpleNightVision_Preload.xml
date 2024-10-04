@@ -1,12 +1,12 @@
 <rect name="SNV_Preload">
-	<image name="Texture"><filename>Stentorious\Interface\static\0.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\1.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\2.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\3.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\4.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\5.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\6.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\7.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\8.dds</filename></image>
-	<image name="Texture"><filename>Stentorious\Interface\static\9.dds</filename></image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\0.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\1.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\2.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\3.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\4.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\5.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\6.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\7.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\8.dds </filename> </image>
+	<image name="Texture"> <filename> Stentorious\Interface\static\9.dds </filename> </image>
 </rect>

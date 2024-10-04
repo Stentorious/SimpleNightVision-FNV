@@ -1,44 +1,64 @@
-; Simple Night Vision 2.3 - Stentorious
-
 ; Check for requirements
-if eval (IsModLoaded "Enhanced Vision.esp" || IsModLoaded "Advanced Recon Tech.esm" || GetPluginVersion "JohnnyGuitarNVSE" < 360 || GetPluginVersion "ShowOffNVSE Plugin" < 165) || (GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 2) == 0 
+if Goo1.AuxVarGetFlt "*SNV_Init" == 0
 	return
 endif
 
-Goo1.AuxVarSetFlt "*SNV_FLAG" 0 0
-Goo1.AuxVarSetFlt "*SNV_FLAG" 1 1
-Goo1.AuxVarErase "*SNV_REF"
-Goo1.AuxVarErase "*SNV_CACHE"
+if Goo1.AuxVarType "SNV_Mode" 0 == 0
+	Goo1.AuxVarSetFlt "SNV_Mode" 0 0
+	Goo1.AuxVarSetFlt "SNV_Mode" 1 1
+endif
+Goo1.AuxVarErase "*SNV_Shader"
 SetUIFloatAlt "HudMainMenu\_SNV+A" 0
 SetUIFloatAlt "HudMainMenu\_SNV+M" 0
+RIMOD NVDLC03GhostNightvisionISFX
+RIMOD NVDLC04RedNightvisionISFX
 
-rimod NVDLC03GhostNightvisionISFX
-rimod NVDLC04RedNightvisionISFX
-
-; Remove Cyberware vision mode on load
+; Remove Cyberware vision mode
 if IsModLoaded "Cyberware.esm" && GetINIFloat "General:bOverrideCyberware" "SimpleNightVision.ini" == 1
-
-	ref stR1 = EditorIDToFormID "CWxVisionModeLevel"
-	ref stR2 = EditorIDToFormID "CWxBionicEyesQuest"
-
-	float stF1 = GetGlobalVariable stR1
-	if stF1 > 0
-		if stF1 == 1
-			SetStage stR2 2
-		elseif stF1 == 2
-			SetStage stR2 4
-		elseif stF1 == 3
-			SetStage stR2 6
+	ref rGlobal = EditorIDToFormID "CWxVisionModeLevel"
+	ref rQuest = EditorIDToFormID "CWxBionicEyesQuest"
+	float fGlobal = GetGlobalVariable rGlobal
+	if fGlobal > 0
+		if fGlobal == 1
+			SetStage rQuest 2
+		elseif fGlobal == 2
+			SetStage rQuest 4
+		elseif fGlobal == 3
+			SetStage rQuest 6
 		endif
-		SetGlobalVariable stR1 0
-		SetStage stR2 0
+		SetGlobalVariable rGlobal 0
+		SetStage rQuest 0
 		SetStage (EditorIDToFormID "CWxBionicEyesGrainQuest") 0
 	endif
-
 endif
 
+; Set event handlers
 SetJohnnyOnDyingEventHandler 1 (CompileScript "SimpleNightVision/OnDeath.gek") 0
 SetEventHandlerAlt "OnActorUnequip" (CompileScript "SimpleNightVision/OnUnequip.gek") 1::Player
-SetOnAuxTimerStopHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStop.gek") "*SNV_TIMER0"
-SetOnAuxTimerStopHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStop1.gek") "*SNV_TIMER1"
-SetOnAuxTimerStartHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStartTher.gek") "*SNV_TIMER2"
+SetOnAuxTimerStopHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStop.gek") "*SNV_KeyToggle"
+SetOnAuxTimerStopHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStop1.gek") "*SNV_KeySupport"
+SetOnAuxTimerStartHandler 1 (CompileScript "SimpleNightVision/OnAuxTimerStartTher.gek") "*SNV_Thermal"
+
+; Update vision mode
+if Goo1.AuxVarGetFlt "SNV_Mode" 0 == 1
+
+	; Enable night vision
+	if Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
+		IMOD NVDLC03GhostNightvisionISFX
+		SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 0)
+		SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 1)
+		SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 2)
+		SetUIFloatAlt "HudMainMenu\_SNV+A" (Goo1.AuxVarGetFlt "*SNV_INI" 3)
+		SetUIFloatAlt "HudMainMenu\_SNV+M" 1
+
+	; Enable thermal vision
+	else
+		IMOD NVDLC04RedNightvisionISFX
+		SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 4)
+		SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 5)
+		SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 6)
+		SetUIFloatAlt "HudMainMenu\_SNV+A" ((Goo1.AuxVarGetFlt "*SNV_INI" 7) * 1.1)
+		CallAfterFrames 0 ({} => AuxTimerStart "*SNV_Thermal" 5 30)
+		SetUIFloatAlt "HudMainMenu\_SNV+M" 2
+	endif
+endif

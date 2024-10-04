@@ -1,37 +1,44 @@
-string_var sTimerName
 ref rOwnerForm
-ref stR1
-array_var stA1
-array_var stA2
+string_var sTimerName
+
+ref rActor
+array_var aShaderRefs
+array_var aActorRefs
 array_var aForE
 
 begin Function {sTimerName, rOwnerForm}
 
-	stA1 = Goo1.AuxVarGetAsArr "*SNV_CACHE" 
-	stA2 = GetActorsByProcessingLevel 0
-	
-	if stA1 != stA2
-		Goo1.AuxVarErase "*SNV_CACHE"
-		if stA1
-			foreach aForE <- stA1
-				stR1 = *aForE
-				if IsFormValid stR1
-					stR1.SMS effectAbsorb
+	; Get cached and nearby refs
+	aShaderRefs = Goo1.AuxVarGetAsArr "*SNV_Shader"
+	aActorRefs = GetActorsByProcessingLevel 0
+
+	; Process actors if any new refs found
+	if aShaderRefs != aActorRefs
+
+		; Remove effect shader from all refs
+		Goo1.AuxVarErase "*SNV_Shader"
+		if aShaderRefs
+			foreach aForE <- aShaderRefs
+				rActor = *aForE
+				if eval IsFormValid rActor
+					rActor.SMS effectAbsorb
 				endif
 			loop
 		endif
-		if stA2
+
+		; Add effect shader to all valid refs
+		if aActorRefs
 			aForE = Ar_Null
-			foreach aForE <- stA2
-				stR1 = *aForE
-				if IsFormValid stR1 && stR1.GetCreatureType != 6 && stR1.GetDead == 0 && stR1.GetDisabled == 0
-					stR1.PMS effectAbsorb
-					Goo1.AuxVarSetRef "*SNV_CACHE" stR1 -1
+			foreach aForE <- aActorRefs
+				rActor = *aForE
+				if eval IsFormValid rActor && rActor.GetCreatureType != 6 && rActor.GetDead == 0 && rActor.GetDisabled == 0
+					rActor.PMS effectAbsorb
+					Goo1.AuxVarSetRef "*SNV_Shader" rActor -1
 				endif
 			loop
 		endif
 	endif
-	
-	stA1 = stA2 = aForE = Ar_Null
-	
+
+	aShaderRefs = aActorRefs = aForE = Ar_Null
+
 end

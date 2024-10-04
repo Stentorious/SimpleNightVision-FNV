@@ -1,11 +1,12 @@
-string_var sTimerName
 ref rOwnerForm
+string_var sTimerName
 
 begin Function {sTimerName, rOwnerForm}
 
-	if Goo1.AuxVarGetFlt "*SNV_FLAG" 0 != 0
+	; Toggle vision modes off
+	if Goo1.AuxVarGetFlt "SNV_Mode" 0 != 0
 		PlaySound UIPipBoyLightOff
 		Call (CompileScript "SimpleNightVision/ToggleOff.gek")
 	endif
-	
+
 end
