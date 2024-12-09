@@ -1,7 +1,4 @@
 <_SNV+0> 0 </_SNV+0>
-<_SNV+R> 0 </_SNV+R>
-<_SNV+G> 0 </_SNV+G>
-<_SNV+B> 0 </_SNV+B>
 <_SNV+A> 0 </_SNV+A>
 <_SNV+M> 0 </_SNV+M>
 
@@ -18,10 +15,22 @@
 		<width> <copy src="parent()" trait="width" /> </width>
 		<height> <copy src="parent()" trait="height" /> </height>
 		<zoom> -1 </zoom>
-		<systemcolor> 0 </systemcolor>
-		<red> <copy src="io()" trait="_SNV+R" /> </red>
-		<green> <copy src="io()" trait="_SNV+G" /> </green>
-		<blue> <copy src="io()" trait="_SNV+B" /> </blue>
+		<systemcolor>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_systemcolor_" />
+		</systemcolor>
+		<red>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_red_" />
+		</red>
+		<green>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_green_" />
+		</green>
+		<blue>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_blue_" />
+		</blue>
 		<filename>
 			<copy src="io()" trait="_SNV+0" />
 			<copy src="me()" trait="_Tile_" />
@@ -36,6 +45,18 @@
 		<_Tile_7> Stentorious\Interface\static\7.dds </_Tile_7>
 		<_Tile_8> Stentorious\Interface\static\8.dds </_Tile_8>
 		<_Tile_9> Stentorious\Interface\static\9.dds </_Tile_9>
+		<_systemcolor_0> 0 </_systemcolor_0>
+		<_systemcolor_1> 0 </_systemcolor_1>
+		<_systemcolor_2> 0 </_systemcolor_2>
+		<_red_0> 255 </_red_0>
+		<_red_1> 127 </_red_1>
+		<_red_2> 255 </_red_2>
+		<_green_0> 255 </_green_0>
+		<_green_1> 255 </_green_1>
+		<_green_2> 255 </_green_2>
+		<_blue_0> 255 </_blue_0>
+		<_blue_1> 127 </_blue_1>
+		<_blue_2> 255 </_blue_2>
 	</image>
 
 </rect>

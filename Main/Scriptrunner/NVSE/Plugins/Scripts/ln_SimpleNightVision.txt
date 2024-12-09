@@ -45,19 +45,13 @@ if Goo1.AuxVarGetFlt "SNV_Mode" 0 == 1
 	; Enable night vision
 	if Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
 		IMOD NVDLC03GhostNightvisionISFX
-		SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 0)
-		SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 1)
-		SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 2)
-		SetUIFloatAlt "HudMainMenu\_SNV+A" (Goo1.AuxVarGetFlt "*SNV_INI" 3)
+		SetUIFloatAlt "HudMainMenu\_SNV+A" (Goo1.AuxVarGetFlt "*SNV_INI" 0)
 		SetUIFloatAlt "HudMainMenu\_SNV+M" 1
 
 	; Enable thermal vision
 	else
 		IMOD NVDLC04RedNightvisionISFX
-		SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 4)
-		SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 5)
-		SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 6)
-		SetUIFloatAlt "HudMainMenu\_SNV+A" ((Goo1.AuxVarGetFlt "*SNV_INI" 7) * 1.1)
+		SetUIFloatAlt "HudMainMenu\_SNV+A" ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1)
 		CallAfterFrames 0 ({} => AuxTimerStart "*SNV_Thermal" 5 30)
 		SetUIFloatAlt "HudMainMenu\_SNV+M" 2
 	endif

@@ -12,10 +12,7 @@ begin Function {}
 		if Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
 			IMOD NVDLC03GhostNightvisionISFX
 			RIMOD NVDLC04RedNightvisionISFX
-			SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 0)
-			SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 1)
-			SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 2)
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 3) 0.5
+			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 0) 0.5
 			PlaySound UIPipBoyLightOn
 			SetUIFloatAlt "HudMainMenu\_SNV+M" 1
 			Goo1.AuxVarSetFlt "SNV_Mode" 1 1
@@ -24,10 +21,7 @@ begin Function {}
 		else
 			RIMOD NVDLC03GhostNightvisionISFX
 			IMOD NVDLC04RedNightvisionISFX
-			SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 4)
-			SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 5)
-			SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 6)
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 7) * 1.1) 0.5
+			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1) 0.5
 			AuxTimerStart "*SNV_Thermal" 5 30
 			PlaySound UIPipBoyLightOn
 			SetUIFloatAlt "HudMainMenu\_SNV+M" 2
@@ -54,10 +48,7 @@ begin Function {}
 
 			IMOD NVDLC03GhostNightvisionISFX
 			RIMOD NVDLC04RedNightvisionISFX
-			SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 0)
-			SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 1)
-			SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 2)
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 3) 0.5
+			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 0) 0.5
 			PlaySound UIPipBoyLightOn
 			SetUIFloatAlt "HudMainMenu\_SNV+M" 1
 			Goo1.AuxVarSetFlt "SNV_Mode" 1 1
@@ -67,10 +58,7 @@ begin Function {}
 		else
 			RIMOD NVDLC03GhostNightvisionISFX
 			IMOD NVDLC04RedNightvisionISFX
-			SetUIFloatAlt "HudMainMenu\_SNV+R" (Goo1.AuxVarGetFlt "*SNV_INI" 4)
-			SetUIFloatAlt "HudMainMenu\_SNV+G" (Goo1.AuxVarGetFlt "*SNV_INI" 5)
-			SetUIFloatAlt "HudMainMenu\_SNV+B" (Goo1.AuxVarGetFlt "*SNV_INI" 6)
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 7) * 1.1) 0.5
+			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1) 0.5
 			AuxTimerStart "*SNV_Thermal" 5 30
 			PlaySound UIPipBoyLightOn
 			SetUIFloatAlt "HudMainMenu\_SNV+M" 2

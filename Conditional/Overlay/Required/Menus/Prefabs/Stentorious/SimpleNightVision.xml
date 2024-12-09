@@ -4,9 +4,6 @@
 </rect>
 
 <_SNV+0> 0 </_SNV+0>
-<_SNV+R> 0 </_SNV+R>
-<_SNV+G> 0 </_SNV+G>
-<_SNV+B> 0 </_SNV+B>
 <_SNV+A> 0 </_SNV+A>
 <_SNV+M> 0 </_SNV+M>
 
@@ -23,10 +20,22 @@
 		<width> <copy src="parent()" trait="width" /> </width>
 		<height> <copy src="parent()" trait="height" /> </height>
 		<zoom> -1 </zoom>
-		<systemcolor> 0 </systemcolor>
-		<red> <copy src="io()" trait="_SNV+R" /> </red>
-		<green> <copy src="io()" trait="_SNV+G" /> </green>
-		<blue> <copy src="io()" trait="_SNV+B" /> </blue>
+		<systemcolor>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_Systemcolor_" />
+		</systemcolor>
+		<red>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_Red_" />
+		</red>
+		<green>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_Green_" />
+		</green>
+		<blue>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_Blue_" />
+		</blue>
 		<filename>
 			<copy src="io()" trait="_SNV+0" />
 			<copy src="me()" trait="_Tile_" />
@@ -41,6 +50,18 @@
 		<_Tile_7> Stentorious\Interface\static\7.dds </_Tile_7>
 		<_Tile_8> Stentorious\Interface\static\8.dds </_Tile_8>
 		<_Tile_9> Stentorious\Interface\static\9.dds </_Tile_9>
+		<_systemcolor_0> 0 </_systemcolor_0>
+		<_systemcolor_1> 0 </_systemcolor_1>
+		<_systemcolor_2> 0 </_systemcolor_2>
+		<_red_0> 255 </_red_0>
+		<_red_1> 127 </_red_1>
+		<_red_2> 255 </_red_2>
+		<_green_0> 255 </_green_0>
+		<_green_1> 255 </_green_1>
+		<_green_2> 255 </_green_2>
+		<_blue_0> 255 </_blue_0>
+		<_blue_1> 127 </_blue_1>
+		<_blue_2> 255 </_blue_2>
 	</image>
 
 	<image name="Overlay">
@@ -53,14 +74,43 @@
 			<copy src="me()" trait="_Alpha_" />
 		</alpha>
 		<depth> -4999 </depth>
-		<width> <copy src="parent()" trait="width" /> </width>
-		<height> <copy src="parent()" trait="height" /> </height>
+		<x>
+			<copy> 0 </copy>
+			<sub>
+				<copy src="me()" trait="width" />
+				<sub src="parent()" trait="width" />
+				<div> 2 </div>
+			</sub>
+		</x>
+		<y>
+			<copy> 0 </copy>
+			<sub>
+				<copy src="me()" trait="height" />
+				<sub src="parent()" trait="height" />
+				<div> 2 </div>
+			</sub>
+		</y>
+		<width>
+			<copy src="parent()" trait="width" />
+			<mul src="me()" trait="_Scale" />
+		</width>
+		<height>
+			<copy src="parent()" trait="height" />
+			<mul src="me()" trait="_Scale" />
+		</height>
 		<zoom> -1 </zoom>
 		<systemcolor> 0 </systemcolor>
 		<filename>
 			<copy src="io()" trait="_SNV+M" />
 			<copy src="me()" trait="_Tile_" />
 		</filename>
+		<_Scale>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_Scale_" />
+		</_Scale>
+		<_Scale_0> 1 </_Scale_0>
+		<_Scale_1> 1 </_Scale_1>
+		<_Scale_2> 1 </_Scale_2>
 		<_Alpha_0> 0 </_Alpha_0>
 		<_Alpha_1> 0 </_Alpha_1>
 		<_Alpha_2> 0 </_Alpha_2>
