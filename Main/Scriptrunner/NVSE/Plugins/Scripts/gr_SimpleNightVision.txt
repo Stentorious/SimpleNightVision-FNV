@@ -212,11 +212,20 @@ SetEffectShaderTraitNumeric effectAbsorb 20 0					; Edge Effect - Alpha Pulse Fr
 SetEffectShaderTraitNumeric effectAbsorb 22 1					; Edge Effect - Full Alpha Ratio
 SetEffectShaderTraitNumeric effectAbsorb 23 2					; Membrane Shader - Dest Blend Mode
 
+Goo1.AuxVarSetFlt "*SNV_INI" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fPipBoyStrength" "SimpleNightVision.ini"))) 2
+
 ;Set Event Handlers
 fINI = GetINIFloat "General:iKeybind" "SimpleNightVision.ini"
 
 SetOnKeyDownEventHandler (CompileScript "SimpleNightVision/OnKeyDown.gek") 1 fINI
 SetEventHandler "OnCellEnter" (CompileScript "SimpleNightVision/OnCellEnter.gek")
+
+SetOnMenuOpenEventHandler (CompileScript "SimpleNightVision/OnMenuOpen.gek") 1 1002
+SetOnMenuOpenEventHandler (CompileScript "SimpleNightVision/OnMenuOpen.gek") 1 1003
+SetOnMenuOpenEventHandler (CompileScript "SimpleNightVision/OnMenuOpen.gek") 1 1023
+SetOnMenuCloseEventHandler (CompileScript "SimpleNightVision/OnMenuClose.gek") 1 1002
+SetOnMenuCloseEventHandler (CompileScript "SimpleNightVision/OnMenuClose.gek") 1 1003
+SetOnMenuCloseEventHandler (CompileScript "SimpleNightVision/OnMenuClose.gek") 1 1023
 
 if IsModLoaded "Cyberware.esm" && GetINIFloat "General:bOverrideCyberware" "SimpleNightVision.ini" == 1
 	SetOnKeyUpEventHandler (CompileScript "SimpleNightVision/OnKeyUpCyb.gek") 1 fINI

@@ -12,10 +12,14 @@
 	<visible> 1 </visible>
 	<width> <copy src="screen()" trait="width" /> </width>
 	<height> <copy src="screen()" trait="height" /> </height>
+	<_AlphaMenu> 1.0 </_AlphaMenu>
 
 	<image name="Static">
 		<visible> 1 </visible>
-		<alpha> <copy src="io()" trait="_SNV+A" /> </alpha>
+		<alpha>
+			<copy src="io()" trait="_SNV+A" />
+			<mul src="parent()" trait="_AlphaMenu" />
+		</alpha>
 		<depth> -5000 </depth>
 		<width> <copy src="parent()" trait="width" /> </width>
 		<height> <copy src="parent()" trait="height" /> </height>
@@ -70,8 +74,8 @@
 			<gt> 0 </gt>
 		</visible>
 		<alpha>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Alpha_" />
+			<copy src="me()" trait="_Alpha" />
+			<mul src="parent()" trait="_AlphaMenu" />
 		</alpha>
 		<depth> -4999 </depth>
 		<x>
@@ -108,6 +112,10 @@
 			<copy src="io()" trait="_SNV+M" />
 			<copy src="me()" trait="_Scale_" />
 		</_Scale>
+		<_Alpha>
+			<copy src="io()" trait="_SNV+M" />
+			<copy src="me()" trait="_Alpha_" />
+		</_Alpha>
 		<_Scale_0> 1 </_Scale_0>
 		<_Scale_1> 1 </_Scale_1>
 		<_Scale_2> 1 </_Scale_2>

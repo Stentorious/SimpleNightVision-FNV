@@ -7,10 +7,14 @@
 	<visible> 1 </visible>
 	<width> <copy src="screen()" trait="width" /> </width>
 	<height> <copy src="screen()" trait="height" /> </height>
+	<_AlphaMenu> 1.0 </_AlphaMenu>
 
 	<image name="Static">
 		<visible> 1 </visible>
-		<alpha> <copy src="io()" trait="_SNV+A" /> </alpha>
+		<alpha>
+			<copy src="io()" trait="_SNV+A" />
+			<mul src="parent()" trait="_AlphaMenu" />
+		</alpha>
 		<depth> -5000 </depth>
 		<width> <copy src="parent()" trait="width" /> </width>
 		<height> <copy src="parent()" trait="height" /> </height>
