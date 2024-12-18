@@ -35,42 +35,42 @@ endif
 ; Add LR Riot Gear support
 ref rHelmet = GetObjectEffect NVDLC04HelmetRiotGear
 if rHelmet == NVDLC04HelmetRiotGearOE
-	if GetNthEffectBase rHelmet 0 == NVDLC04RedNightvisionBE
-		RemoveNthEffect NVDLC04HelmetRiotGearOE 0
+	if GetNthEffectBase rHelmet 3 == NVDLC04DummySneakSightBE
+		RemoveNthEffect NVDLC04HelmetRiotGearOE 3
 	endif
 	if GetNthEffectBase rHelmet 2 == NVDLC04DummySneakSightBE
 		RemoveNthEffect NVDLC04HelmetRiotGearOE 2
 	endif
-	if GetNthEffectBase rHelmet 3 == NVDLC04DummySneakSightBE
-		RemoveNthEffect NVDLC04HelmetRiotGearOE 3
+	if GetNthEffectBase rHelmet 0 == NVDLC04RedNightvisionBE
+		RemoveNthEffect NVDLC04HelmetRiotGearOE 0
 	endif
 endif
 AssignKeyword NVDLC04HelmetRiotGear "SimpleNightVision"
 
 rHelmet = GetObjectEffect NVDLC04HelmetRiotGearCustom
 if rHelmet == NVDLC04HelmetRiotGearCustomOE
-	if GetNthEffectBase rHelmet 0 == NVDLC04RedNightvisionBE
-		RemoveNthEffect NVDLC04HelmetRiotGearCustomOE 0
-	endif
-	if GetNthEffectBase rHelmet 2 == NVDLC04DummySneakSightBE
-		RemoveNthEffect NVDLC04HelmetRiotGearCustomOE 2
-	endif
 	if GetNthEffectBase rHelmet 3 == NVDLC04DummySneakSightBE
 		RemoveNthEffect NVDLC04HelmetRiotGearCustomOE 3
+	endif
+		if GetNthEffectBase rHelmet 2 == NVDLC04DummySneakSightBE
+		RemoveNthEffect NVDLC04HelmetRiotGearCustomOE 2
+	endif
+	if GetNthEffectBase rHelmet 0 == NVDLC04RedNightvisionBE
+		RemoveNthEffect NVDLC04HelmetRiotGearCustomOE 0
 	endif
 endif
 AssignKeyword NVDLC04HelmetRiotGearCustom "SimpleNightVision"
 
 rHelmet = GetObjectEffect NVDLC04HelmetRiotGearUnique
 if rHelmet == NVDLC04HelmetRiotGearUniqueOE
-	if GetNthEffectBase rHelmet 0 == NVDLC04RedNightvisionBE
-		RemoveNthEffect NVDLC04HelmetRiotGearUniqueOE 0
-	endif
-	if GetNthEffectBase rHelmet 3 == NVDLC04DummySneakSightBE
-		RemoveNthEffect NVDLC04HelmetRiotGearUniqueOE 3
-	endif
 	if GetNthEffectBase rHelmet 4 == NVDLC04DummySneakSightBE
 		RemoveNthEffect NVDLC04HelmetRiotGearUniqueOE 4
+	endif
+		if GetNthEffectBase rHelmet 3 == NVDLC04DummySneakSightBE
+		RemoveNthEffect NVDLC04HelmetRiotGearUniqueOE 3
+	endif
+	if GetNthEffectBase rHelmet 0 == NVDLC04RedNightvisionBE
+		RemoveNthEffect NVDLC04HelmetRiotGearUniqueOE 0
 	endif
 endif
 AssignKeyword NVDLC04HelmetRiotGearUnique "SimpleNightVision"
