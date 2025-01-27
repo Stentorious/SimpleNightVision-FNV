@@ -8,8 +8,8 @@ if Goo1.AuxVarType "SNV_Mode" 0 == 0
 	Goo1.AuxVarSetFlt "SNV_Mode" 1 1
 endif
 Goo1.AuxVarErase "*SNV_Shader"
-SetUIFloatAlt "HudMainMenu\_SNV+A" 0
-SetUIFloatAlt "HudMainMenu\_SNV+M" 0
+SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Alpha" 0
+SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 0
 RIMOD NVDLC03GhostNightvisionISFX
 RIMOD NVDLC04RedNightvisionISFX
 
@@ -45,14 +45,14 @@ if Goo1.AuxVarGetFlt "SNV_Mode" 0 == 1
 	; Enable night vision
 	if Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
 		IMOD NVDLC03GhostNightvisionISFX
-		SetUIFloatAlt "HudMainMenu\_SNV+A" (Goo1.AuxVarGetFlt "*SNV_INI" 0)
-		SetUIFloatAlt "HudMainMenu\_SNV+M" 1
+		SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Alpha" (Goo1.AuxVarGetFlt "*SNV_INI" 0)
+		SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 1
 
 	; Enable thermal vision
 	else
 		IMOD NVDLC04RedNightvisionISFX
-		SetUIFloatAlt "HudMainMenu\_SNV+A" ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1)
+		SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Alpha" ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1)
 		CallAfterFrames 0 ({} => AuxTimerStart "*SNV_Thermal" 5 30)
-		SetUIFloatAlt "HudMainMenu\_SNV+M" 2
+		SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 2
 	endif
 endif

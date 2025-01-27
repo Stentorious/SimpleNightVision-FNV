@@ -12,19 +12,19 @@ begin Function {}
 		if Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
 			IMOD NVDLC03GhostNightvisionISFX
 			RIMOD NVDLC04RedNightvisionISFX
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 0) 0.5
+			SetUIFloatGradual "HUDMainMenu\SimpleNightVision\_Alpha" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 0) 0.5
 			PlaySound UIPipBoyLightOn
-			SetUIFloatAlt "HudMainMenu\_SNV+M" 1
+			SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 1
 			Goo1.AuxVarSetFlt "SNV_Mode" 1 1
 
 		; Enable thermal vision
 		else
 			RIMOD NVDLC03GhostNightvisionISFX
 			IMOD NVDLC04RedNightvisionISFX
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1) 0.5
+			SetUIFloatGradual "HUDMainMenu\SimpleNightVision\_Alpha" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1) 0.5
 			AuxTimerStart "*SNV_Thermal" 5 30
 			PlaySound UIPipBoyLightOn
-			SetUIFloatAlt "HudMainMenu\_SNV+M" 2
+			SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 2
 			Goo1.AuxVarSetFlt "SNV_Mode" 2 1
 		endif
 
@@ -48,9 +48,9 @@ begin Function {}
 
 			IMOD NVDLC03GhostNightvisionISFX
 			RIMOD NVDLC04RedNightvisionISFX
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 0) 0.5
+			SetUIFloatGradual "HUDMainMenu\SimpleNightVision\_Alpha" 200 (Goo1.AuxVarGetFlt "*SNV_INI" 0) 0.5
 			PlaySound UIPipBoyLightOn
-			SetUIFloatAlt "HudMainMenu\_SNV+M" 1
+			SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 1
 			Goo1.AuxVarSetFlt "SNV_Mode" 1 1
 			Goo1.AuxVarErase "*SNV_Shader"
 
@@ -58,10 +58,10 @@ begin Function {}
 		else
 			RIMOD NVDLC03GhostNightvisionISFX
 			IMOD NVDLC04RedNightvisionISFX
-			SetUIFloatGradual "HudMainMenu\_SNV+A" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1) 0.5
+			SetUIFloatGradual "HUDMainMenu\SimpleNightVision\_Alpha" 200 ((Goo1.AuxVarGetFlt "*SNV_INI" 1) * 1.1) 0.5
 			AuxTimerStart "*SNV_Thermal" 5 30
 			PlaySound UIPipBoyLightOn
-			SetUIFloatAlt "HudMainMenu\_SNV+M" 2
+			SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 2
 			Goo1.AuxVarSetFlt "SNV_Mode" 2 1
 		endif
 	endif

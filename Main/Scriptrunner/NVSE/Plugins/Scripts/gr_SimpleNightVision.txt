@@ -24,7 +24,7 @@ if GetPluginVersion "UI Organizer Plugin" < 230
 endif
 Goo1.AuxVarSetFlt "*SNV_Init" 1
 
-SetUIFloatGradual "HudMainMenu\_SNV+0" 0 9.999 0.5 3
+SetUIFloatGradual "HUDMainMenu\SimpleNightVision\Static\_index" 0 9.999 0.5 3
 
 ; Add OWB Hazmat Darklight Cowl support
 if eval GetObjectEffect NVDLC03GhostHoodlessHead == NVDLC03GhostHoodGogglesOE

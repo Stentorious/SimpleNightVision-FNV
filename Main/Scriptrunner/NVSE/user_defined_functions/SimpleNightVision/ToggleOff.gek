@@ -31,8 +31,8 @@ begin Function {}
 	Goo1.AuxVarErase "SNV_Armor"
 
 	; Reset HUD
-	SetUIFloatAlt "HudMainMenu\_SNV+M" 0
-	SetUIFloatGradual "HudMainMenu\_SNV+A" 0
+	SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 0
+	SetUIFloatGradual "HUDMainMenu\SimpleNightVision\_Alpha" 0
 
 	aShaderRefs = aForE = Ar_Null
 

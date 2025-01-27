@@ -3,74 +3,80 @@
 	<image name="Texture"> <filename> Stentorious\Interface\overlay\thermal_vision.dds </filename> </image>
 </rect>
 
-<_SNV+0> 0 </_SNV+0>
-<_SNV+A> 0 </_SNV+A>
-<_SNV+M> 0 </_SNV+M>
-
 <rect name="SimpleNightVision">
 
 	<visible> 1 </visible>
 	<width> <copy src="screen()" trait="width" /> </width>
 	<height> <copy src="screen()" trait="height" /> </height>
+
+	<_Mode> 0 </_Mode>
+	<_Alpha> 0 </_Alpha>
 	<_AlphaMenu> 1.0 </_AlphaMenu>
 
 	<image name="Static">
 		<visible> 1 </visible>
 		<alpha>
-			<copy src="io()" trait="_SNV+A" />
+			<copy src="parent()" trait="_Alpha" />
 			<mul src="parent()" trait="_AlphaMenu" />
 		</alpha>
 		<depth> -5000 </depth>
 		<width> <copy src="parent()" trait="width" /> </width>
 		<height> <copy src="parent()" trait="height" /> </height>
 		<zoom> -1 </zoom>
-		<systemcolor>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Systemcolor_" />
-		</systemcolor>
-		<red>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Red_" />
-		</red>
-		<green>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Green_" />
-		</green>
-		<blue>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Blue_" />
-		</blue>
-		<filename>
-			<copy src="io()" trait="_SNV+0" />
-			<copy src="me()" trait="_Tile_" />
-		</filename>
-		<_Tile_0> Stentorious\Interface\static\0.dds </_Tile_0>
-		<_Tile_1> Stentorious\Interface\static\1.dds </_Tile_1>
-		<_Tile_2> Stentorious\Interface\static\2.dds </_Tile_2>
-		<_Tile_3> Stentorious\Interface\static\3.dds </_Tile_3>
-		<_Tile_4> Stentorious\Interface\static\4.dds </_Tile_4>
-		<_Tile_5> Stentorious\Interface\static\5.dds </_Tile_5>
-		<_Tile_6> Stentorious\Interface\static\6.dds </_Tile_6>
-		<_Tile_7> Stentorious\Interface\static\7.dds </_Tile_7>
-		<_Tile_8> Stentorious\Interface\static\8.dds </_Tile_8>
-		<_Tile_9> Stentorious\Interface\static\9.dds </_Tile_9>
+
 		<_systemcolor_0> 0 </_systemcolor_0>
 		<_systemcolor_1> 0 </_systemcolor_1>
 		<_systemcolor_2> 0 </_systemcolor_2>
+		<systemcolor>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_systemcolor_" />
+		</systemcolor>
+
 		<_red_0> 255 </_red_0>
 		<_red_1> 127 </_red_1>
 		<_red_2> 255 </_red_2>
+		<red>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_red_" />
+		</red>
+
 		<_green_0> 255 </_green_0>
 		<_green_1> 255 </_green_1>
 		<_green_2> 255 </_green_2>
+		<green>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_green_" />
+		</green>
+
 		<_blue_0> 255 </_blue_0>
 		<_blue_1> 127 </_blue_1>
 		<_blue_2> 255 </_blue_2>
+		<blue>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_blue_" />
+		</blue>
+
+		<_index> 0 </_index>
+		<_filename_0> Interface\Stentorious\_Common\Static\0.dds </_filename_0>
+		<_filename_1> Interface\Stentorious\_Common\Static\1.dds </_filename_1>
+		<_filename_2> Interface\Stentorious\_Common\Static\2.dds </_filename_2>
+		<_filename_3> Interface\Stentorious\_Common\Static\3.dds </_filename_3>
+		<_filename_4> Interface\Stentorious\_Common\Static\4.dds </_filename_4>
+		<_filename_5> Interface\Stentorious\_Common\Static\5.dds </_filename_5>
+		<_filename_6> Interface\Stentorious\_Common\Static\6.dds </_filename_6>
+		<_filename_7> Interface\Stentorious\_Common\Static\7.dds </_filename_7>
+		<_filename_8> Interface\Stentorious\_Common\Static\8.dds </_filename_8>
+		<_filename_9> Interface\Stentorious\_Common\Static\9.dds </_filename_9>
+		<filename>
+			<copy src="me()" trait="_index"/>
+			<copy src="me()" trait="_filename_"/>
+		</filename>
+
 	</image>
 
 	<image name="Overlay">
 		<visible>
-			<copy src="io()" trait="_SNV+M" />
+			<copy src="parent()" trait="_Mode" />
 			<gt> 0 </gt>
 		</visible>
 		<alpha>
@@ -104,27 +110,31 @@
 		</height>
 		<zoom> -1 </zoom>
 		<systemcolor> 0 </systemcolor>
+
+		<_filename_0> Stentorious\Interface\overlay\night_vision.dds </_filename_0>
+		<_filename_1> Stentorious\Interface\overlay\night_vision.dds </_filename_1>
+		<_filename_2> Stentorious\Interface\overlay\thermal_vision.dds </_filename_2>
 		<filename>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Tile_" />
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_filename_" />
 		</filename>
-		<_Scale>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Scale_" />
-		</_Scale>
-		<_Alpha>
-			<copy src="io()" trait="_SNV+M" />
-			<copy src="me()" trait="_Alpha_" />
-		</_Alpha>
+
 		<_Scale_0> 1 </_Scale_0>
 		<_Scale_1> 1 </_Scale_1>
 		<_Scale_2> 1 </_Scale_2>
+		<_Scale>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_Scale_" />
+		</_Scale>
+
 		<_Alpha_0> 0 </_Alpha_0>
 		<_Alpha_1> 0 </_Alpha_1>
 		<_Alpha_2> 0 </_Alpha_2>
-		<_Tile_0> Stentorious\Interface\overlay\night_vision.dds </_Tile_0>
-		<_Tile_1> Stentorious\Interface\overlay\night_vision.dds </_Tile_1>
-		<_Tile_2> Stentorious\Interface\overlay\thermal_vision.dds </_Tile_2>
+		<_Alpha>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_Alpha_" />
+		</_Alpha>
+
 	</image>
 
 </rect>
