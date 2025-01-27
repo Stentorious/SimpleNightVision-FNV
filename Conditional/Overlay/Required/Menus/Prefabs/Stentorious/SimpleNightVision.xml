@@ -1,6 +1,6 @@
-<rect name="SNV_Overlay">
-	<image name="Texture"> <filename> Stentorious\Interface\overlay\night_vision.dds </filename> </image>
-	<image name="Texture"> <filename> Stentorious\Interface\overlay\thermal_vision.dds </filename> </image>
+<rect name="SimpleNightVision_Overlay">
+	<image name="Texture"><filename>Interface\Stentorious\SimpleNightVision\night_vision.dds</filename></image>
+	<image name="Texture"><filename>Interface\Stentorious\SimpleNightVision\thermal_vision.dds</filename></image>
 </rect>
 
 <rect name="SimpleNightVision">
@@ -111,9 +111,9 @@
 		<zoom> -1 </zoom>
 		<systemcolor> 0 </systemcolor>
 
-		<_filename_0> Stentorious\Interface\overlay\night_vision.dds </_filename_0>
-		<_filename_1> Stentorious\Interface\overlay\night_vision.dds </_filename_1>
-		<_filename_2> Stentorious\Interface\overlay\thermal_vision.dds </_filename_2>
+		<_filename_0> Interface\Stentorious\SimpleNightVision\night_vision.dds </_filename_0>
+		<_filename_1> Interface\Stentorious\SimpleNightVision\night_vision.dds </_filename_1>
+		<_filename_2> Interface\Stentorious\SimpleNightVision\thermal_vision.dds </_filename_2>
 		<filename>
 			<copy src="parent()" trait="_Mode" />
 			<copy src="me()" trait="_filename_" />
