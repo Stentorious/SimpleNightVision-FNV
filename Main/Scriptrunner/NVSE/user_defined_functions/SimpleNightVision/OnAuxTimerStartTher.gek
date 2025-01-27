@@ -1,10 +1,10 @@
 ref rOwnerForm
 string_var sTimerName
 
+int iSize
 ref rActor
 array_var aShaderRefs
 array_var aActorRefs
-array_var aForE
 
 begin Function {sTimerName, rOwnerForm}
 
@@ -17,28 +17,27 @@ begin Function {sTimerName, rOwnerForm}
 
 		; Remove effect shader from all refs
 		Goo1.AuxVarErase "*SNV_Shader"
-		if aShaderRefs
-			foreach aForE <- aShaderRefs
-				rActor = *aForE
-				if eval IsFormValid rActor
+		if eval (iSize = Ar_Size aShaderRefs) > 0
+			while (iSize -= 1) > -1
+				if eval IsFormValid (rActor = aShaderRefs[iSize])
 					rActor.SMS effectAbsorb
 				endif
 			loop
 		endif
 
 		; Add effect shader to all valid refs
-		if aActorRefs
-			aForE = Ar_Null
-			foreach aForE <- aActorRefs
-				rActor = *aForE
+		if eval (iSize = Ar_Size aActorRefs) > 0
+			while (iSize -= 1) > -1
+				rActor = aActorRefs[iSize]
 				if eval IsFormValid rActor && rActor.GetCreatureType != 6 && rActor.GetDead == 0 && rActor.GetDisabled == 0
 					rActor.PMS effectAbsorb
 					Goo1.AuxVarSetRef "*SNV_Shader" rActor -1
 				endif
 			loop
 		endif
+
 	endif
 
-	aShaderRefs = aActorRefs = aForE = Ar_Null
+	aShaderRefs = aActorRefs = Ar_Null
 
 end

@@ -1,6 +1,6 @@
+int iSize
 ref rActor
 array_var aShaderRefs
-array_var aForE
 
 begin Function {}
 
@@ -15,10 +15,9 @@ begin Function {}
 		; Remove effect shader from all refs
 		AuxTimerStop "*SNV_Thermal"
 		aShaderRefs = Goo1.AuxVarGetAsArr "*SNV_Shader"
-		if aShaderRefs
-			foreach aForE <- aShaderRefs
-				rActor = *aForE
-				if IsFormValid rActor
+		if eval (iSize = Ar_Size aShaderRefs) > 0
+			while (iSize -= 1) > -1
+				if eval IsFormValid (rActor = aShaderRefs[iSize])
 					rActor.SMS effectAbsorb
 				endif
 			loop
@@ -34,6 +33,6 @@ begin Function {}
 	SetUIFloatAlt "HUDMainMenu\SimpleNightVision\_Mode" 0
 	SetUIFloatGradual "HUDMainMenu\SimpleNightVision\_Alpha" 0
 
-	aShaderRefs = aForE = Ar_Null
+	aShaderRefs = Ar_Null
 
 end
