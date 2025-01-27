@@ -12,20 +12,20 @@ begin Function {sTimerName, rOwnerForm}
 	rGlasses = Player.GetEqObj 11
 
 	; Display message box if valid headgear can support vision modes
-	Goo1.AuxVarErase "SNV_Ref"
+	Goo1.AuxVarErase "*SNV_Ref"
 	if eval IsFormValid rHat && IsPA rHat == 0 && HasKeyword rHat "SimpleNightVision" == 0
 		iFlag = 1
-		Goo1.AuxVarSetRef "SNV_Ref" rHat
+		Goo1.AuxVarSetRef "*SNV_Ref" rHat
 	elseif eval IsFormValid rGlasses && IsPA rGlasses == 0 && HasKeyword rGlasses "SimpleNightVision" == 0
 		iFlag = 1
-		Goo1.AuxVarSetRef "SNV_Ref" rGlasses
+		Goo1.AuxVarSetRef "*SNV_Ref" rGlasses
 	endif
 
 	if eval iFlag
-		rHat = Goo1.AuxVarGetRef "SNV_Ref"
+		rHat = Goo1.AuxVarGetRef "*SNV_Ref"
 		MessageBoxExAlt (begin function {int iButton}
 			if iButton == 0
-				ref rArmor = Goo1.AuxVarGetRef "SNV_Ref"
+				ref rArmor = Goo1.AuxVarGetRef "*SNV_Ref"
 				array_var aINISections = GetINISection "SimpleNightVision" "..\KEYWORDS\SimpleNightVision.ini" 1
 				SetINIString ("SimpleNightVision:" + $(Ar_Size aINISections)) (GetEditorID rArmor) "..\KEYWORDS\SimpleNightVision.ini"
 				AssignKeyword rArmor "SimpleNightVision"
