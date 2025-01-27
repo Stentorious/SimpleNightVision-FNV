@@ -14,7 +14,7 @@ RIMOD NVDLC03GhostNightvisionISFX
 RIMOD NVDLC04RedNightvisionISFX
 
 ; Remove Cyberware vision mode
-if IsModLoaded "Cyberware.esm" && GetINIFloat "General:bOverrideCyberware" "SimpleNightVision.ini" == 1
+if IsModLoaded "Cyberware.esm" && GetINIFloat "General:bOverrideCyberware" "Stentorious\SimpleNightVision.ini" == 1
 	ref rGlobal = EditorIDToFormID "CWxVisionModeLevel"
 	ref rQuest = EditorIDToFormID "CWxBionicEyesQuest"
 	float fGlobal = GetGlobalVariable rGlobal

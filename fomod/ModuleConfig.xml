@@ -215,7 +215,7 @@
 					<flagDependency flag="Scriptrunner" value="Active"/>
 				</dependencies>
 				<files>
-					<file source="Conditional\Overlay\Config\Scriptrunner\SimpleNightVision.ini" destination="Config\SimpleNightVision.ini" priority="1" />
+					<file source="Conditional\Overlay\Config\Scriptrunner\SimpleNightVision.ini" destination="Config\Stentorious\SimpleNightVision.ini" priority="1" />
 				</files>
 			</pattern>
 			<pattern>
@@ -225,7 +225,7 @@
 					<flagDependency flag="Patch STARS" value=""/>
 				</dependencies>
 				<files>
-					<file source="Conditional\Overlay\Config\Plugin\Default\SimpleNightVision.ini" destination="Config\SimpleNightVision.ini" priority="1" />
+					<file source="Conditional\Overlay\Config\Plugin\Default\SimpleNightVision.ini" destination="Config\Stentorious\SimpleNightVision.ini" priority="1" />
 				</files>
 			</pattern>
 			<pattern>
@@ -235,7 +235,7 @@
 					<flagDependency flag="Patch STARS" value="Active"/>
 				</dependencies>
 				<files>
-					<file source="Conditional\Overlay\Config\Plugin\STARS TTW\SimpleNightVision.ini" destination="Config\SimpleNightVision.ini" priority="1" />
+					<file source="Conditional\Overlay\Config\Plugin\STARS TTW\SimpleNightVision.ini" destination="Config\Stentorious\SimpleNightVision.ini" priority="1" />
 				</files>
 			</pattern>
 		</patterns>
