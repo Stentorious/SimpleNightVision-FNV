@@ -107,13 +107,13 @@ SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 45 0.3		; Blur: Blur Radius 		
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 50 255		; Cinematic: Tint: Alpha
 
 ; Set configurable traits
-float fINI = (GetMaxOf 0 (GetMinOf 15 (GetINIFloat "NightVision:fMoonlightBrightness" "Stentorious\SimpleNightVision.ini")))
+float fINI = GetMaxOf 0 (GetMinOf 15 (GetINIFloat_Cached "NightVision:fMoonlightBrightness" "Stentorious\SimpleNightVision.ini"))
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 26 fINI		; HDR: Sunlight Dimmer (Add) 		Skylight brightness
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 28 fINI		; HDR: Grass Dimmer (Add) 			Grass brightness
-SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 44 (GetMaxOf 0 (GetMinOf 15 (GetINIFloat "NightVision:fOverallBrightness" "Stentorious\SimpleNightVision.ini")))		; Cinematic: Brightness (Add) Overall brightness
+SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 44 (GetMaxOf 0 (GetMinOf 15 (GetINIFloat_Cached "NightVision:fOverallBrightness" "Stentorious\SimpleNightVision.ini")))		; Cinematic: Brightness (Add) Overall brightness
 
 ; Set color
-string_var sINI = GetINIString "NightVision:iColor" "Stentorious\SimpleNightVision.ini"
+string_var sINI = GetINIString_Cached "NightVision:iColor" "Stentorious\SimpleNightVision.ini"
 int iLength = Sv_Length sINI
 if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
 	fINI = ToNumber (sINI[0:1]) 1
@@ -137,10 +137,10 @@ elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
 	endif
 endif
 
-SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 63 ((GetMaxOf 0 (GetMinOf 2 (GetINIFloat "NightVision:fMotionBlur" "Stentorious\SimpleNightVision.ini"))) * 2)		; Full-Screen Motion Blur: Strength
-Goo1.AuxVarSetFlt "*SNV_INI" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "NightVision:fStaticStrength" "Stentorious\SimpleNightVision.ini"))) * 255) 0
-SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Alpha_1" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "NightVision:fHUDOverlayStrength" "Stentorious\SimpleNightVision.ini"))) * 255)
-SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Scale_1" (GetMaxOf 1 (GetMinOf 1.5 (GetINIFloat "NightVision:fHUDOverlayScale" "Stentorious\SimpleNightVision.ini")))
+SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 63 ((GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "NightVision:fMotionBlur" "Stentorious\SimpleNightVision.ini"))) * 2)		; Full-Screen Motion Blur: Strength
+Goo1.AuxVarSetFlt "*SNV_INI" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "NightVision:fStaticStrength" "Stentorious\SimpleNightVision.ini"))) * 255) 0
+SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Alpha_1" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "NightVision:fHUDOverlayStrength" "Stentorious\SimpleNightVision.ini"))) * 255)
+SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Scale_1" (GetMaxOf 1 (GetMinOf 1.5 (GetINIFloat_Cached "NightVision:fHUDOverlayScale" "Stentorious\SimpleNightVision.ini")))
 
 ; Set thermal vision IMOD traits
 ; Set default traits
@@ -166,13 +166,13 @@ SetImageSpaceModTrait NVDLC04RedNightvisionISFX 45 0.3			; Blur: Blur Radius 			
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 50 255			; Cinematic: Tint: Alpha
 
 ; Set configurable traits
-fINI = (GetMaxOf 0 (GetMinOf 15 (GetINIFloat "ThermalVision:fMoonlightBrightness" "Stentorious\SimpleNightVision.ini")))
+fINI = (GetMaxOf 0 (GetMinOf 15 (GetINIFloat_Cached "ThermalVision:fMoonlightBrightness" "Stentorious\SimpleNightVision.ini")))
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 26 fINI			; HDR: Sunlight Dimmer (Add) 		Skylight brightness
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 28 fINI			; HDR: Grass Dimmer (Add) 			Grass brightness
-SetImageSpaceModTrait NVDLC04RedNightvisionISFX 44 (GetMaxOf 0 (GetMinOf 15 (GetINIFloat "ThermalVision:fOverallBrightness" "Stentorious\SimpleNightVision.ini")))		; Cinematic: Brightness (Add) Overall brightness
+SetImageSpaceModTrait NVDLC04RedNightvisionISFX 44 (GetMaxOf 0 (GetMinOf 15 (GetINIFloat_Cached "ThermalVision:fOverallBrightness" "Stentorious\SimpleNightVision.ini")))		; Cinematic: Brightness (Add) Overall brightness
 
 ; Set color
-sINI = GetINIString "ThermalVision:iColor" "Stentorious\SimpleNightVision.ini"
+sINI = GetINIString_Cached "ThermalVision:iColor" "Stentorious\SimpleNightVision.ini"
 iLength = Sv_Length sINI
 if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
 	fINI = ToNumber (sINI[0:1]) 1
@@ -195,10 +195,10 @@ elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
 endif
 Sv_Destruct sINI
 
-SetImageSpaceModTrait NVDLC04RedNightvisionISFX 63 ((GetMaxOf 0 (GetMinOf 2 (GetINIFloat "ThermalVision:fMotionBlur" "Stentorious\SimpleNightVision.ini"))) * 2)		; Full-Screen Motion Blur: Strength
-Goo1.AuxVarSetFlt "*SNV_INI" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "ThermalVision:fStaticStrength" "Stentorious\SimpleNightVision.ini"))) * 255) 1
-SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Alpha_2" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat "ThermalVision:fHUDOverlayStrength" "Stentorious\SimpleNightVision.ini"))) * 255)
-SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Scale_2" (GetMaxOf 1 (GetMinOf 1.5 (GetINIFloat "ThermalVision:fHUDOverlayScale" "Stentorious\SimpleNightVision.ini")))
+SetImageSpaceModTrait NVDLC04RedNightvisionISFX 63 ((GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "ThermalVision:fMotionBlur" "Stentorious\SimpleNightVision.ini"))) * 2)		; Full-Screen Motion Blur: Strength
+Goo1.AuxVarSetFlt "*SNV_INI" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "ThermalVision:fStaticStrength" "Stentorious\SimpleNightVision.ini"))) * 255) 1
+SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Alpha_2" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "ThermalVision:fHUDOverlayStrength" "Stentorious\SimpleNightVision.ini"))) * 255)
+SetUIFloatAlt "HudMainMenu\SimpleNightVision\Overlay\_Scale_2" (GetMaxOf 1 (GetMinOf 1.5 (GetINIFloat_Cached "ThermalVision:fHUDOverlayScale" "Stentorious\SimpleNightVision.ini")))
 
 ; Set thermal vision effect shader traits
 SetEffectShaderTraitNumeric effectAbsorb 0 24					; Flags
@@ -212,10 +212,10 @@ SetEffectShaderTraitNumeric effectAbsorb 20 0					; Edge Effect - Alpha Pulse Fr
 SetEffectShaderTraitNumeric effectAbsorb 22 1					; Edge Effect - Full Alpha Ratio
 SetEffectShaderTraitNumeric effectAbsorb 23 2					; Membrane Shader - Dest Blend Mode
 
-Goo1.AuxVarSetFlt "*SNV_INI" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat "General:fPipBoyStrength" "Stentorious\SimpleNightVision.ini"))) 2
+Goo1.AuxVarSetFlt "*SNV_INI" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "General:fPipBoyStrength" "Stentorious\SimpleNightVision.ini"))) 2
 
 ;Set Event Handlers
-fINI = GetINIFloat "General:iKeybind" "Stentorious\SimpleNightVision.ini"
+fINI = GetINIFloat_Cached "General:iKeybind" "Stentorious\SimpleNightVision.ini"
 
 SetOnKeyDownEventHandler (CompileScript "SimpleNightVision/OnKeyDown.gek") 1 fINI
 SetEventHandler "OnCellEnter" (CompileScript "SimpleNightVision/OnCellEnter.gek")
@@ -227,7 +227,11 @@ SetOnMenuCloseEventHandler (CompileScript "SimpleNightVision/OnMenuClose.gek") 1
 SetOnMenuCloseEventHandler (CompileScript "SimpleNightVision/OnMenuClose.gek") 1 1003
 SetOnMenuCloseEventHandler (CompileScript "SimpleNightVision/OnMenuClose.gek") 1 1023
 
-if IsModLoaded "Cyberware.esm" && GetINIFloat "General:bOverrideCyberware" "Stentorious\SimpleNightVision.ini" == 1
+Goo1.AuxVarSetFlt "*SNV_INI" (GetINIFloat_Cached "General:bOverrideCyberware" "Stentorious\SimpleNightVision.ini") 3
+
+CloseFileSO "Stentorious\SimpleNightVision.ini" 0
+
+if eval IsModLoaded "Cyberware.esm" && Goo1.AuxVarGetFlt "*SNV_INI" 3
 	SetOnKeyUpEventHandler (CompileScript "SimpleNightVision/OnKeyUpCyb.gek") 1 fINI
 	SetOnRemovePerkEventHandler 1 (CompileScript "SimpleNightVision/OnRemovePerkCyb.gek") 0 (EditorIDToFormID "CWxImplantVisionModePerk")
 	SetOnQuestStageEventHandler (CompileScript "SimpleNightVision/OnQuestStageCyb.gek") 1 (EditorIDToFormID "CWxBionicEyesQuest") 1 1
