@@ -1,0 +1,96 @@
+int	iKeyID
+
+int iSwitchMode
+int iCount
+float fTime
+ref rArmor
+ref rHat
+ref rGlasses
+
+begin Function {iKeyID}
+
+	; Reset support timer
+	AuxTimerStop "*SNV_KeySupport"
+
+	; Toggle vision mode
+	if eval (!MenuMode && Player.GetDead == 0 && AuxTimerTimeLeft "*SNV_KeyToggle" != -1)
+		AuxTimerStop "*SNV_KeyToggle"
+		rHat = Player.GetEqObj 10
+		rGlasses = Player.GetEqObj 11
+		if eval Goo1.AuxVarGetFlt "*SNV_INI" 3 && Player.HasPerk (EditorIDToFormID "CWxImplantVisionModePerk")
+			iSwitchMode = 1
+		elseif eval IsFormValid rHat && (IsPA rHat || HasKeyword rHat "ModernNightVision")
+			rArmor = rHat
+			iSwitchMode = 1
+		elseif eval IsFormValid rGlasses && (IsPA rGlasses || HasKeyword rGlasses "ModernNightVision")
+			rArmor = rGlasses
+			iSwitchMode = 1
+		endif
+
+		if eval iSwitchMode
+
+			; Check for energy requirements
+			if eval Goo1.AuxVarGetFlt "*SNV_INI" 8 > 0 && Goo1.AuxVarGetFlt "SNV_Mode" 2 == 0
+				iCount = Player.GetItemCount AmmoSmallEnergyCell
+				SetUIStringAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\CountText\string" "%g" iCount
+				SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyCount" iCount
+				SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\CountText\_Alpha" 510
+				SetUIFloatGradual "HUDMainMenu\ModernNightVision\EnergyDisplay\CountText\_Alpha" 510 0 1
+				if eval iCount > 0
+					Player.RemoveItem AmmoSmallEnergyCell 1 1
+					Player.AddItemAlt DrainedSmallEnergyCell 1
+					Goo1.AuxVarSetFlt "SNV_Mode" (Goo1.AuxVarGetFlt "*SNV_INI" 8) 2
+					SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyCharge" 0 (Goo1.AuxVarGetFlt "*SNV_INI" 8) 1
+					PlaySound WPNPistolLaserCharge
+				else
+					MessageExAlt 3 "#0|You have no Energy Cells remaining."
+					PlaySound OBJSwitchButtonBFail
+					SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyAlpha" 2 0 1
+					return
+				endif
+			endif
+
+			; Play animation
+			if eval Goo1.AuxVarGetFlt "*SNV_INI" 5 && IsPC1stPerson
+				if eval Player.IsIdlePlaying || Player.IsAnimPlayingEx 5 || Player.IsAnimPlayingEx 4 || Player.GetAnimAction == 13 || Player.GetIsRagdolled
+				else
+					if eval Player.IsAnimSequencePlaying "ModernNightVision\On.kf"
+						Player.DeactivateAnim "ModernNightVision\On.kf"
+					endif
+					if eval Player.IsAnimSequencePlaying "ModernNightVision\Off.kf"
+						Player.DeactivateAnim "ModernNightVision\Off.kf"
+					endif
+					if eval Player.IsBlockingOrAiming
+						fTime = 0.25
+					endif
+					DisablePlayerControlsAltEx 30100
+					Goo1.AuxVarSetRef "SNV_Armor" rArmor
+					Goo1.AuxVarSetFlt "*SNV_Animation" 1
+					AuxTimerStart "*SNV_Animation" (fTime) 14
+
+					; Overlay fade
+					if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 == 0
+						if eval Goo1.AuxVarGetFlt "*SNV_INI" 4
+							SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" 0
+						endif
+						SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaOverlay" 0 1 0.2
+						SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyAlpha" 0 1 0.2
+					endif
+
+				endif
+
+			; Skip animation
+			else
+				Goo1.AuxVarSetRef "SNV_Armor" rArmor
+				; Overlay fade
+				if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 == 0
+					SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaOverlay" 1
+					SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyAlpha" 0 1 0.2
+				endif
+				Call (CompileScript "ModernNightVision/ToggleOn.gek") 0
+			endif
+		endif
+
+	endif
+
+end

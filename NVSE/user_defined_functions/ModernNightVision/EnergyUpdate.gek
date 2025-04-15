@@ -1,0 +1,50 @@
+ref rOwnerForm
+string_var sTimerName
+
+int iCount
+float fEnergy
+float fEnergyUse
+ref rArmor
+
+begin Function {sTimerName, rOwnerForm}
+
+	; Update energy charge
+	fEnergy = Goo1.AuxVarGetFlt "SNV_Mode" 2
+	fEnergyUse = Goo1.AuxVarGetFlt "*SNV_INI" 9
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyCharge" fEnergy
+	Goo1.AuxVarSetFlt "SNV_Mode" (GetMaxOf 0 (fEnergy - fEnergyUse)) 2
+
+	; Update Energy Display text
+	if eval Goo1.AuxVarGetFlt "*SNV_INI" 10 == 1
+		sTimerName = sv_Construct "%g%%" (Flr (((fEnergy / (Goo1.AuxVarGetFlt "*SNV_INI" 8)) * 100) + 0.5))
+	elseif eval fEnergyUse > 0
+		sTimerName = sv_Construct "%gs" (Flr ((fEnergy / fEnergyUse) + 0.5))
+	else
+		sTimerName = "-"
+	endif
+	SetUIStringAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\string" "%z" sTimerName
+
+	if eval fEnergy == 0
+		iCount = Player.GetItemCount AmmoSmallEnergyCell
+		SetUIStringAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\CountText\string" "%g" iCount
+		SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyCount" iCount
+		SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\CountText\_Alpha" 510
+		SetUIFloatGradual "HUDMainMenu\ModernNightVision\EnergyDisplay\CountText\_Alpha" 510 0 1
+		if eval iCount > 0
+			Player.RemoveItem AmmoSmallEnergyCell 1 1
+			Player.AddItemAlt DrainedSmallEnergyCell 1
+			Goo1.AuxVarSetFlt "SNV_Mode" (fEnergy = Goo1.AuxVarGetFlt "*SNV_INI" 8) 2
+			SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyCharge" 0 fEnergy 1
+			PlaySound WPNPistolLaserCharge
+		else
+			AuxTimerStop "*SNV_KeyToggle"
+			AuxTimerStop "*SNV_KeySupport"
+			Call (CompileScript "ModernNightVision/ToggleOff.gek") 2
+			;MessageExAlt 3 "#0|You have no Energy Cells remaining."
+			PlaySound OBJComputerTerminalPowerDown
+		endif
+	endif
+
+	sv_Destruct sTimerName
+
+end

@@ -1,0 +1,59 @@
+int iFlag
+
+int iSize
+ref rActor
+array_var aShaderRefs
+
+begin Function {iFlag}
+
+	; Update animation stage
+	if eval iFlag == 1
+		Goo1.AuxVarSetFlt "*SNV_Animation" 3
+		AuxTimerStart "*SNV_Animation" 0.7 14
+	endif
+
+	; Disable night vision
+	if eval Goo1.AuxVarGetFlt "SNV_Mode" 1 == 0
+		RIMOD NVDLC03GhostNightvisionISFX
+
+	; Disable thermal vision
+	else
+		RIMOD NVDLC04RedNightvisionISFX
+
+		; Remove effect shader from all refs
+		AuxTimerStop "*SNV_Thermal"
+		aShaderRefs = Goo1.AuxVarGetAsArr "*SNV_Shader"
+		if eval (iSize = Ar_Size aShaderRefs) > 0
+			while (iSize -= 1) > -1
+				if eval IsReference (rActor = aShaderRefs[iSize])
+					rActor.SMS effectAbsorb
+				endif
+			loop
+		endif
+	endif
+
+	; Play sound
+	if eval iFlag < 2
+		PlaySound UIPipBoyLightOff
+	endif
+
+	; Reset aux
+	Goo1.AuxVarSetFlt "SNV_Mode" 0 0
+	Goo1.AuxVarErase "*SNV_Shader"
+	Goo1.AuxVarErase "SNV_Armor"
+	if eval Goo1.AuxVarGetFlt "*SNV_INI" 4
+		Goo1.AuxVarSetFlt "SNV_Mode" 0 1
+	endif
+
+	; Reset HUD
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_State" 0
+	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 0
+	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaOverlay" 1 0 0.2
+	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyAlpha" 1 0 0.2
+
+	; Reset power
+	AuxTimerStop "*SNV_Energy"
+
+	aShaderRefs = Ar_Null
+
+end

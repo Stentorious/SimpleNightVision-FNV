@@ -1,0 +1,387 @@
+<rect name="ModernNightVision_Overlay">
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\night_vision.dds</filename></image>
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\thermal_vision.dds</filename></image>
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\night_vision_eyebox.dds</filename></image>
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\thermal_vision_eyebox.dds</filename></image>
+</rect>
+
+<rect name="ModernNightVision">
+
+	<visible> 1 </visible>
+	<width> <copy src="screen()" trait="width" /> </width>
+	<height> <copy src="screen()" trait="height" /> </height>
+
+	<!-- Vision mode -->
+	<_State> 0 </_State>
+	<_Mode> -1 </_Mode>
+	<_Random> 0 </_Random>
+
+	<!-- Overlay Inertia -->
+	<_Inertia> 1 </_Inertia>
+	<_OffsetX> 0 </_OffsetX>
+	<_OffsetY> 0 </_OffsetY>
+	<_Rotation> 0 </_Rotation>
+
+	<!-- Energy display -->
+	<_EnergyMax> 0 </_EnergyMax>
+	<_EnergyCharge> 0 </_EnergyCharge>
+	<_EnergyCount> 0 </_EnergyCount>
+	<_EnergyAlpha> 0 </_EnergyAlpha>
+
+	<!-- Alpha control -->
+	<_AlphaStatic> 0 </_AlphaStatic>
+	<_AlphaOverlay> 0 </_AlphaOverlay>
+	<_AlphaMenu> 1 </_AlphaMenu>
+
+	<image name="Static">
+		<visible> 1 </visible>
+		<alpha>
+			<copy src="parent()" trait="_AlphaStatic" />
+			<mul src="parent()" trait="_AlphaMenu" />
+		</alpha>
+		<rotateaxisx>
+			<copy src="me()" trait="width" />
+			<div> 2 </div>
+		</rotateaxisx>
+		<rotateaxisy>
+			<copy src="me()" trait="height" />
+			<div> 2 </div>
+		</rotateaxisy>
+		<rotateangle>
+			<copy> 0 </copy>
+			<add> 3.141592653 </add>
+			<onlyif src="parent()" trait="_Random" />
+		</rotateangle>
+		<depth> -5001 </depth>
+		<width> <copy src="parent()" trait="width" /> </width>
+		<height> <copy src="parent()" trait="height" /> </height>
+		<zoom> -1 </zoom>
+		<systemcolor> 0 </systemcolor>
+		<red> 255 </red>
+		<green> 255 </green>
+		<blue> 255 </blue>
+
+		<_index> 0 </_index>
+		<_filename_0> Interface\Stentorious\_Common\Static\0.dds </_filename_0>
+		<_filename_1> Interface\Stentorious\_Common\Static\1.dds </_filename_1>
+		<_filename_2> Interface\Stentorious\_Common\Static\2.dds </_filename_2>
+		<_filename_3> Interface\Stentorious\_Common\Static\3.dds </_filename_3>
+		<_filename_4> Interface\Stentorious\_Common\Static\4.dds </_filename_4>
+		<_filename_5> Interface\Stentorious\_Common\Static\5.dds </_filename_5>
+		<_filename_6> Interface\Stentorious\_Common\Static\6.dds </_filename_6>
+		<_filename_7> Interface\Stentorious\_Common\Static\7.dds </_filename_7>
+		<_filename_8> Interface\Stentorious\_Common\Static\8.dds </_filename_8>
+		<_filename_9> Interface\Stentorious\_Common\Static\9.dds </_filename_9>
+		<filename>
+			<copy src="me()" trait="_index"/>
+			<copy src="me()" trait="_filename_"/>
+		</filename>
+
+	</image>
+
+	<image name="Overlay">
+		<visible> <copy src="parent()" trait="_1stPerson" /> </visible>
+		<alpha>
+			<copy src="parent()" trait="_AlphaOverlay" />
+			<mul> 2 </mul>
+			<sub> 1 </sub>
+			<max> 0 </max>
+			<mul src="parent()" trait="_AlphaMenu" />
+			<mul src="me()" trait="_Alpha" />
+		</alpha>
+		<depth> -4999 </depth>
+		<x>
+			<copy> 0 </copy>
+			<sub>
+				<copy src="me()" trait="width" />
+				<sub src="parent()" trait="width" />
+				<div> 2 </div>
+			</sub>
+			<sub>
+				<copy src="parent()" trait="_OffsetX" />
+				<onlyif src="parent()" trait="_Inertia" />
+				<div> 2.5 </div>
+			</sub>
+		</x>
+		<y>
+			<copy> 0 </copy>
+			<sub>
+				<copy src="me()" trait="height" />
+				<sub src="parent()" trait="height" />
+				<div> 2 </div>
+			</sub>
+			<sub>
+				<copy src="parent()" trait="_OffsetY" />
+				<onlyif src="parent()" trait="_Inertia" />
+				<div> 2.5 </div>
+			</sub>
+		</y>
+		<rotateaxisx>
+			<copy src="me()" trait="width" />
+			<div> 2 </div>
+		</rotateaxisx>
+		<rotateaxisy>
+			<copy src="me()" trait="height" />
+			<div> 2 </div>
+		</rotateaxisy>
+		<rotateangle>
+			<copy src="parent()" trait="_Rotation" />
+			<mul> 0.01745 </mul>
+			<onlyif src="parent()" trait="_Inertia" />
+		</rotateangle>
+		<width>
+			<copy src="parent()" trait="width" />
+			<mul src="me()" trait="_Scale" />
+		</width>
+		<height>
+			<copy src="parent()" trait="height" />
+			<mul src="me()" trait="_Scale" />
+		</height>
+		<zoom> -1 </zoom>
+		<systemcolor> 0 </systemcolor>
+
+		<_filename_0> Interface\Stentorious\ModernNightVision\night_vision.dds </_filename_0>
+		<_filename_1> Interface\Stentorious\ModernNightVision\thermal_vision.dds </_filename_1>
+		<filename>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_filename_" />
+		</filename>
+
+		<_Scale_0> 1 </_Scale_0>
+		<_Scale_1> 1 </_Scale_1>
+		<_Scale>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_Scale_" />
+		</_Scale>
+
+		<_Alpha_0> 0 </_Alpha_0>
+		<_Alpha_1> 0 </_Alpha_1>
+		<_Alpha>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_Alpha_" />
+		</_Alpha>
+
+	</image>
+
+	<image name="Eyebox">
+		<visible>
+			<copy src="parent()" trait="_Inertia" />
+			<copy src="sibling(Overlay)" trait="visible" />
+		</visible>
+		<alpha>
+			<copy src="parent()" trait="_AlphaOverlay" />
+			<mul src="parent()" trait="_AlphaMenu" />
+			<mul src="sibling(Overlay)" trait="_Alpha" />
+		</alpha>
+		<depth> -5000 </depth>
+		<x>
+			<copy> 0 </copy>
+			<sub>
+				<copy src="me()" trait="width" />
+				<sub src="parent()" trait="width" />
+				<div> 2 </div>
+			</sub>
+			<sub src="parent()" trait="_OffsetX" />
+		</x>
+		<y>
+			<copy> 0 </copy>
+			<sub>
+				<copy src="me()" trait="height" />
+				<sub src="parent()" trait="height" />
+				<div> 2 </div>
+			</sub>
+			<sub src="parent()" trait="_OffsetY" />
+		</y>
+
+		<rotateaxisx> <copy src="sibling(Overlay)" trait="rotateaxisx" /> </rotateaxisx>
+		<rotateaxisy> <copy src="sibling(Overlay)" trait="rotateaxisy" /> </rotateaxisy>
+		<rotateangle> <copy src="sibling(Overlay)" trait="rotateangle" /> </rotateangle>
+		<width> <copy src="sibling(Overlay)" trait="width" /> </width>
+		<height> <copy src="sibling(Overlay)" trait="height" /> </height>
+		<zoom> -1 </zoom>
+		<systemcolor> 0 </systemcolor>
+
+		<_filename_0> Interface\Stentorious\ModernNightVision\night_vision_eyebox.dds </_filename_0>
+		<_filename_1> Interface\Stentorious\ModernNightVision\thermal_vision_eyebox.dds </_filename_1>
+		<filename>
+			<copy src="parent()" trait="_Mode" />
+			<copy src="me()" trait="_filename_" />
+		</filename>
+
+	</image>
+
+	<rect name="EnergyDisplay">
+		<visible>
+			<copy src="ReticleCenter" trait="visible" />
+			<or src="AmmoTypeLabel" trait="visible" />
+			<or src="ActionPoints" trait="visible" />
+			<or src="HitPoints" trait="visible" />
+			<and>
+				<copy src="me()" trait="_AlphaMul" />
+				<gt> 0 </gt>
+			</and>
+			<!-- <and src="me()" trait="_visible" /> -->
+			<!-- <and src="me()" trait="_visible_pa" /> -->
+		</visible>
+		<locus> 1 </locus>
+		<depth> 0 </depth>
+		<x>
+			<copy src="ActionPoints" trait="x" />
+			<add> 30 </add>
+			<add src="me()" trait="_OffsetX" />
+		</x>
+		<y>
+			<copy src="ActionPoints" trait="y" />
+			<add> 3 </add>
+			<add src="me()" trait="_OffsetY" />
+		</y>
+
+		<_OffsetX> 0 </_OffsetX>
+		<_OffsetY> 0 </_OffsetY>
+		<_IconScale> 1 </_IconScale>
+		<_EnergyPerc>
+			<copy src="parent()" trait="_EnergyCharge" />
+			<div src="parent()" trait="_EnergyMax" />
+		</_EnergyPerc>
+		<_ColorCharge>
+			<copy> &hudmain; </copy>
+			<add>
+				<copy src="me()" trait="_EnergyPerc" />
+				<lt> 0.2 </lt>
+			</add>
+		</_ColorCharge>
+		<_IconPath> Interface\Stentorious\ModernNightVision\Battery.dds </_IconPath>
+
+		<_IconWidth>
+			<copy> 32 </copy>
+			<mul src="me()" trait="_IconScale" />
+		</_IconWidth>
+		<_IconStyle> 1 </_IconStyle>
+		<_ChargeText> 1 </_ChargeText>
+		<_AlphaMul>
+			<copy src="parent()" trait="_EnergyAlpha" />
+			<min> 1 </min>
+		</_AlphaMul>
+
+		<text name="ChargeText">
+			<visible>
+				<not src="sibling(CountText)" trait="alpha" />
+				<and src="parent()" trait="_ChargeText" />
+			</visible>
+			<alpha>
+				<copy> 255 </copy>
+				<mul src="parent()" trait="_AlphaMul" />
+			</alpha>
+			<depth> 3 </depth>
+			<x>
+				<copy> 12.5 </copy>
+				<mul src="parent()" trait="_IconScale" />
+			</x>
+			<y>
+				<copy> 10 </copy>
+				<mul src="parent()" trait="_IconScale" />
+			</y>
+			<zoom>
+				<copy> 60 </copy>
+				<mul src="parent()" trait="_IconScale" />
+			</zoom>
+			<systemcolor> <copy src="parent()" trait="_ColorCharge" /> </systemcolor>
+			<brightness> 255 </brightness>
+			<font> 7 </font>
+			<justify> &center; </justify>
+			<string> 100% </string>
+		</text>
+
+		<text name="CountText">
+			<visible> 1 </visible>
+			<alpha>
+				<copy src="me()" trait="_Alpha" />
+				<min> 255 </min>
+				<mul src="parent()" trait="_AlphaMul" />
+			</alpha>
+			<depth> 3 </depth>
+			<x>	<copy src="sibling(ChargeText)" trait="x" /> </x>
+			<y> <copy src="sibling(ChargeText)" trait="y" /> </y>
+			<zoom> <copy src="sibling(ChargeText)" trait="zoom" /> </zoom>
+			<systemcolor>
+				<copy> &hudmain; </copy>
+				<add>
+					<copy src="grandparent()" trait="_EnergyCount" />
+					<eq> 0 </eq>
+				</add>
+			</systemcolor>
+			<brightness> 255 </brightness>
+			<font> <copy src="sibling(ChargeText)" trait="font" /> </font>
+			<justify> &center; </justify>
+			<string></string>
+			<_Alpha> 0 </_Alpha>
+		</text>
+
+		<rect name="IconClip">
+			<clipwindow>1</clipwindow>
+			<depth>0</depth>
+			<width> <copy src="parent()" trait="_IconWidth" /> </width>
+			<height> <copy src="parent()" trait="_IconWidth" /> </height>
+			<y>
+				<copy src="parent()" trait="_IconWidth" />
+				<mul>
+					<copy> 1 </copy>
+					<sub src="parent()" trait="_EnergyPerc"/>
+				</mul>
+				<onlyif src="parent()" trait="_IconStyle"/>
+			</y>
+			<image name="Icon">
+				<visible> 1 </visible>
+				<alpha>
+					<copy> 255 </copy>
+					<mul src="grandparent()" trait="_AlphaMul" />
+				</alpha>
+				<locus> 1 </locus>
+				<depth> 1 </depth>
+				<x> 0 </x>
+				<y> 0 </y>
+				<width> <copy src="grandparent()" trait="_IconWidth" /> </width>
+				<height> <copy src="grandparent()" trait="_IconWidth" /> </height>
+				<zoom> &scale; </zoom>
+				<clips> 1 </clips>
+				<systemcolor> <copy src="grandparent()" trait="_ColorCharge" /> </systemcolor>
+				<brightness> 204 </brightness>
+				<filename> <copy src="grandparent()" trait="_IconPath" />  </filename>
+			</image>
+		</rect>
+		<image name="Background">
+			<visible> 1 </visible>
+			<alpha> <copy src="sibling(ChargeText)" trait="alpha" /> </alpha>
+			<locus> 1 </locus>
+			<depth> 0 </depth>
+			<x> 0 </x>
+			<y> 0 </y>
+			<width> <copy src="parent()" trait="_IconWidth" /> </width>
+			<height> <copy src="parent()" trait="_IconWidth" /> </height>
+			<zoom> &scale; </zoom>
+			<systemcolor> <copy src="parent()" trait="_ColorCharge" /> </systemcolor>
+			<brightness> 76.5 </brightness>
+			<filename> <copy src="parent()" trait="_IconPath" /> </filename>
+		</image>
+		<image name="DropShadow">
+			<visible> 1 </visible>
+			<alpha>
+				<copy src="sibling(ChargeText)" trait="alpha" />
+				<div> 2 </div>
+			</alpha>
+			<depth> -1 </depth>
+			<x>	1 </x>
+			<y> 1 </y>
+			<width> <copy src="parent()" trait="_IconWidth" /> </width>
+			<height> <copy src="parent()" trait="_IconWidth" /> </height>
+			<zoom> &scale; </zoom>
+			<systemcolor> 0 </systemcolor>
+			<red> 0 </red>
+			<green> 0 </green>
+			<blue> 0 </blue>
+			<filename> <copy src="parent()" trait="_IconPath" /> </filename>
+		</image>
+
+	</rect>
+
+</rect>
