@@ -1,0 +1,6 @@
+<rect name="ModernNightVision_Overlay">
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\Overlay\night_vision.dds</filename></image>
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\Overlay\thermal_vision.dds</filename></image>
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\Overlay\night_vision_eyebox.dds</filename></image>
+	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\Overlay\thermal_vision_eyebox.dds</filename></image>
+</rect>

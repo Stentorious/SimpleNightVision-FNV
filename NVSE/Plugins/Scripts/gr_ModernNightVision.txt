@@ -33,6 +33,8 @@
 ; 9 = Color - Systemcolor (Thermal Vision)
 ; 10 = Overall brightness (Thermal Vision)
 ; 11 = Energy use multiplier (Thermal Vision)
+; 12 = Overlay Texture (Night Vision)
+; 13 = Overlay Texture (Thermal Vision)
 
 Goo1.AuxVarSetFlt "*SNV_INI" 0 0
 Goo1.AuxVarSetFlt "*SNV_INI" 0 1
@@ -252,6 +254,10 @@ AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "ThermalVision:fOve
 ; Energy use multiplier
 AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" (sINIPath))) 11 Caps001
 
+; Overlay textures
+AuxVarSetStr "*SNV_Override" (GetINIString_Cached "NightVision:sOverlayTexture" (sINIPath) "night_vision") 12 Caps001
+AuxVarSetStr "*SNV_Override" (GetINIString_Cached "ThermalVision:sOverlayTexture" (sINIPath) "thermal_vision") 13 Caps001
+
 ; IMOD traits
 ; Default traits
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 9 1				; HDR: Emissive Mult (Multiply)
@@ -460,6 +466,10 @@ if eval (iSize = Ar_Size aOverrideINIs) > 0
 
 			; Energy consumption
 			AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 11 Caps001))) 11 rHelmet
+
+			; Overlay textures
+			AuxVarSetStr "*SNV_Override" (GetINIString_Cached "NightVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 12 Caps001)) 12 rHelmet
+			AuxVarSetStr "*SNV_Override" (GetINIString_Cached "ThermalVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 13 Caps001)) 13 rHelmet
 
 			CloseFileSO ("Config\Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) 0
 

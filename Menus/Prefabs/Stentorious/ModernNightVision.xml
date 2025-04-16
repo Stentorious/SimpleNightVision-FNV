@@ -1,10 +1,3 @@
-<rect name="ModernNightVision_Overlay">
-	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\night_vision.dds</filename></image>
-	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\thermal_vision.dds</filename></image>
-	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\night_vision_eyebox.dds</filename></image>
-	<image name="Texture"><filename>Interface\Stentorious\ModernNightVision\thermal_vision_eyebox.dds</filename></image>
-</rect>
-
 <rect name="ModernNightVision">
 
 	<visible> 1 </visible>
@@ -141,8 +134,8 @@
 		<zoom> -1 </zoom>
 		<systemcolor> 0 </systemcolor>
 
-		<_filename_0> Interface\Stentorious\ModernNightVision\night_vision.dds </_filename_0>
-		<_filename_1> Interface\Stentorious\ModernNightVision\thermal_vision.dds </_filename_1>
+		<_filename_0> Interface\Stentorious\ModernNightVision\Overlay\night_vision.dds </_filename_0>
+		<_filename_1> Interface\Stentorious\ModernNightVision\Overlay\thermal_vision.dds </_filename_1>
 		<filename>
 			<copy src="parent()" trait="_Mode" />
 			<copy src="me()" trait="_filename_" />
@@ -205,8 +198,8 @@
 		<zoom> -1 </zoom>
 		<systemcolor> 0 </systemcolor>
 
-		<_filename_0> Interface\Stentorious\ModernNightVision\night_vision_eyebox.dds </_filename_0>
-		<_filename_1> Interface\Stentorious\ModernNightVision\thermal_vision_eyebox.dds </_filename_1>
+		<_filename_0> Interface\Stentorious\ModernNightVision\Overlay\night_vision_eyebox.dds </_filename_0>
+		<_filename_1> Interface\Stentorious\ModernNightVision\Overlay\thermal_vision_eyebox.dds </_filename_1>
 		<filename>
 			<copy src="parent()" trait="_Mode" />
 			<copy src="me()" trait="_filename_" />

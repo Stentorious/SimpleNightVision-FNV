@@ -6,6 +6,7 @@ float fTime
 ref rArmor
 ref rHat
 ref rGlasses
+string_var sTexture
 
 begin Function {iKeyID}
 
@@ -50,9 +51,13 @@ begin Function {iKeyID}
 				endif
 			endif
 
+			; Get state
+			iSwitchMode = Goo1.AuxVarGetFlt "SNV_Mode" 0
+
 			; Play animation
 			if eval Goo1.AuxVarGetFlt "*SNV_INI" 5 && IsPC1stPerson
 				if eval Player.IsIdlePlaying || Player.IsAnimPlayingEx 5 || Player.IsAnimPlayingEx 4 || Player.GetAnimAction == 13 || Player.GetIsRagdolled
+					return
 				else
 					if eval Player.IsAnimSequencePlaying "ModernNightVision\On.kf"
 						Player.DeactivateAnim "ModernNightVision\On.kf"
@@ -69,7 +74,7 @@ begin Function {iKeyID}
 					AuxTimerStart "*SNV_Animation" (fTime) 14
 
 					; Overlay fade
-					if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 == 0
+					if eval iSwitchMode == 0
 						if eval Goo1.AuxVarGetFlt "*SNV_INI" 4
 							SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" 0
 						endif
@@ -83,14 +88,32 @@ begin Function {iKeyID}
 			else
 				Goo1.AuxVarSetRef "SNV_Armor" rArmor
 				; Overlay fade
-				if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 == 0
+				if eval iSwitchMode == 0
 					SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaOverlay" 1
 					SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyAlpha" 0 1 0.2
 				endif
 				Call (CompileScript "ModernNightVision/ToggleOn.gek") 0
 			endif
+
+			; Update overlay
+			if eval iSwitchMode == 0
+				if eval HasKeyword rArmor "SNV_Override" == 0
+					rArmor = Caps001
+				endif
+				sTexture = AuxVarGetStr "*SNV_Override" 12 rArmor
+				SetUIStringAlt "HUDMainMenu\ModernNightVision\Overlay\_filename_0" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + ".dds")
+				SetUIStringAlt "HUDMainMenu\ModernNightVision\Eyebox\_filename_0" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + "_eyebox.dds")
+				sTexture = AuxVarGetStr "*SNV_Override" 13 rArmor
+				SetUIStringAlt "HUDMainMenu\ModernNightVision\Overlay\_filename_1" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + ".dds")
+				SetUIStringAlt "HUDMainMenu\ModernNightVision\Eyebox\_filename_1" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + "_eyebox.dds")
+				sv_Destruct sTexture
+
+				; Force trait assignment update
+				ModUIFloat "HUDMainMenu\ModernNightVision\_Mode" 1
+				ModUIFloat "HUDMainMenu\ModernNightVision\_Mode" -1
+
+			endif
+
 		endif
-
 	endif
-
 end
