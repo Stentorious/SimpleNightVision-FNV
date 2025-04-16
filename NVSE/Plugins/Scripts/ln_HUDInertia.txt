@@ -1,0 +1,60 @@
+; HUD Inertia - Stentorious
+
+; "*HUDInertia_INI"
+; 0 = Camera inertia strength
+; 1 = Inertia smoothing rate
+; 2 = Movement inertia strength
+; 3 = Forward movement animation frequency
+; 4 = Forward movement animation amplitude
+; 5 = Strafe movement animation frequency
+; 6 = Strafe movement animation amplitude
+; 7 = Max speed
+
+; On game restart
+if eval Goo1.AuxVarGetFlt "*HUDInertia_Init" == 0
+	Goo1.AuxVarSetFlt "*HUDInertia_Init" 1
+
+	; Check for requirements
+	if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 9
+	else
+		MessageBoxEx "HUD Inertia missing requirement!%rInstall xNVSE 6.3.10+."
+		return
+	endif
+	if GetPluginVersion "JohnnyGuitarNVSE" < 360
+		MessageBoxEx "HUD Inertia missing requirement!%rInstall latest JohnnyGuitar NVSE plugin."
+		return
+	endif
+	if GetPluginVersion "ShowOffNVSE Plugin" < 165
+		MessageBoxEx "HUD Inertia missing requirement!%rInstall latest ShowOff NVSE plugin."
+		return
+	endif
+	if GetPluginVersion "UI Organizer Plugin" < 230
+		MessageBoxEx "HUD Inertia missing requirement!%rInstall latest User Interface Organizer plugin."
+		return
+	endif
+
+	; Load inertia settings
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" (10 * (GetINIFloat_Cached "Inertia:fCameraStrength" "Stentorious\HUDInertia.ini" 1)) 0	; Camera inertia strength
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" (7.5 * (GetINIFloat_Cached "Inertia:fSmoothingRate" "Stentorious\HUDInertia.ini" 1)) 1	; Inertia smoothing rate
+	float fINI = GetINIFloat_Cached "Inertia:fMovementStrength" "Stentorious\HUDInertia.ini" 1
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" (-0.125 * fINI) 2	; Movement inertia strength
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" (20 * fINI) 3		; Forward movement animation amplitude
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" (25 * fINI) 4		; Strafe movement animation amplitude
+	fINI = GetINIFloat_Cached "Inertia:fAnimationSpeed" "Stentorious\HUDInertia.ini" 1
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" (12 * fINI) 5		; Forward movement animation frequency
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" (10 * fINI) 6		; Strafe movement animation frequency
+	Goo1.AuxVarSetFlt "*HUDInertia_INI" 5 7					; Max speed
+	CloseFileSO "Stentorious\HUDInertia.ini" 0
+
+	SetGameMainLoopCallback (CompileScript "HUDInertia\MainLoop.gek") 1 1 1
+
+endif
+
+; On game load
+Goo1.AuxVarSetFlt "*HUDInertia_Cache" (Player.GetAngle X) 0
+Goo1.AuxVarSetFlt "*HUDInertia_Cache" (Player.GetAngle Z) 1
+Goo1.AuxVarSetFlt "*HUDInertia_Cache" 0 2
+Goo1.AuxVarSetFlt "*HUDInertia_Cache" 0 3
+Goo1.AuxVarSetFlt "*HUDInertia_Cache" (Player.GetPos Z) 4
+Goo1.AuxVarSetFlt "*HUDInertia_Cache" 0 5
+Goo1.AuxVarSetFlt "*HUDInertia_Cache" 0 6

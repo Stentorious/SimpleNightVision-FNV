@@ -16,11 +16,9 @@
 	<_Mode> -1 </_Mode>
 	<_Random> 0 </_Random>
 
-	<!-- Overlay Inertia -->
+	<!-- Overlay -->
 	<_Inertia> 1 </_Inertia>
-	<_OffsetX> 0 </_OffsetX>
-	<_OffsetY> 0 </_OffsetY>
-	<_Rotation> 0 </_Rotation>
+	<_PipBoy> 0 </_PipBoy>
 
 	<!-- Energy display -->
 	<_EnergyMax> 0 </_EnergyMax>
@@ -80,7 +78,10 @@
 	</image>
 
 	<image name="Overlay">
-		<visible> <copy src="parent()" trait="_1stPerson" /> </visible>
+		<visible>
+			<copy src="io()" trait="_HUDInertia+1stPerson" />
+			<or src="parent()" trait="_PipBoy" />
+		</visible>
 		<alpha>
 			<copy src="parent()" trait="_AlphaOverlay" />
 			<mul> 2 </mul>
@@ -98,9 +99,9 @@
 				<div> 2 </div>
 			</sub>
 			<sub>
-				<copy src="parent()" trait="_OffsetX" />
-				<onlyif src="parent()" trait="_Inertia" />
+				<copy src="io()" trait="_HUDInertia+OffsetX" />
 				<div> 2.5 </div>
+				<mul src="parent()" trait="_Inertia" />
 			</sub>
 		</x>
 		<y>
@@ -111,9 +112,9 @@
 				<div> 2 </div>
 			</sub>
 			<sub>
-				<copy src="parent()" trait="_OffsetY" />
-				<onlyif src="parent()" trait="_Inertia" />
+				<copy src="io()" trait="_HUDInertia+OffsetY" />
 				<div> 2.5 </div>
+				<mul src="parent()" trait="_Inertia" />
 			</sub>
 		</y>
 		<rotateaxisx>
@@ -125,9 +126,9 @@
 			<div> 2 </div>
 		</rotateaxisy>
 		<rotateangle>
-			<copy src="parent()" trait="_Rotation" />
+			<copy src="io()" trait="_HUDInertia+Rotation" />
 			<mul> 0.01745 </mul>
-			<onlyif src="parent()" trait="_Inertia" />
+			<mul src="parent()" trait="_Inertia" />
 		</rotateangle>
 		<width>
 			<copy src="parent()" trait="width" />
@@ -164,10 +165,7 @@
 	</image>
 
 	<image name="Eyebox">
-		<visible>
-			<copy src="parent()" trait="_Inertia" />
-			<copy src="sibling(Overlay)" trait="visible" />
-		</visible>
+		<visible> <copy src="sibling(Overlay)" trait="visible" /> </visible>
 		<alpha>
 			<copy src="parent()" trait="_AlphaOverlay" />
 			<mul src="parent()" trait="_AlphaMenu" />
@@ -181,7 +179,10 @@
 				<sub src="parent()" trait="width" />
 				<div> 2 </div>
 			</sub>
-			<sub src="parent()" trait="_OffsetX" />
+			<sub>
+				<copy src="io()" trait="_HUDInertia+OffsetX" />
+				<mul src="parent()" trait="_Inertia" />
+			</sub>
 		</x>
 		<y>
 			<copy> 0 </copy>
@@ -190,7 +191,10 @@
 				<sub src="parent()" trait="height" />
 				<div> 2 </div>
 			</sub>
-			<sub src="parent()" trait="_OffsetY" />
+			<sub>
+				<copy src="io()" trait="_HUDInertia+OffsetY" />
+				<mul src="parent()" trait="_Inertia" />
+			</sub>
 		</y>
 
 		<rotateaxisx> <copy src="sibling(Overlay)" trait="rotateaxisx" /> </rotateaxisx>

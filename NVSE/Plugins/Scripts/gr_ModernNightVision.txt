@@ -34,16 +34,6 @@
 ; 10 = Overall brightness (Thermal Vision)
 ; 11 = Energy use multiplier (Thermal Vision)
 
-; "*SNV_InertiaSet"
-; 0 = Camera inertia strength
-; 1 = Inertia smoothing rate
-; 2 = Movement inertia strength
-; 3 = Forward movement animation frequency
-; 4 = Forward movement animation amplitude
-; 5 = Strafe movement animation frequency
-; 6 = Strafe movement animation amplitude
-; 7 = Max speed
-
 Goo1.AuxVarSetFlt "*SNV_INI" 0 0
 Goo1.AuxVarSetFlt "*SNV_INI" 0 1
 Goo1.AuxVarSetFlt "*SNV_INI" 0 2
@@ -406,19 +396,7 @@ if eval IsModLoaded "DarNifiedUINV.esp"
 endif
 
 ; Overlay inertia
-if eval GetINIFloat_Cached "OverlayInertia:bEnable" (sINIPath)
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" (10 * (GetINIFloat_Cached "OverlayInertia:fCameraStrength" (sINIPath))) 0	; Camera inertia strength
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" (7.5 * (GetINIFloat_Cached "OverlayInertia:fSmoothingRate" (sINIPath))) 1	; Inertia smoothing rate
-	fINI = GetINIFloat_Cached "OverlayInertia:fMovementStrength" (sINIPath)
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" (-0.125 * fINI) 2	; Movement inertia strength
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" (20 * fINI) 3		; Forward movement animation amplitude
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" (25 * fINI) 4		; Strafe movement animation amplitude
-	fINI = GetINIFloat_Cached "OverlayInertia:fAnimationSpeed" (sINIPath)
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" (12 * fINI) 5		; Forward movement animation frequency
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" (10 * fINI) 6		; Strafe movement animation frequency
-	Goo1.AuxVarSetFlt "*SNV_InertiaSet" 5 7					; Max speed
-	SetGameMainLoopCallback (CompileScript "ModernNightVision\HUDInertia.gek") 1 1 1
-endif
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Inertia" (GetINIFloat_Cached "General:fOverlayInertia" (sINIPath))
 
 ; Config override support
 array_var aOverrideINIs = GetFilesInFolder "Config\Stentorious\ModernNightVision" "*.ini"

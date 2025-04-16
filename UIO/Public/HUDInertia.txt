@@ -1,0 +1,2 @@
+Stentorious\HUDInertia\HUDMainMenu.xml::HUDMainMenu
+true

@@ -3,6 +3,7 @@ int	iMenuID
 begin Function {iMenuID}
 
 	if eval !(MenuMode 1)
+		SetUIFloatAlt "HudMainMenu\ModernNightVision\_PipBoy" 1
 		SetUIFloatGradual "HudMainMenu\ModernNightVision\_AlphaMenu" 1.0 (Goo1.AuxVarGetFlt "*SNV_INI" 2) 0.25
 	endif
 

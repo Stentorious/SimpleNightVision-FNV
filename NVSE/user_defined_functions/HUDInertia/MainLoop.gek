@@ -1,0 +1,113 @@
+int iIgnoreMovement
+float fSwimMul
+float fPlrPosZ
+float fDeltaTime
+float fYaw
+float fPitch
+float fOffsetMoveY
+float fOffsetCamX
+float fOffsetCamY
+float fOffsetAnimX
+float fOffsetAnimY
+float fOffsetUIX
+float fOffsetUIY
+float fMouseInertiaMul
+float fSmoothRate
+float fForwardX
+float fForwardY
+float fVelocityXWorld
+float fVelocityYWorld
+float fVelocityXLocal
+float fVelocityYLocal
+float fSpeed
+float fSpeedMax
+float fSpeedFactor
+float fAnimPhase
+float fOverlayTilt
+float fTemp
+ref rTemp
+
+begin Function {}
+
+	if eval (fDeltaTime = GGetSecPass) <= 0
+		return
+	endif
+
+	; Update camera POV
+	SetUIFloatAlt "HUDMainMenu\_HUDInertia+1stPerson" (IsPC1stPerson)
+
+	; Parameters
+	iIgnoreMovement = (eval Player.GetFallTimeElapsed > 0.0)
+	fSwimMul = 1 - ((Player.IsPlayerSwimming) * 0.5)
+	fMouseInertiaMul = Goo1.AuxVarGetFlt "*HUDInertia_INI" 0
+	fSmoothRate = 1 - Exp(-(Goo1.AuxVarGetFlt "*HUDInertia_INI" 1) * fDeltaTime)
+	fSpeedMax = Goo1.AuxVarGetFlt "*HUDInertia_INI" 7
+
+	; Rotation inertia
+	fOffsetCamX = (((Fmod ((fYaw = Player.GetAngle Z) - (Goo1.AuxVarGetFlt "*HUDInertia_Cache" 0)) 360 180) - 360) / fDeltaTime) * fMouseInertiaMul * 0.01
+	fOffsetCamY = (((Fmod ((fPitch = Player.GetAngle X) - (Goo1.AuxVarGetFlt "*HUDInertia_Cache" 1)) 360 180) - 360) / fDeltaTime) * fMouseInertiaMul * 0.01
+	Goo1.AuxVarSetFlt "*HUDInertia_Cache" fYaw 0
+	Goo1.AuxVarSetFlt "*HUDInertia_Cache" fPitch 1
+	if eval V3Len fOffsetCamX fOffsetCamY 0 > 250
+		V3Norm "fOffsetCamX" "fOffsetCamY" "fOffsetCamZ" (fOffsetCamX) (fOffsetCamY) (fTemp)
+	endif
+
+	; Vertical inertia
+	fOffsetMoveY = Clamp ((((fPlrPosZ = Player.GetPos Z) - (Goo1.AuxVarGetFlt "*HUDInertia_Cache" 4)) / fDeltaTime) * (Goo1.AuxVarGetFlt "*HUDInertia_INI" 2) * ((eval iIgnoreMovement) + 1)) -75 75
+	Goo1.AuxVarSetFlt "*HUDInertia_Cache" fPlrPosZ 4
+
+	; Calculate player's local velocity/speed
+	fForwardX = FSin fYaw
+	fForwardY = FCos fYaw
+	fVelocityXWorld = Player.GetActorVelocity X
+	fVelocityYWorld = Player.GetActorVelocity Y
+	fVelocityXLocal = fForwardY * fVelocityXWorld - fForwardX * fVelocityYWorld
+	fVelocityYLocal = fForwardY * fVelocityYWorld + fForwardX * fVelocityXWorld
+	fSpeed = V3Len fVelocityXLocal fVelocityYLocal 0
+	fSpeedFactor = Clamp (fSpeed / fSpeedMax) 0 1
+
+	; Calculate movement animation offsets
+	if eval iIgnoreMovement == 0
+		Goo1.AuxVarSetFlt "*HUDInertia_Cache" (fAnimPhase = Goo1.AuxVarGetFlt "*HUDInertia_Cache" 5 + (fSpeed * fDeltaTime * fSpeedFactor)) 5
+		fOffsetAnimY = FSin(fAnimPhase * (Goo1.AuxVarGetFlt "*HUDInertia_INI" 5) * fSwimMul) * (Goo1.AuxVarGetFlt "*HUDInertia_INI" 3) * fSpeedFactor * fSpeedFactor
+		fOffsetAnimX = FSin(fAnimPhase * (Goo1.AuxVarGetFlt "*HUDInertia_INI" 6) * fSwimMul) * (Goo1.AuxVarGetFlt "*HUDInertia_INI" 4) * fSpeedFactor * (Clamp (-(fVelocityXLocal) / fSpeedMax) -1 1) * (1 - (0.5))
+		if eval Abs(fVelocityXLocal) < 0.1
+			fOffsetAnimX = 0
+			if eval fSpeed == 0 && fAnimPhase > 0
+				Goo1.AuxVarSetFlt "*HUDInertia_Cache" 0 5
+			endif
+		endif
+	endif
+
+	; UI interpolation
+	Goo1.AuxVarSetFlt "*HUDInertia_Cache" (fOffsetUIX = Lerp (Goo1.AuxVarGetFlt "*HUDInertia_Cache" 2) (fOffsetCamX + fOffsetAnimX) fSmoothRate) 2
+	Goo1.AuxVarSetFlt "*HUDInertia_Cache" (fOffsetUIY = Lerp (Goo1.AuxVarGetFlt "*HUDInertia_Cache" 3) (fOffsetCamY + fOffsetAnimY + fOffsetMoveY) fSmoothRate) 3
+	Goo1.AuxVarSetFlt "*HUDInertia_Cache" (fOverlayTilt = Lerp (Goo1.AuxVarGetFlt "*HUDInertia_Cache" 6) (-(fVelocityXLocal) * (0.10 / fSpeedMax) * fSpeedFactor) fSmoothRate) 6
+	SetUIFloatAlt "HUDMainMenu\_HUDInertia+OffsetX" fOffsetUIX
+	SetUIFloatAlt "HUDMainMenu\_HUDInertia+OffsetY" fOffsetUIY
+	SetUIFloatAlt "HUDMainMenu\_HUDInertia+Rotation" fOverlayTilt
+
+	; Modern Night Vision support
+	if eval Goo1.AuxVarType "*SNV_INI" 0 > 0
+
+		; Randomize static rotation
+		SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Random" (GetRandomInRange 0 2)
+
+		; IMOD transition
+		if eval Goo1.AuxVarGetFlt "*SNV_DoF"
+			if Goo1.AuxVarGetFlt "SNV_Mode" 1 == 0
+				rTemp = NVDLC03GhostNightvisionISFX
+			Else
+				rTemp = NVDLC04RedNightvisionISFX
+			endif
+			Goo1.AuxVarSetFlt "*SNV_DoF" (fTemp = GetMinOf ((Goo1.AuxVarGetFlt "*SNV_DoF" 1) + fDeltaTime) 0.5) 1
+			SetImageSpaceModTrait rTemp 45 (GetMaxOf (3-(fTemp * 6)) 0.3)
+			SetImageSpaceModTrait rTemp 46 (0.006-(fTemp * 0.012))
+			if eval fTemp == 0.5
+				Goo1.AuxVarSetFlt "*SNV_DoF" 0 0
+			endif
+		endif
+
+	endif
+
+end
