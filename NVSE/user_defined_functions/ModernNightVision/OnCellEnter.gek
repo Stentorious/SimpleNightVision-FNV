@@ -1,9 +1,9 @@
-ref	 rEnteredCell
+ref	rEnteredCell
 
 begin Function {rEnteredCell}
 
 	; Update thermal vision on cell enter
-	if Goo1.AuxVarGetFlt "SNV_Mode" 0 != 0 && Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
+	if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 && Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1
 		AuxTimerStart "*SNV_Thermal" 5 30
 	endif
 

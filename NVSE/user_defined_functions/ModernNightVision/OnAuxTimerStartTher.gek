@@ -28,8 +28,7 @@ begin Function {sTimerName, rOwnerForm}
 		; Add effect shader to all valid refs
 		if eval (iSize = Ar_Size aActorRefs) > 0
 			while (iSize -= 1) > -1
-				rActor = aActorRefs[iSize]
-				if eval IsReference rActor && rActor.GetCreatureType != 6 && rActor.GetDead == 0 && rActor.GetDisabled == 0
+				if eval IsReference (rActor = aActorRefs[iSize]) && rActor.GetCreatureType != 6 && rActor.GetDead == 0 && rActor.GetDisabled == 0
 					rActor.PMS effectAbsorb
 					Goo1.AuxVarSetRef "*SNV_Shader" rActor -1
 				endif

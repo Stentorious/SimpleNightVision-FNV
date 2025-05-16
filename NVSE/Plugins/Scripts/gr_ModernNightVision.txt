@@ -54,9 +54,9 @@ if eval IsModLoaded "Enhanced Vision.esp" || IsModLoaded "Advanced Recon Tech.es
 	MessageBoxEx "Conflicting Night Vision mod detected!%rModern Night Vision has been disabled."
 	return
 endif
-if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 2
+if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 9
 else
-	MessageBoxEx "Modern Night Vision missing requirement!%rInstall xNVSE 6.3.3+."
+	MessageBoxEx "Modern Night Vision missing requirement!%rInstall xNVSE 6.3.10+."
 	return
 endif
 if GetPluginVersion "JohnnyGuitarNVSE" < 360
@@ -411,69 +411,70 @@ if eval (iSize = Ar_Size aOverrideINIs) > 0
 	while (iSize -= 1) > -1
 		sINI = aOverrideINIs[iSize]
 		sINI = sINI[0:-5]
-		if eval IsBaseForm (rHelmet = EditorIDToFormID (sINI))
-
-			; Override keyword
-			AssignKeyword rHelmet "SNV_Override"
-			AssignKeyword rHelmet "ModernNightVision"
-
-			; Night vision
-			; Color
-			sINI = GetINIString_Cached "NightVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "NightVision:sColor" (sINIPath))
-			iLength = Sv_Length sINI
-			if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
-				AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 0 rHelmet
-				AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 1 rHelmet
-				AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 2 rHelmet
-				AuxVarSetFlt "*SNV_Override" -1 3 rHelmet
-			elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-				fINI = ToNumber sINI
-				if eval fINI < 6 && fINI > -1
-					AuxVarSetFlt "*SNV_Override" 255 0 rHelmet
-					AuxVarSetFlt "*SNV_Override" 255 1 rHelmet
-					AuxVarSetFlt "*SNV_Override" 255 2 rHelmet
-					AuxVarSetFlt "*SNV_Override" fINI 3 rHelmet
-				endif
-			endif
-
-			; Brightness
-			AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "NightVision:fOverallBrightness" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 4 Caps001))) 4 rHelmet
-
-			; Energy consumption
-			AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "NightVision:fEnergyConsumption" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 5 Caps001))) 5 rHelmet
-
-			; Thermal vision
-			; Color
-			sINI = GetINIString_Cached "ThermalVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "ThermalVision:sColor" (sINIPath))
-			iLength = Sv_Length sINI
-			if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
-				AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 6 rHelmet
-				AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 7 rHelmet
-				AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 8 rHelmet
-				AuxVarSetFlt "*SNV_Override" -1 9 rHelmet
-			elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-				fINI = ToNumber sINI
-				if eval fINI < 6 && fINI > -1
-					AuxVarSetFlt "*SNV_Override" 255 6 rHelmet
-					AuxVarSetFlt "*SNV_Override" 255 7 rHelmet
-					AuxVarSetFlt "*SNV_Override" 255 8 rHelmet
-					AuxVarSetFlt "*SNV_Override" fINI 9 rHelmet
-				endif
-			endif
-
-			; Thermal vision brightness
-			AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "ThermalVision:fOverallBrightness" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 10 Caps001))) 10 rHelmet
-
-			; Energy consumption
-			AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 11 Caps001))) 11 rHelmet
-
-			; Overlay textures
-			AuxVarSetStr "*SNV_Override" (GetINIString_Cached "NightVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 12 Caps001)) 12 rHelmet
-			AuxVarSetStr "*SNV_Override" (GetINIString_Cached "ThermalVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 13 Caps001)) 13 rHelmet
-
-			CloseFileSO ("Config\Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) 0
-
+		if eval IsBaseForm (rHelmet = EditorIDToFormID (sINI)) == 0
+			continue
 		endif
+
+		; Override keyword
+		AssignKeyword rHelmet "SNV_Override"
+		AssignKeyword rHelmet "ModernNightVision"
+
+		; Night vision
+		; Color
+		sINI = GetINIString_Cached "NightVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "NightVision:sColor" (sINIPath))
+		iLength = Sv_Length sINI
+		if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 0 rHelmet
+			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 1 rHelmet
+			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 2 rHelmet
+			AuxVarSetFlt "*SNV_Override" -1 3 rHelmet
+		elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
+			fINI = ToNumber sINI
+			if eval fINI < 6 && fINI > -1
+				AuxVarSetFlt "*SNV_Override" 255 0 rHelmet
+				AuxVarSetFlt "*SNV_Override" 255 1 rHelmet
+				AuxVarSetFlt "*SNV_Override" 255 2 rHelmet
+				AuxVarSetFlt "*SNV_Override" fINI 3 rHelmet
+			endif
+		endif
+
+		; Brightness
+		AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "NightVision:fOverallBrightness" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 4 Caps001))) 4 rHelmet
+
+		; Energy consumption
+		AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "NightVision:fEnergyConsumption" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 5 Caps001))) 5 rHelmet
+
+		; Thermal vision
+		; Color
+		sINI = GetINIString_Cached "ThermalVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "ThermalVision:sColor" (sINIPath))
+		iLength = Sv_Length sINI
+		if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 6 rHelmet
+			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 7 rHelmet
+			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 8 rHelmet
+			AuxVarSetFlt "*SNV_Override" -1 9 rHelmet
+		elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
+			fINI = ToNumber sINI
+			if eval fINI < 6 && fINI > -1
+				AuxVarSetFlt "*SNV_Override" 255 6 rHelmet
+				AuxVarSetFlt "*SNV_Override" 255 7 rHelmet
+				AuxVarSetFlt "*SNV_Override" 255 8 rHelmet
+				AuxVarSetFlt "*SNV_Override" fINI 9 rHelmet
+			endif
+		endif
+
+		; Thermal vision brightness
+		AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "ThermalVision:fOverallBrightness" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 10 Caps001))) 10 rHelmet
+
+		; Energy consumption
+		AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 11 Caps001))) 11 rHelmet
+
+		; Overlay textures
+		AuxVarSetStr "*SNV_Override" (GetINIString_Cached "NightVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 12 Caps001)) 12 rHelmet
+		AuxVarSetStr "*SNV_Override" (GetINIString_Cached "ThermalVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 13 Caps001)) 13 rHelmet
+
+		CloseFileSO ("Config\Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) 0
+
 	loop
 endif
 

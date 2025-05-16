@@ -135,15 +135,6 @@ endif
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" -1
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" (Goo1.AuxVarGetFlt "SNV_Mode" 1)
 
-; HUD inertia
-Goo1.AuxVarSetFlt "*SNV_Inertia" (Player.GetAngle X) 0
-Goo1.AuxVarSetFlt "*SNV_Inertia" (Player.GetAngle Z) 1
-Goo1.AuxVarSetFlt "*SNV_Inertia" 0 2
-Goo1.AuxVarSetFlt "*SNV_Inertia" 0 3
-Goo1.AuxVarSetFlt "*SNV_Inertia" (Player.GetPos Z) 4
-Goo1.AuxVarSetFlt "*SNV_Inertia" 0 5
-Goo1.AuxVarSetFlt "*SNV_Inertia" 0 6
-
 ; Update energy requirements
 if eval Goo1.AuxVarGetFlt "*SNV_INI" 8 > 0
 	float fEnergy = Goo1.AuxVarGetFlt "SNV_Mode" 2

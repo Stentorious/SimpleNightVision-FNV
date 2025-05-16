@@ -2,18 +2,19 @@ ref rActor
 
 begin Function {rActor}
 
-	if eval IsReference rActor && Goo1.AuxVarGetFlt "SNV_Mode" 0
+	if eval IsReference rActor == 0 || Goo1.AuxVarGetFlt "SNV_Mode" 0 == 0
+		return
+	endif
 
-		; Disable vision modes on death
-		if rActor == Player
-			AuxTimerStop "*SNV_KeyToggle"
-			AuxTimerStop "*SNV_KeySupport"
-			Call (CompileScript "ModernNightVision/ToggleOff.gek") 2
+	; Disable vision modes on death
+	if rActor == Player
+		AuxTimerStop "*SNV_KeyToggle"
+		AuxTimerStop "*SNV_KeySupport"
+		Call (CompileScript "ModernNightVision/ToggleOff.gek") 2
 
-		; Remove effect shader from actor on death
-		elseif eval Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1 && rActor.HasEffectShader effectAbsorb
-			rActor.SMS effectAbsorb
-		endif
+	; Remove effect shader from actor on death
+	elseif eval Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1 && rActor.HasEffectShader effectAbsorb
+		rActor.SMS effectAbsorb
 	endif
 
 end
