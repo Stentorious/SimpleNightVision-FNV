@@ -54,8 +54,7 @@ if eval IsModLoaded "Enhanced Vision.esp" || IsModLoaded "Advanced Recon Tech.es
 	MessageBoxEx "Conflicting Night Vision mod detected!%rModern Night Vision has been disabled."
 	return
 endif
-if GetNVSEVersion > 5 && GetNVSERevision > 2 && GetNVSEBeta > 9
-else
+if eval GetNVSEVersion < 6 || (GetNVSEVersion == 6 && GetNVSERevision < 4)
 	MessageBoxEx "Modern Night Vision missing requirement!%rInstall xNVSE 6.3.10+."
 	return
 endif
