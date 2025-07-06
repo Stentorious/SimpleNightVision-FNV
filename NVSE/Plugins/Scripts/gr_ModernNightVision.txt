@@ -55,7 +55,7 @@ if eval IsModLoaded "Enhanced Vision.esp" || IsModLoaded "Advanced Recon Tech.es
 	return
 endif
 if eval GetNVSEVersion < 6 || (GetNVSEVersion == 6 && GetNVSERevision < 4)
-	MessageBoxEx "Modern Night Vision missing requirement!%rInstall xNVSE 6.3.10+."
+	MessageBoxEx "Modern Night Vision missing requirement!%rInstall xNVSE 6.4.0+."
 	return
 endif
 if GetPluginVersion "JohnnyGuitarNVSE" < 360
