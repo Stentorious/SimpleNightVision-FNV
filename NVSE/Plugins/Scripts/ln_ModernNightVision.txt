@@ -47,15 +47,7 @@ if eval Goo1.AuxVarGetFlt "*SNV_INI" 4 == 0
 endif
 if eval Goo1.AuxVarGetFlt "*SNV_INI" 5
 	SetOnTimerStopHandler 1 (begin function {string_var sTimerName, ref rOwnerForm}
-		iTemp = Goo1.AuxVarGetFlt "*SNV_Animation"
-		if eval iTemp == 1
-			Player.PlayAnimationPath "ModernNightVision\On.kf" 1
-		elseif eval iTemp == 2
-			Player.PlayAnimationPath "ModernNightVision\Off.kf" 1
-		elseif eval iTemp == 3
-			Goo1.AuxVarSetFlt "*SNV_Animation" 0
-			EnablePlayerControlsAltEx 30100
-		endif
+		EnablePlayerControlsAltEx 30100
 		sv_Destruct sTimerName
 	end) "*SNV_Animation"
 endif
@@ -136,19 +128,28 @@ SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" -1
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" (Goo1.AuxVarGetFlt "SNV_Mode" 1)
 
 ; Update energy requirements
-if eval Goo1.AuxVarGetFlt "*SNV_INI" 8 > 0
+if eval Goo1.AuxVarGetFlt "*SNV_INI" 8
+	if Goo1.AuxVarType "SNV_Mode" 2 == 0
+		Goo1.AuxVarSetFlt "SNV_Mode" 0 2
+	endif
+	if Goo1.AuxVarType "SNV_Mode" 3 == 0
+		Goo1.AuxVarSetFlt "SNV_Mode" 300 3
+	endif
 	float fEnergy = Goo1.AuxVarGetFlt "SNV_Mode" 2
+	float fEnergyMax = Goo1.AuxVarGetFlt "SNV_Mode" 3
 	float fEnergyUse = Goo1.AuxVarGetFlt "*SNV_INI" 9
 	string_var sEnergy = "-"
 	if eval Goo1.AuxVarGetFlt "*SNV_INI" 10 == 1
-		sEnergy = sv_Construct "%g%%" (Flr (((fEnergy / (Goo1.AuxVarGetFlt "*SNV_INI" 8)) * 100) + 0.5))
+		sEnergy = sv_Construct "%g%%" (Flr (((fEnergy / fEnergyMax) * 100) + 0.5))
 	elseif eval fEnergyUse > 0
 		sEnergy = sv_Construct "%gs" (Flr ((fEnergy / fEnergyUse) + 0.5))
 	endif
 	SetUIStringAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\string" "%z" sEnergy
 	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyCharge" fEnergy
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyMax" fEnergyMax
 	SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\EnergyUpdate.gek") "*SNV_Energy"
 	sv_Destruct sEnergy
 else
 	Goo1.AuxVarSetFlt "SNV_Mode" 1 2
+	Goo1.AuxVarSetFlt "SNV_Mode" 1 3
 endif

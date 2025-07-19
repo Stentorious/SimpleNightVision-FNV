@@ -14,8 +14,8 @@
 	<_PipBoy> 0 </_PipBoy>
 
 	<!-- Energy display -->
-	<_EnergyMax> 0 </_EnergyMax>
-	<_EnergyCharge> 0 </_EnergyCharge>
+	<_EnergyMax> 1 </_EnergyMax>
+	<_EnergyCharge> 1 </_EnergyCharge>
 	<_EnergyCount> 0 </_EnergyCount>
 	<_EnergyAlpha> 0 </_EnergyAlpha>
 
@@ -310,6 +310,36 @@
 			<brightness> 255 </brightness>
 			<font> <copy src="sibling(ChargeText)" trait="font" /> </font>
 			<justify> &center; </justify>
+			<string></string>
+			<_Alpha> 0 </_Alpha>
+		</text>
+
+		<text name="ItemName">
+			<visible>
+				<copy src="grandparent()" trait="_EnergyCount" />
+				<gt> 0 </gt>
+			</visible>
+			<alpha> <copy src="sibling(CountText)" trait="_Alpha" /> </alpha>
+			<depth> 3 </depth>
+			<x>
+				<copy src="sibling(ChargeText)" trait="x" />
+				<add>
+					<copy> 20 </copy>
+					<mul src="parent()" trait="_IconScale" />
+				</add>
+			</x>
+			<y> <copy src="sibling(ChargeText)" trait="y" /> </y>
+			<zoom> <copy src="sibling(ChargeText)" trait="zoom" /> </zoom>
+			<systemcolor>
+				<copy> &hudmain; </copy>
+				<add>
+					<copy src="grandparent()" trait="_EnergyCount" />
+					<eq> 0 </eq>
+				</add>
+			</systemcolor>
+			<brightness> 255 </brightness>
+			<font> <copy src="sibling(ChargeText)" trait="font" /> </font>
+			<justify> &left; </justify>
 			<string></string>
 			<_Alpha> 0 </_Alpha>
 		</text>

@@ -5,7 +5,7 @@ begin Function {rPerk}
 	; Disable vision mode on Cyberware perk removal if not wearing helmet
 	if this == Player; && Goo1.AuxVarType "SNV_Armor" == 0
 		AuxTimerStop "*SNV_KeyToggle"
-		Call (CompileScript "ModernNightVision/ToggleOff.gek") 2
+		Call (CompileScript "ModernNightVision/ToggleOff.gek") 1
 	endif
 
 end

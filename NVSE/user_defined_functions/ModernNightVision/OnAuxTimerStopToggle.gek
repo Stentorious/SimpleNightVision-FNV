@@ -1,9 +1,7 @@
-ref rOwnerForm
+ref rOwner
 string_var sTimerName
 
-float fTime
-
-begin Function {sTimerName, rOwnerForm}
+begin Function {sTimerName, rOwner}
 
 	sv_Destruct sTimerName
 
@@ -22,15 +20,16 @@ begin Function {sTimerName, rOwnerForm}
 			if eval Player.IsAnimSequencePlaying "ModernNightVision\Off.kf"
 				Player.DeactivateAnim "ModernNightVision\Off.kf"
 			endif
-			if eval Player.IsBlockingOrAiming
-				fTime = 0.25
+			if eval GSIV 0 > 0
+				SetSmoothIronsightsValue 0 0
 			endif
 			DisablePlayerControlsAltEx 30100
-			Goo1.AuxVarSetFlt "*SNV_Animation" 2
-			AuxTimerStart "*SNV_Animation" (fTime) 14
+			Player.PlayAnimationPath "ModernNightVision\Off.kf" 1
+			AuxTimerStart "*SNV_Animation" 1.05 14
+			Goo1.AuxVarSetFlt "*SNV_Animation" 1
 		endif
 	else
-		Call (CompileScript "ModernNightVision/ToggleOff.gek") 0
+		Call (CompileScript "ModernNightVision/ToggleOff.gek") 1
 	endif
 
 end

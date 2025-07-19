@@ -2,15 +2,10 @@ int iFlag
 
 int iSize
 ref rActor
-array_var aShaderRefs
 
 begin Function {iFlag}
 
-	; Update animation stage
-	if eval iFlag == 1
-		Goo1.AuxVarSetFlt "*SNV_Animation" 3
-		AuxTimerStart "*SNV_Animation" 0.7 14
-	endif
+	Goo1.AuxVarSetFlt "*SNV_Animation" 0
 
 	; Disable night vision
 	if eval Goo1.AuxVarGetFlt "SNV_Mode" 1 == 0
@@ -22,10 +17,9 @@ begin Function {iFlag}
 
 		; Remove effect shader from all refs
 		AuxTimerStop "*SNV_Thermal"
-		aShaderRefs = Goo1.AuxVarGetAsArr "*SNV_Shader"
-		if eval (iSize = Ar_Size aShaderRefs) > 0
+		if eval (iSize = Goo1.AuxVarSize "*SNV_Shader") > 0
 			while (iSize -= 1) > -1
-				if eval IsReference (rActor = aShaderRefs[iSize])
+				if eval IsReference (rActor = Goo1.AuxVarGetRef "*SNV_Shader" iSize)
 					rActor.SMS effectAbsorb
 				endif
 			loop
@@ -33,7 +27,7 @@ begin Function {iFlag}
 	endif
 
 	; Play sound
-	if eval iFlag < 2
+	if eval iFlag
 		PlaySound UIPipBoyLightOff
 	endif
 
@@ -53,7 +47,5 @@ begin Function {iFlag}
 
 	; Reset power
 	AuxTimerStop "*SNV_Energy"
-
-	aShaderRefs = Ar_Null
 
 end

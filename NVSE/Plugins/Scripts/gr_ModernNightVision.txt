@@ -5,6 +5,7 @@
 ; 0 = On/Off state
 ; 1 = Vision mode state
 ; 2 = Remaining energy
+; 3 = Loaded energy max charge
 
 ; "*SNV_INI"
 ; 0 = Static Strength (Night Vision)
@@ -15,7 +16,7 @@
 ; 5 = First person anims
 ; 6 = Screen Blur (Night Vision)
 ; 7 = Screen Blur (Thermal Vision)
-; 8 = Energy Cell power
+; 8 = Requires energy
 ; 9 = Current energy consumption rate
 ; 10 = Remaining charge text style
 ; 11 = Energy cell count text style
@@ -72,6 +73,10 @@ if GetPluginVersion "UI Organizer Plugin" < 230
 endif
 if GetPluginVersion "kNVSE" < 37
 	MessageBoxEx "Modern Night Vision missing requirement!%rInstall latest kNVSE plugin."
+	return
+endif
+if GetPluginVersion "lStewieAl's Tweaks" < 906
+	MessageBoxEx "Modern Night Vision missing requirement!%rInstall latest lStewieAl's Tweaks."
 	return
 endif
 if eval FileExists "UIO\Public\RadiationVisuals.txt" && FileExists "Textures\Interface\Stentorious\RadiationVisuals\0_0.dds" == 0
@@ -159,8 +164,7 @@ endif
 ; Night vision
 ; Color
 string_var sINI = GetINIString_Cached "NightVision:sColor" (sINIPath)
-int iLength = Sv_Length sINI
-if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+if eval (int iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
 	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 0 Caps001
 	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 1 Caps001
 	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 2 Caps001
@@ -231,8 +235,7 @@ SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Scale_0" ((GetMaxOf 1 (Get
 ; Thermal vision
 ; Set color
 sINI = GetINIString_Cached "ThermalVision:sColor" (sINIPath)
-iLength = Sv_Length sINI
-if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+if eval (iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
 	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 6 Caps001
 	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 7 Caps001
 	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 8 Caps001
@@ -375,21 +378,19 @@ Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:iSwitchMode" (sIN
 Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:b1stPersonAnimations" (sINIPath)) 5						; Animation support
 
 ; Energy consumption
-Goo1.AuxVarSetFlt "*SNV_INI" (GetMaxOf 0 (GetINIFloat_Cached "General:fEnergyCellPower" (sINIPath))) 8
-if eval (fINI = Goo1.AuxVarGetFlt "*SNV_INI" 8) == 0
+Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:bRequireEnergy" (sINIPath)) 8
+if eval Goo1.AuxVarGetFlt "*SNV_INI" 8 == 0
 	AuxVarSetFlt "*SNV_Override" 0 5 Caps001
 	AuxVarSetFlt "*SNV_Override" 0 11 Caps001
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyCharge" 1
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyMax" 1
-	SetUIStringAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\string" "100%%"
-else
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyMax" fINI
 endif
 
 ; Energy display UI
 Goo1.AuxVarSetFlt "*SNV_INI" (GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "EnergyDisplay:iChargeStyle" (sINIPath)))) 10	; Text style
 if eval Goo1.AuxVarGetFlt "*SNV_INI" 10 == 0
 	SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ChargeText" 0
+endif
+if eval GetINIFloat_Cached "EnergyDisplay:bShowItemName" (sINIPath) 1 == 0
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ItemName\visible" 0
 endif
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconScale" (GetINIFloat_Cached "EnergyDisplay:fScale" (sINIPath))
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_OffsetX" (GetINIFloat_Cached "EnergyDisplay:fOffsetX" (sINIPath))
@@ -421,8 +422,7 @@ if eval (iSize = Ar_Size aOverrideINIs) > 0
 		; Night vision
 		; Color
 		sINI = GetINIString_Cached "NightVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "NightVision:sColor" (sINIPath))
-		iLength = Sv_Length sINI
-		if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+		if eval (iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
 			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 0 rHelmet
 			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 1 rHelmet
 			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 2 rHelmet
@@ -446,8 +446,7 @@ if eval (iSize = Ar_Size aOverrideINIs) > 0
 		; Thermal vision
 		; Color
 		sINI = GetINIString_Cached "ThermalVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "ThermalVision:sColor" (sINIPath))
-		iLength = Sv_Length sINI
-		if eval iLength == 6 && TestExpr (ToNumber sINI 1 1)
+		if eval (iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
 			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 6 rHelmet
 			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 7 rHelmet
 			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 8 rHelmet
@@ -477,6 +476,21 @@ if eval (iSize = Ar_Size aOverrideINIs) > 0
 	loop
 endif
 
+; Energy consumption
+aOverrideINIs = GetINISection "EnergyConsumption" (sINIPath)
+if eval (ar_Size aOverrideINIs) < 2
+	aOverrideINIs = ar_Construct "stringmap"
+	aOverrideINIs["0"] = "AmmoSmallEnergyCell|300"
+endif
+foreach array_var aForE <- aOverrideINIs
+	array_var aTemp = Sv_Split (*aForE) "|"
+	if eval IsFormValid (rHelmet = EditorIDToFormID (aTemp[0])) == 0 || GetType rHelmet != 41
+		continue
+	endif
+	Goo1.AuxVarSetRef "*SNV_Energy" rHelmet -1
+	Goo1.AuxVarSetFlt "*SNV_Energy" (#(aTemp[1])) -1
+loop
+
 CloseFileSO (sINIPath) 0
-aOverrideINIs = Ar_Null
+aOverrideINIs = aTemp = aForE = Ar_Null
 Sv_Destruct sINI sINIPath

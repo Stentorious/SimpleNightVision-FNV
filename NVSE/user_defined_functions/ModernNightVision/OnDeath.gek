@@ -10,7 +10,7 @@ begin Function {rActor}
 	if rActor == Player
 		AuxTimerStop "*SNV_KeyToggle"
 		AuxTimerStop "*SNV_KeySupport"
-		Call (CompileScript "ModernNightVision/ToggleOff.gek") 2
+		Call (CompileScript "ModernNightVision/ToggleOff.gek") 0
 
 	; Remove effect shader from actor on death
 	elseif eval Goo1.AuxVarGetFlt "SNV_Mode" 1 == 1 && rActor.HasEffectShader effectAbsorb
