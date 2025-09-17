@@ -48,7 +48,6 @@ endif
 
 ; Set event handlers
 SetJohnnyOnDyingEventHandler 1 (CompileScript "ModernNightVision\OnDeath.gek") 0
-SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\OnAuxTimerStopSupport.gek") "*SNV_KeySupport"
 SetOnTimerStartHandler 1 (CompileScript "ModernNightVision\OnAuxTimerStartTher.gek") "*SNV_Thermal"
 SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\OnAuxTimerStopToggle.gek") "*SNV_KeyToggle"
 SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\EnergyUpdate.gek") "*SNV_Energy"

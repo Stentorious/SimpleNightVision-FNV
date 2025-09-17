@@ -15,9 +15,6 @@ string_var sEnergy
 
 begin Function {iKeyID}
 
-	; Reset support timer
-	AuxTimerStop "*SNV_KeySupport"
-
 	; Toggle vision mode
 	if eval (!MenuMode && Player.GetDead == 0 && AuxTimerTimeLeft "*SNV_KeyToggle" != -1)
 	else

@@ -9,7 +9,6 @@ begin Function {rActor}
 	; Disable vision modes on death
 	if rActor == Player
 		AuxTimerStop "*SNV_KeyToggle"
-		AuxTimerStop "*SNV_KeySupport"
 		Call (CompileScript "ModernNightVision/ToggleOff.gek") 0
 
 	; Remove effect shader from actor on death

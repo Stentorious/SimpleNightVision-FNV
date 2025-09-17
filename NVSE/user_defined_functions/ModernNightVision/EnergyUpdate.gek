@@ -55,7 +55,6 @@ begin Function {sTimerName, rOwner}
 		PlaySound WPNPistolLaserCharge
 	else
 		AuxTimerStop "*SNV_KeyToggle"
-		AuxTimerStop "*SNV_KeySupport"
 		Call (CompileScript "ModernNightVision/ToggleOff.gek") 1
 		;MessageExAlt 3 "#0|You have no item to charge your vision modes."
 		PlaySound OBJComputerTerminalPowerDown

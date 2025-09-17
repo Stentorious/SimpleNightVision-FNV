@@ -5,7 +5,6 @@ begin Function {iKeyID}
 	; Start key bind timers
 	if eval !MenuMode && Goo1.AuxVarGetFlt "*SNV_Animation" != 1
 		AuxTimerStart "*SNV_KeyToggle" 0.5 14
-		AuxTimerStart "*SNV_KeySupport" 2 14
 	endif
 
 end
