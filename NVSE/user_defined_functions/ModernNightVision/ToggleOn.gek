@@ -1,16 +1,8 @@
 int iIndex
-int iMode
-int iRed
-int iGreen
-int iBlue
-int iSystemcolor
-int iTintAlpha
+int iVisionMode
 float fEnergy
 float fEnergyUse
 ref rActor
-ref rArmor
-ref rIMODIn
-ref rIMODOut
 string_var sEnergy
 
 begin Function {iIndex}
@@ -22,7 +14,7 @@ begin Function {iIndex}
 		Goo1.AuxVarSetFlt "SNV_Mode" 1 0
 
 		; Set overlay
-		iMode = Goo1.AuxVarGetFlt "SNV_Mode" 1
+		iVisionMode = Goo1.AuxVarGetFlt "SNV_Mode" 1
 
 		; Energy
 		AuxTimerStart "*SNV_Energy" 1 30
@@ -53,73 +45,41 @@ begin Function {iIndex}
 
 		; Enable thermal vision
 		else
-			iMode = 1
+			; Toggle off (Wrap mode) if thermal vision disabled
+			if eval Goo1.AuxVarGetFlt "*SNV_INI" 4 && Goo1.AuxVarGetFlt "*SNV_INI" 7 == 0
+				Call (CompileScript "ModernNightVision/ToggleOff.gek") 1
+				return
+			endif
+
+			iVisionMode = 1
 		endif
 	endif
 
-	if eval IsBaseForm (rArmor = Goo1.AuxVarGetRef "SNV_Armor") && HasKeyword rArmor "SNV_Override"
-	else
-		rArmor = Caps001
-	endif
-
-	; Update effect color
-	iIndex = iMode * 6
-	iRed = AuxVarGetFlt "*SNV_Override" iIndex rArmor
-	iGreen = AuxVarGetFlt "*SNV_Override" (iIndex + 1) rArmor
-	iBlue = AuxVarGetFlt "*SNV_Override" (iIndex + 2) rArmor
-	iSystemcolor = AuxVarGetFlt "*SNV_Override" (iIndex + 3) rArmor
-	iTintAlpha = 255
-	if eval iSystemcolor > 0
-		GetSystemColorAlt iSystemcolor (iRed) (iGreen) (iBlue)
-	elseif eval iSystemcolor == 0
-		iTintAlpha = 0
-	else
-		iSystemcolor = 0
-	endif
-
-	if eval iMode == 0
-		rIMODIn = NVDLC03GhostNightvisionISFX
-		rIMODOut = NVDLC04RedNightvisionISFX
-	elseif eval iMode == 1
-		rIMODIn = NVDLC04RedNightvisionISFX
-		rIMODOut = NVDLC03GhostNightvisionISFX
+	if eval iVisionMode == 0
+		IMOD NVDLC03GhostNightvisionISFX
+		RIMOD NVDLC04RedNightvisionISFX
+	elseif eval iVisionMode == 1
+		IMOD NVDLC04RedNightvisionISFX
+		RIMOD NVDLC03GhostNightvisionISFX
 		AuxTimerStart "*SNV_Thermal" 5 30
 	endif
 
-	SetImageSpaceModTrait rIMODIn 47 iRed
-	SetImageSpaceModTrait rIMODIn 48 iGreen
-	SetImageSpaceModTrait rIMODIn 49 iBlue
-	SetImageSpaceModTrait rIMODIn 50 iTintAlpha
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\red" iRed
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\green" iGreen
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\blue" iBlue
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\systemcolor" iSystemcolor
-
-	; Update brightness
-	SetImageSpaceModTrait rIMODIn 43 (AuxVarGetFlt "*SNV_Override" (iIndex + 4) rArmor)
-
-	; Update energy use rate
-	fEnergyUse = AuxVarGetFlt "*SNV_Override" (iIndex + 5) rArmor
-	Goo1.AuxVarSetFlt "*SNV_INI" fEnergyUse 9
-
-	RIMOD rIMODOut
-	IMOD rIMODIn
 	PlaySound UIPipBoyLightOn
-	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 200 (Goo1.AuxVarGetFlt "*SNV_INI" iMode) 0.5
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" iMode
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_State" 1
-	Goo1.AuxVarSetFlt "SNV_Mode" iMode 1
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" iVisionMode
+	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 0.8
+	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 0.8 (GetUIFloatAlt "HUDMainMenu\ModernNightVision\_Static") 0.5
+	Goo1.AuxVarSetFlt "SNV_Mode" iVisionMode 1
 
 	; IMOD Transition
 	Goo1.AuxVarSetFlt "*SNV_DoF" 1 0
 	Goo1.AuxVarSetFlt "*SNV_DoF" 0 1
 
 	; Update Energy Display text
-	if eval Goo1.AuxVarGetFlt "*SNV_INI" 8
+	if eval GetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyRequired" == 1
 		fEnergy = Goo1.AuxVarGetFlt "SNV_Mode" 2
-		if eval Goo1.AuxVarGetFlt "*SNV_INI" 10 == 1
+		if eval GetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ChargeStyle" == 1
 			sEnergy = sv_Construct "%g%%" (Flr (((fEnergy / (Goo1.AuxVarGetFlt "SNV_Mode" 3)) * 100) + 0.5))
-		elseif eval fEnergyUse > 0
+		elseif eval (fEnergyUse = GetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyUseCalc") > 0
 			sEnergy = sv_Construct "%gs" (Flr ((fEnergy / fEnergyUse) + 0.5))
 		else
 			sEnergy = "-"

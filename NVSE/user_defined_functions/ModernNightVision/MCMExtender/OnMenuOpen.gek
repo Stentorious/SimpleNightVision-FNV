@@ -1,0 +1,57 @@
+int iMenuID
+
+int iFlag
+ref rArmor
+
+begin Function {int iMenuID}
+
+	Goo1.AuxVarErase "*MNV_Menu"
+	Goo1.AuxVarSetFlt "*MNV_Menu" 0 0
+	Goo1.AuxVarSetFlt "*MNV_Menu" 0 1
+	Goo1.AuxVarSetFlt "*MNV_Menu" -1 2
+	Goo1.AuxVarSetStr "*MNV_Menu" ("") 3
+	Goo1.AuxVarSetStr "*MNV_Menu" ("") 4
+	Goo1.AuxVarSetStr "*MNV_Menu" "Current Headgear:  NONE" 5
+	Goo1.AuxVarSetStr "*MNV_Menu" ("") 6
+
+	; Check if wearing vision mode supported headgear
+	; Hat
+	if eval IsFormValid (rArmor = Player.GetEqObj 10)
+		if eval IsPA rArmor || HasKeyword rArmor "ModernNightVision"
+			iFlag = 2
+		else
+			iFlag = 1
+		endif
+
+	; Glasses
+	elseif eval IsFormValid (rArmor = Player.GetEqObj 11)
+		if eval IsPA rArmor || HasKeyword rArmor "ModernNightVision"
+			iFlag = 2
+		else
+			iFlag = 1
+		endif
+	endif
+
+	; Wearing supported headgear
+	if eval iFlag == 0
+		return
+	endif
+
+	Goo1.AuxVarSetFlt "*MNV_Menu" 1 0
+
+	; Has vision mode support
+	Goo1.AuxVarSetFlt "*MNV_Menu" (eval iFlag == 1) 1
+
+	; Has override config
+	if eval IsFormValid rArmor
+		Goo1.AuxVarSetStr "*MNV_Menu" ("Current Headgear:  " + (LNGetName rArmor)) 5
+		Goo1.AuxVarSetRef "*SNV_Ref" rArmor
+		if eval iFlag == 2
+			Goo1.AuxVarSetFlt "*MNV_Menu" (eval HasKeyword rArmor "SNV_Override" == 0) 2
+			Goo1.AuxVarSetStr "*MNV_Menu" (sv_Construct "Stentorious\ModernNightVision\%z.ini" (GetEditorID rArmor)) 3
+			Goo1.AuxVarSetStr "*MNV_Menu" (GetEditorID rArmor) 4
+			Goo1.AuxVarSetStr "*MNV_Menu" (LNGetName rArmor) 6
+		endif
+	endif
+
+end

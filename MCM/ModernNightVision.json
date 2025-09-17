@@ -1,0 +1,596 @@
+{
+	"modName": "ModernNightVision",
+	"displayName": "$modDisplayName",
+	"description": "$modDescription",
+	"saveFile": "Stentorious/ModernNightVision.ini",
+	"minMCMVersion": 1.2,
+	"minModVersion": 1.00,
+	"requirements": [
+		{ "type": "file", "file": "NVSE/plugins/scripts/gr_ModernNightVision.txt" }
+	],
+	"submenus": {
+		"1": {
+			"listTitle": "$General",
+			"pageTitle": "$General",
+			"active": 1,
+			"columns": 2,
+			"enable": 1,
+			"options": {
+				"1": {
+					"title": "$General",
+					"enable": 1,
+					"type": 0
+				},
+				"3": {
+					"title": "$Keybind",
+					"enable": 1,
+					"type": 3,
+					"mouse": "$KeybindMouse",
+					"vars": [ { "configINI": "General:iKeybind", "default": 49 } ],
+					"call": { "type": "file", "value": "ModernNightVision/MCMExtender/UpdateOption.gek" }
+				},
+				"5": {
+					"title": "$ControllerSupport",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$ControllerSupportMouse",
+				   "vars": [ { "form": "Goo1", "auxVar": "*SNV_INI", "key": 1, "configINI": "General:bControllerSupport", "default": 1 } ]
+				},
+				"7": {
+					"title": "$SwitchMode",
+					"enable": 1,
+					"type": 1,
+					"mouse": "$SwitchModeMouse",
+					"vars": [ { "form": "Goo1", "auxVar": "*SNV_INI", "key": 4, "configINI": "General:iSwitchMode", "default": 0 } ],
+					"strings": [ "$Toggle", "$Wrap"]
+				},
+				"9": {
+					"title": "$RequireEnergy",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$RequireEnergyMouse",
+					"vars": [ { "uiTrait": "HUDMainMenu/ModernNightVision/_EnergyRequired", "configINI": "General:bRequireEnergy", "default": 1 } ]
+				},
+				"11": {
+					"title": "$AnimationsFirstPerson",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$AnimationsFirstPersonMouse",
+					"vars": [ { "form": "Goo1", "auxVar": "*SNV_INI", "key": 5, "configINI": "General:b1stPersonAnimations", "default": 1 } ]
+				},
+				"13": {
+					"title": "$OverlayInertia",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$OverlayInertiaMouse",
+					"suffix": "x",
+					"vars": [ { "uiTrait": "HUDMainMenu/ModernNightVision/_Inertia", "configINI": "General:fOverlayInertia", "default": 1 } ],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 2, "suffix": "x" }
+				},
+				"15": {
+					"title": "$OverlayOpacityPipboy",
+					"enable": 1,
+					"type": 2,
+					"mouse": "$OverlayOpacityPipboyMouse",
+					"suffix": "%",
+					"vars": [{ "form": "Goo1", "auxVar": "*SNV_INI", "key": 2, "configINI": "General:fPipBoyStrength", "default": 50 }],
+					"scale": { "valueDecimal": 0, "valueIncrement": 1, "valueMin": 0, "valueMax": 100, "suffix": "%" }
+				},
+
+				"19": {
+					"title": { "form": "Goo1", "auxVar": "*MNV_Menu", "key": 5 },
+					"type": 0,
+					"state": { "form": "Goo1", "auxVar": "*MNV_Menu", "key": 0, "value": 1, "disable": 1 }
+				},
+				"21": {
+					"title": "$AddSupport",
+					"type": 6,
+					"mouse": "$AddSupportMouse",
+					"state": { "form": "Goo1", "auxVar": "*MNV_Menu", "key": 1, "value": 1, "disable": 1 },
+					"vars": [],
+					"call": { "type": "file", "value": "ModernNightVision/MCMExtender/UpdateOption.gek" },
+					"textOn": " ",
+					"textOff": " "
+				},
+				"23": {
+					"title": "$AddOverrideConfig",
+					"type": 6,
+					"mouse": "$AddOverrideConfigMouse",
+					"state": { "form": "Goo1", "auxVar": "*MNV_Menu", "key": 2, "value": 1, "disable": 1 },
+					"vars": [],
+					"call": { "type": "file", "value": "ModernNightVision/MCMExtender/UpdateOption.gek" },
+					"textOn": " ",
+					"textOff": " "
+				},
+
+				"2": {
+					"title": "$EnergyDisplay",
+					"enable": 1,
+					"type": 0
+				},
+				"4": {
+					"title": "$StyleIcon",
+					"enable": 1,
+					"type": 1,
+					"mouse": "$StyleIconMouse",
+					"vars": [ { "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_IconStyle", "configINI": "EnergyDisplay:iIconStyle", "default": 1 } ],
+					"strings": [ "$Static", "$Dynamic" ]
+				},
+				"6": {
+					"title": "$StyleText",
+					"enable": 1,
+					"type": 1,
+					"mouse": "$StyleTextMouse",
+					"vars": [ { "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_ChargeStyle", "configINI": "EnergyDisplay:iChargeStyle", "default": 1 } ],
+					"strings": [ "$Disable", "$Percentage", "$Seconds" ]
+				},
+				"8": {
+					"title": "$ItemName",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$ItemNameMouse",
+					"vars": [ { "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_ItemName", "configINI": "EnergyDisplay:bShowItemName", "default": 1 } ]
+				},
+				"10": {
+					"title": "$Scale",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$ScaleMouse",
+					"suffix": "x",
+					"vars": [ { "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_IconScale", "configINI": "EnergyDisplay:fScale", "default": 1 } ],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
+				},
+				"12": {
+					"title": "$PositionOffset",
+					"enable": 1,
+					"type": 8,
+					"mouse": "$PositionOffsetMouse",
+					"vars": [
+						{ "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_OffsetX", "configINI": "EnergyDisplay:fOffsetX", "default": 0 },
+						{ "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_OffsetY", "configINI": "EnergyDisplay:fOffsetX", "default": 0 }
+					],
+					"scale": {
+						"setting1": "X:",
+						"setting2": "Y:",
+						"value1Decimal": 0,
+						"value2Decimal": 0,
+						"value1Increment": 1,
+						"value2Increment": 1,
+						"value1Min": -200,
+						"value2Min": -200,
+						"value1Max": 200,
+						"value2Max": 200
+					}
+				}
+			}
+		},
+
+		"2": {
+			"listTitle": "$VisionModesList",
+			"pageTitle": "$VisionModesPage",
+			"columns": 2,
+			"enable": 1,
+			"options": {
+				"1": {
+					"title": "$NightVision",
+					"enable": 1,
+					"type": 0
+				},
+				"3": {
+					"title": "$Enable",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$EnableMouse",
+					"vars": [ { "form": "Caps001", "auxVar": "*MNV_NV", "key": 0, "configINI": "NightVision:bEnable", "default": 1 } ]
+				},
+				"5": {
+					"title": "$EnergyConsumption",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$EnergyConsumptionMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 1, "configINI": "NightVision:fEnergyConsumption", "default": 1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"7": {
+					"title": "$ColorTint",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$ColorTintMouse",
+					"vars": [ { "form": "Caps001", "auxVar": "*MNV_NV", "key": 2, "configINI": "NightVision:bColorTint", "default": 1 } ]
+				},
+				"9": {
+					"title": "$ColorCustom",
+					"type": 9,
+					"mouse": "$ColorCustomMouse",
+					"state": { "form": "Caps001", "auxVar": "*MNV_NV", "key": 2, "value": 1, "disable": 1 },
+					"vars": [
+						{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 3, "configINI": "NightVision:iRed", "default": 127 },
+						{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 4, "configINI": "NightVision:iGreen", "default": 255 },
+						{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 5, "configINI": "NightVision:iBlue", "default": 127 }
+					]
+				},
+				"11": {
+					"title": "$StaticNoise",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$StaticNoiseMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 6, "configINI": "NightVision:fStaticStrength", "default": 0.25 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 0, "valueMax": 1, "suffix": "x" }
+				},
+				"13": {
+					"title": "$BrightnessOverall",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessOverallMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 7, "configINI": "NightVision:fOverallBrightness", "default": 2.5 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.5, "valueMin": 0, "valueMax": 100, "suffix": "x" }
+				},
+				"15": {
+					"title": "$BrightnessSky",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessSkyMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 8, "configINI": "NightVision:fMoonlightBrightness", "default": 1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"17": {
+					"title": "$MotionBlur",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$MotionBlurMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 9, "configINI": "NightVision:fMotionBlur", "default": 0.1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 4, "suffix": "x" }
+				},
+				"19": {
+					"title": "$DepthOfField",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$DepthOfFieldMouse",
+					"suffix": "m",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 10, "configINI": "NightVision:fDepthBlur", "default": 5.75 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.05, "valueMin": 0, "valueMax": 10, "suffix": "m" }
+				},
+				"21": {
+					"title": "$OverlayOpacity",
+					"enable": 1,
+					"type": 2,
+					"mouse": "$OverlayOpacityMouse",
+					"suffix": "%",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 11, "configINI": "NightVision:fOverlayOpacity", "default": 100 }],
+					"scale": { "valueDecimal": 0, "valueIncrement": 1, "valueMin": 0, "valueMax": 100, "suffix": "%" }
+				},
+				"23": {
+					"title": "$OverlayScale",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$OverlayScaleMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 12, "configINI": "NightVision:fOverlayScale", "default": 1.1 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
+				},
+
+				"2": {
+					"title": "$ThermalVision",
+					"enable": 1,
+					"type": 0
+				},
+				"4": {
+					"title": "$Enable",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$EnableMouse",
+					"vars": [ { "form": "Caps001", "auxVar": "*MNV_TV", "key": 0, "configINI": "ThermalVision:bEnable", "default": 1 } ]
+				},
+				"6": {
+					"title": "$EnergyConsumption",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$EnergyConsumptionMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 1, "configINI": "ThermalVision:fEnergyConsumption", "default": 1.5 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"8": {
+					"title": "$ColorTint",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$ColorTintMouse",
+					"vars": [ { "form": "Caps001", "auxVar": "*MNV_TV", "key": 2, "configINI": "ThermalVision:bColorTint", "default": 1 } ]
+				},
+				"10": {
+					"title": "$ColorCustom",
+					"type": 9,
+					"mouse": "$ColorCustomMouse",
+					"state": { "form": "Caps001", "auxVar": "*MNV_TV", "key": 2, "value": 1, "disable": 1 },
+					"vars": [
+						{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 3, "configINI": "ThermalVision:iRed", "default": 255 },
+						{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 4, "configINI": "ThermalVision:iGreen", "default": 255 },
+						{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 5, "configINI": "ThermalVision:iBlue", "default": 255 }
+					]
+				},
+				"12": {
+					"title": "$StaticNoise",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$StaticNoiseMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 6, "configINI": "ThermalVision:fStaticStrength", "default": 0.28 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 0, "valueMax": 1, "suffix": "x" }
+				},
+				"14": {
+					"title": "$BrightnessOverall",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessOverallMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 7, "configINI": "ThermalVision:fOverallBrightness", "default": 1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.5, "valueMin": 0, "valueMax": 100, "suffix": "x" }
+				},
+				"16": {
+					"title": "$BrightnessSky",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessSkyMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 8, "configINI": "ThermalVision:fMoonlightBrightness", "default": 0 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"18": {
+					"title": "$MotionBlur",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$MotionBlurMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 9, "configINI": "ThermalVision:fMotionBlur", "default": 2 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 4, "suffix": "x" }
+				},
+				"20": {
+					"title": "$DepthOfField",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$DepthOfFieldMouse",
+					"suffix": "m",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 10, "configINI": "ThermalVision:fDepthBlur", "default": 5.75 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.05, "valueMin": 0, "valueMax": 10, "suffix": "m" }
+				},
+				"22": {
+					"title": "$OverlayOpacity",
+					"enable": 1,
+					"type": 2,
+					"mouse": "$OverlayOpacityMouse",
+					"suffix": "%",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 11, "configINI": "ThermalVision:fOverlayOpacity", "default": 100 }],
+					"scale": { "valueDecimal": 0, "valueIncrement": 1, "valueMin": 0, "valueMax": 100, "suffix": "%" }
+				},
+				"24": {
+					"title": "$OverlayScale",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$OverlayScaleMouse",
+					"suffix": "x",
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 12, "configINI": "ThermalVision:fOverlayScale", "default": 1.1 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
+				}
+			}
+		},
+
+		"3": {
+			"listTitle": "$VisionModesOverride",
+			"pageTitle": { "form": "Goo1", "auxVar": "*MNV_Menu", "key": 6 },
+			"columns": 2,
+			"state": { "form": "Goo1", "auxVar": "*MNV_Menu", "key": 2, "value": 0 },
+			"options": {
+				"1": {
+					"title": "$NightVision",
+					"enable": 1,
+					"type": 0
+				},
+				"3": {
+					"title": "$Enable",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$EnableMouse",
+					"vars": [ { "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 0, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:bEnable", "default": 1 } ]
+				},
+				"5": {
+					"title": "$EnergyConsumption",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$EnergyConsumptionMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 1, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fEnergyConsumption", "default": 1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"7": {
+					"title": "$ColorTint",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$ColorTintMouse",
+					"vars": [ { "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 2, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:bColorTint", "default": 1 } ]
+				},
+				"9": {
+					"title": "$ColorCustom",
+					"type": 9,
+					"mouse": "$ColorCustomMouse",
+					"state": { "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 2, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:bColorTint", "value": 1, "disable": 1 },
+					"vars": [
+						{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 3, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:iRed", "default": 127 },
+						{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 4, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:iGreen", "default": 255 },
+						{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 5, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:iBlue", "default": 127 }
+					]
+				},
+				"11": {
+					"title": "$StaticNoise",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$StaticNoiseMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 6, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fStaticStrength", "default": 0.25 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 0, "valueMax": 1, "suffix": "x" }
+				},
+				"13": {
+					"title": "$BrightnessOverall",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessOverallMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 7, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fOverallBrightness", "default": 2.5 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.5, "valueMin": 0, "valueMax": 100, "suffix": "x" }
+				},
+				"15": {
+					"title": "$BrightnessSky",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessSkyMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 8, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fMoonlightBrightness", "default": 1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"17": {
+					"title": "$MotionBlur",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$MotionBlurMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 9, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fMotionBlur", "default": 0.1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 4, "suffix": "x" }
+				},
+				"19": {
+					"title": "$DepthOfField",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$DepthOfFieldMouse",
+					"suffix": "m",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 10, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fDepthBlur", "default": 5.75 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.05, "valueMin": 0, "valueMax": 10, "suffix": "m" }
+				},
+				"21": {
+					"title": "$OverlayOpacity",
+					"enable": 1,
+					"type": 2,
+					"mouse": "$OverlayOpacityMouse",
+					"suffix": "%",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 11, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fOverlayOpacity", "default": 100 }],
+					"scale": { "valueDecimal": 0, "valueIncrement": 1, "valueMin": 0, "valueMax": 100, "suffix": "%" }
+				},
+				"23": {
+					"title": "$OverlayScale",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$OverlayScaleMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 12, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fOverlayScale", "default": 1.1 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
+				},
+
+				"2": {
+					"title": "$ThermalVision",
+					"enable": 1,
+					"type": 0
+				},
+				"4": {
+					"title": "$Enable",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$EnableMouse",
+					"vars": [ { "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 0, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:bEnable", "default": 1 } ]
+				},
+				"6": {
+					"title": "$EnergyConsumption",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$EnergyConsumptionMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 1, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fEnergyConsumption", "default": 1.5 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"8": {
+					"title": "$ColorTint",
+					"enable": 1,
+					"type": 5,
+					"mouse": "$ColorTintMouse",
+					"vars": [ { "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 2, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:bColorTint", "default": 1 } ]
+				},
+				"10": {
+					"title": "$ColorCustom",
+					"type": 9,
+					"mouse": "$ColorCustomMouse",
+					"state": { "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 2, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:bColorTint", "value": 1, "disable": 1 },
+					"vars": [
+						{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 3, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:iRed", "default": 255 },
+						{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 4, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:iGreen", "default": 255 },
+						{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 5, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:iBlue", "default": 255 }
+					]
+				},
+				"12": {
+					"title": "$StaticNoise",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$StaticNoiseMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 6, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fStaticStrength", "default": 0.28 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 0, "valueMax": 1, "suffix": "x" }
+				},
+				"14": {
+					"title": "$BrightnessOverall",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessOverallMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 7, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fOverallBrightness", "default": 1 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.5, "valueMin": 0, "valueMax": 100, "suffix": "x" }
+				},
+				"16": {
+					"title": "$BrightnessSky",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$BrightnessSkyMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 8, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fMoonlightBrightness", "default": 0 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 10, "suffix": "x" }
+				},
+				"18": {
+					"title": "$MotionBlur",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$MotionBlurMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 9, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fMotionBlur", "default": 2 }],
+					"scale": { "valueDecimal": 1, "valueIncrement": 0.1, "valueMin": 0, "valueMax": 4, "suffix": "x" }
+				},
+				"20": {
+					"title": "$DepthOfField",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$DepthOfFieldMouse",
+					"suffix": "m",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 10, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fDepthBlur", "default": 5.75 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.05, "valueMin": 0, "valueMax": 10, "suffix": "m" }
+				},
+				"22": {
+					"title": "$OverlayOpacity",
+					"enable": 1,
+					"type": 2,
+					"mouse": "$OverlayOpacityMouse",
+					"suffix": "%",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 11, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fOverlayOpacity", "default": 100 }],
+					"scale": { "valueDecimal": 0, "valueIncrement": 1, "valueMin": 0, "valueMax": 100, "suffix": "%" }
+				},
+				"24": {
+					"title": "$OverlayScale",
+					"enable": 1,
+					"type": 2.5,
+					"mouse": "$OverlayScaleMouse",
+					"suffix": "x",
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 12, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fOverlayScale", "default": 1.1 }],
+					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,76 @@
+int iButton
+
+ref rArmor
+string_var sINIPath
+
+begin Function {iButton}
+
+	if eval iButton != 0
+		return
+	endif
+	rArmor = Goo1.AuxVarGetRef "*SNV_Ref"
+
+	; Init override config
+	sINIPath = sv_Construct "Stentorious\ModernNightVision\%z.ini" (GetEditorID rArmor)
+	WriteStringToFile ("Data\Config\" + (sINIPath)) 0 "[NightVision]%r[ThermalVision]"
+	AssignKeyword rArmor "SNV_Override"
+	Goo1.AuxVarSetFlt "*MNV_Menu" 0 2
+
+	MessageExAlt 1 "#2|Created override config: %z" sINIPath
+
+	; Vision mode
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 0 Caps001) 0 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 0 Caps001) 0 rArmor
+
+	; Energy use multiplier
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 1 Caps001) 1 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 1 Caps001) 1 rArmor
+
+	; Color
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 2 Caps001) 2 rArmor
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 3 Caps001) 3 rArmor
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 4 Caps001) 4 rArmor
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 5 Caps001) 5 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 2 Caps001) 2 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 3 Caps001) 3 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 4 Caps001) 4 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 5 Caps001) 5 rArmor
+
+	; Static Noise
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 6 Caps001) 6 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 6 Caps001) 6 rArmor
+
+	; Brightness (Overall)
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 7 Caps001) 7 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 7 Caps001) 7 rArmor
+
+	; Brightness (Sky)
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 8 Caps001) 8 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 8 Caps001) 8 rArmor
+
+	; Motion blur
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 9 Caps001) 9 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 9 Caps001) 9 rArmor
+
+	; Depth of Field
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 10 Caps001) 10 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 10 Caps001) 10 rArmor
+
+	; Overlay (Opacity)
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 11 Caps001) 11 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 11 Caps001) 11 rArmor
+
+	; Overlay (Scale)
+	AuxVarSetFlt "*MNV_NV" (AuxVarGetFlt "*MNV_NV" 12 Caps001) 12 rArmor
+	AuxVarSetFlt "*MNV_TV" (AuxVarGetFlt "*MNV_TV" 12 Caps001) 12 rArmor
+
+	; Overlay (Texture)
+	AuxVarSetStr "*MNV_NV" (AuxVarGetStr "*MNV_NV" 13 Caps001) 13 rArmor
+	AuxVarSetStr "*MNV_TV" (AuxVarGetStr "*MNV_TV" 13 Caps001) 13 rArmor
+
+	; Refresh MCM extender submenus
+	Call (CompileScript "MCMExtender\RefreshSubmenus.gek") 1 1 1 1 (ReadFromJSON (Goo1.AuxVarGetStr "*MCMExt_State" 3) "" 0 1)
+
+	sv_Destruct sINIPath
+
+end

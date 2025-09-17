@@ -1,0 +1,37 @@
+float fValue
+int iMenu
+int iSubmenu
+int iOption
+array_var aJSON
+
+int iKeybind
+ref rArmor
+
+Begin Function {fValue, iMenu, iSubmenu, iOption, aJSON}
+
+	; Update keybind
+	if eval iSubmenu == 1
+		if eval iOption == 3
+			if eval (iKeybind = Goo1.AuxVarGetFlt "*SNV_INI" 0) != fValue
+				if eval iKeybind > 0
+					SetOnKeyDownEventHandler (CompileScript "ModernNightVision\OnKeyDown.gek") 0 iKeybind
+					SetOnKeyUpEventHandler (CompileScript "ModernNightVision\OnKeyUp.gek") 0 iKeybind
+				endif
+				if eval fValue > 0
+					SetOnKeyDownEventHandler (CompileScript "ModernNightVision\OnKeyDown.gek") 1 fValue
+					SetOnKeyUpEventHandler (CompileScript "ModernNightVision\OnKeyUp.gek") 1 fValue
+				endif
+				Goo1.AuxVarSetFlt "*SNV_INI" fValue 0
+			endif
+		elseif eval iOption == 21
+			rArmor = Goo1.AuxVarGetRef "*SNV_Ref"
+			MessageBoxExAlt (CompileScript "ModernNightVision\MCMExtender\AddVisionMode.gek") "^Modern Night Vision^Add support to %n?|Ok|Cancel" rArmor
+		elseif eval iOption == 23
+			rArmor = Goo1.AuxVarGetRef "*SNV_Ref"
+			MessageBoxExAlt (CompileScript "ModernNightVision\MCMExtender\AddOverrideConfig.gek") "^Modern Night Vision^Create override config for %n?|Ok|Cancel" rArmor
+		endif
+	endif
+
+	aJSON = ar_Null
+
+End

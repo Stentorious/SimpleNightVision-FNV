@@ -1,0 +1,17 @@
+int iButton
+
+ref rArmor
+
+begin Function {iButton}
+
+	if eval iButton != 0
+		return
+	endif
+	rArmor = Goo1.AuxVarGetRef "*SNV_Ref"
+	SetINIString ("ModernNightVision:" + $(Ar_Size (GetINISection "ModernNightVision" "..\KEYWORDS\ModernNightVision.ini" 1))) (GetEditorID rArmor) "..\KEYWORDS\ModernNightVision.ini"
+	AssignKeyword rArmor "ModernNightVision"
+
+	Goo1.AuxVarSetFlt "*MNV_Menu" 0 1
+	Goo1.AuxVarSetFlt "*MNV_Menu" 1 2
+
+end

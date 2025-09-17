@@ -1,39 +1,47 @@
-ref rOwnerForm
+ref rOwner
 string_var sTimerName
 
 int iFlag
-ref rHat
-ref rGlasses
+ref rArmor
 
-begin Function {sTimerName, rOwnerForm}
+begin Function {sTimerName, rOwner}
 
-	; Get headgear
-	rHat = Player.GetEqObj 10
-	rGlasses = Player.GetEqObj 11
+	; Hat
+	if eval IsFormValid (rArmor = Player.GetEqObj 10)
+		if eval IsPA rArmor || HasKeyword rArmor "ModernNightVision"
+			iFlag = 2
+		else
+			iFlag = 1
+		endif
 
-	; Display message box if valid headgear can support vision modes
-	Goo1.AuxVarErase "*SNV_Ref"
-	if eval IsFormValid rHat && IsPA rHat == 0 && HasKeyword rHat "ModernNightVision" == 0
-		iFlag = 1
-		Goo1.AuxVarSetRef "*SNV_Ref" rHat
-	elseif eval IsFormValid rGlasses && IsPA rGlasses == 0 && HasKeyword rGlasses "ModernNightVision" == 0
-		iFlag = 1
-		Goo1.AuxVarSetRef "*SNV_Ref" rGlasses
+	; Glasses
+	elseif eval IsFormValid (rArmor = Player.GetEqObj 11)
+		if eval IsPA rArmor || HasKeyword rArmor "ModernNightVision"
+			iFlag = 2
+		else
+			iFlag = 1
+		endif
 	endif
 
-	if eval iFlag
-		rHat = Goo1.AuxVarGetRef "*SNV_Ref"
+	; Display message box
+	if eval iFlag == 1
+		Goo1.AuxVarSetRef "*SNV_Ref" rArmor
 		MessageBoxExAlt (begin function {int iButton}
-			if iButton == 0
-				ref rArmor = Goo1.AuxVarGetRef "*SNV_Ref"
-				array_var aINISections = GetINISection "ModernNightVision" "..\KEYWORDS\ModernNightVision.ini" 1
-				SetINIString ("ModernNightVision:" + $(Ar_Size aINISections)) (GetEditorID rArmor) "..\KEYWORDS\ModernNightVision.ini"
-				AssignKeyword rArmor "ModernNightVision"
-				aINISections = Ar_Null
+			if eval iButton != 0
+				return
 			endif
-		end) "^Modern Night Vision^Add support to %n?|Ok|Cancel" rHat
+			ref rArmor = Goo1.AuxVarGetRef "*SNV_Ref"
+			SetINIString ("ModernNightVision:" + $(Ar_Size (GetINISection "ModernNightVision" "..\KEYWORDS\ModernNightVision.ini" 1))) (GetEditorID rArmor) "..\KEYWORDS\ModernNightVision.ini"
+			AssignKeyword rArmor "ModernNightVision"
+			Call (CompileScript "ModernNightVision\UpdateEffect.gek") rArmor
+			Goo1.AuxVarErase "*SNV_Ref"
+		end) "^Modern Night Vision^Add support to %n?|Ok|Cancel" rArmor
+
+	; Error message
+	elseif eval iFlag == 2
+		MessageExAlt 3 "#3|This armor already has vision mode support."
 	else
-		MessageExAlt 3 "#3|No valid armor for night vision support."
+		MessageExAlt 3 "#3|No valid armor for vision mode support."
 	endif
 
 	sv_Destruct sTimerName

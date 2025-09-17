@@ -1,0 +1,19 @@
+ref rEquipper
+ref rEquipped
+
+int iSlotMask
+
+begin Function {rEquipper, rEquipped}
+
+	; Valid armor
+	if eval IsFormValid rEquipped == 0 || GetType rEquipped != 24
+		return
+	endif
+
+	; Check equipment slots
+	iSlotMask = GetESM rEquipped
+	if eval GetBit iSlotMask 10 || GetBit iSlotMask 11
+		Call (CompileScript "ModernNightVision\UpdateEffect.gek") rEquipped
+	endif
+
+end

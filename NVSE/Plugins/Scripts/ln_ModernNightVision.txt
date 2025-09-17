@@ -1,6 +1,15 @@
 ; Check for requirements
-if Goo1.AuxVarGetFlt "*SNV_Init" == 0
+if Goo1.AuxVarGetFlt "*SNV_Init" 0 == 0
 	return
+endif
+
+; Keybind events
+if Goo1.AuxVarGetFlt "*SNV_Init" 1 == 0
+	Goo1.AuxVarSetFlt "*SNV_Init" 1 1
+	if eval (int iKeyID = Goo1.AuxVarGetFlt "*SNV_INI" 0) > 0
+		SetOnKeyDownEventHandler (CompileScript "ModernNightVision\OnKeyDown.gek") 1 iKeyID
+		SetOnKeyUpEventHandler (CompileScript "ModernNightVision\OnKeyUp.gek") 1 iKeyID
+	endif
 endif
 
 int iTemp = 0
@@ -39,117 +48,83 @@ endif
 
 ; Set event handlers
 SetJohnnyOnDyingEventHandler 1 (CompileScript "ModernNightVision\OnDeath.gek") 0
-SetEventHandlerAlt "OnActorUnequip" (CompileScript "ModernNightVision\OnUnequip.gek") 1::Player
 SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\OnAuxTimerStopSupport.gek") "*SNV_KeySupport"
 SetOnTimerStartHandler 1 (CompileScript "ModernNightVision\OnAuxTimerStartTher.gek") "*SNV_Thermal"
-if eval Goo1.AuxVarGetFlt "*SNV_INI" 4 == 0
-	SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\OnAuxTimerStopToggle.gek") "*SNV_KeyToggle"
-endif
-if eval Goo1.AuxVarGetFlt "*SNV_INI" 5
-	SetOnTimerStopHandler 1 (begin function {string_var sTimerName, ref rOwnerForm}
-		EnablePlayerControlsAltEx 30100
-		sv_Destruct sTimerName
-	end) "*SNV_Animation"
-endif
-
-; Update save baked vision mode state
-iTemp = Goo1.AuxVarGetFlt "SNV_Mode" 0
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\_State" iTemp
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\_AlphaOverlay" iTemp
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyAlpha" iTemp
-if eval iTemp
-
-	; Check for color override
-	iTemp = Goo1.AuxVarGetFlt "SNV_Mode" 1
-	ref rArmor = Goo1.AuxVarGetRef "SNV_Armor"
-	if eval IsBaseForm rArmor && HasKeyword rArmor "SNV_Override"
-	else
-		rArmor = Caps001
+SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\OnAuxTimerStopToggle.gek") "*SNV_KeyToggle"
+SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\EnergyUpdate.gek") "*SNV_Energy"
+SetOnTimerStopHandler 1 (begin function {string_var sTimerName, ref rOwnerForm}
+	sv_Destruct sTimerName
+	if eval Goo1.AuxVarGetFlt "*SNV_INI" 5 == 0
+		return
 	endif
+	EnablePlayerControlsAltEx 30100
+end) "*SNV_Animation"
 
-	; Update effect color
-	int iIndex = iTemp * 6
-	int iRed = AuxVarGetFlt "*SNV_Override" iIndex rArmor
-	int iGreen = AuxVarGetFlt "*SNV_Override" (iIndex + 1) rArmor
-	int iBlue = AuxVarGetFlt "*SNV_Override" (iIndex + 2) rArmor
-	int iSystemcolor = AuxVarGetFlt "*SNV_Override" (iIndex + 3) rArmor
-	int iTintAlpha = 255
-	if eval iSystemcolor > 0
-		GetSystemColorAlt iSystemcolor (iRed) (iGreen) (iBlue)
-	elseif eval iSystemcolor == 0
-		iTintAlpha = 0
-	else
-		iSystemcolor = 0
-	endif
+; Update effect
+if eval IsFormValid (ref rArmor = Player.GetEqObj 10) && HasKeyword rArmor "SNV_Override"
+elseif eval IsFormValid (rArmor = Player.GetEqObj 11) && HasKeyword rArmor "SNV_Override"
+else
+	rArmor = Caps001
+endif
+Call (CompileScript "ModernNightVision\UpdateEffect.gek") rArmor
 
-	ref rIMODIn = NVDLC03GhostNightvisionISFX
-	if eval iTemp == 1
-		rIMODIn = NVDLC04RedNightvisionISFX
+; Update save baked vision mode state and validate what vision modes are available
+int iVisionState = Goo1.AuxVarGetFlt "SNV_Mode" 0
+int iVisionMode = Goo1.AuxVarGetFlt "SNV_Mode" 1
+; Neither
+if eval Goo1.AuxVarGetFlt "*SNV_INI" 6 == 0 && Goo1.AuxVarGetFlt "*SNV_INI" 7 == 0
+	iVisionState = 0
+; Night vision unavailable
+elseif eval iVisionMode == 0 && Goo1.AuxVarGetFlt "*SNV_INI" 6 == 0
+	iVisionMode = 1
+; Thermal vision unavailable
+elseif eval Goo1.AuxVarGetFlt "*SNV_INI" 7 == 0
+	iVisionMode = 0
+endif
+Goo1.AuxVarSetFlt "SNV_Mode" iVisionState 0
+Goo1.AuxVarSetFlt "SNV_Mode" iVisionMode 1
+
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_AlphaOverlay" iVisionState
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyAlpha" iVisionState
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" -1
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" iVisionMode
+
+; Vision mode active
+if eval iVisionState
+
+	; Apply IMOD
+	if eval iVisionMode == 1
+		IMOD NVDLC04RedNightvisionISFX
 		CallAfterFrames 0 ({} => AuxTimerStart "*SNV_Thermal" 5 30)
+	else
+		IMOD NVDLC03GhostNightvisionISFX
 	endif
-
-	; Update effect color
-	SetImageSpaceModTrait rIMODIn 47 iRed
-	SetImageSpaceModTrait rIMODIn 48 iGreen
-	SetImageSpaceModTrait rIMODIn 49 iBlue
-	SetImageSpaceModTrait rIMODIn 50 iTintAlpha
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\red" iRed
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\green" iGreen
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\blue" iBlue
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\static\systemcolor" iSystemcolor
-
-	; Update brightness
-	SetImageSpaceModTrait rIMODIn 43 (AuxVarGetFlt "*SNV_Override" (iIndex + 4) rArmor)
-
-	; Update energy use rate
-	Goo1.AuxVarSetFlt "*SNV_INI" (AuxVarGetFlt "*SNV_Override" (iIndex + 5) rArmor) 9
-
-	IMOD rIMODIn
 
 	; Update UI
-	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 200 (Goo1.AuxVarGetFlt "*SNV_INI" iTemp) 0.5
+	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 0.8
+	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 0.8 (GetUIFloatAlt "HUDMainMenu\ModernNightVision\_Static") 0.5
 
 	; Update energy
 	AuxTimerStart "*SNV_Energy" 1 30
 
-	; Update overlay
-	string_var sTexture = AuxVarGetStr "*SNV_Override" 12 rArmor
-	SetUIStringAlt "HUDMainMenu\ModernNightVision\Overlay\_filename_0" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + ".dds")
-	SetUIStringAlt "HUDMainMenu\ModernNightVision\Eyebox\_filename_0" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + "_eyebox.dds")
-	sTexture = AuxVarGetStr "*SNV_Override" 13 rArmor
-	SetUIStringAlt "HUDMainMenu\ModernNightVision\Overlay\_filename_1" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + ".dds")
-	SetUIStringAlt "HUDMainMenu\ModernNightVision\Eyebox\_filename_1" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + "_eyebox.dds")
-	sv_Destruct sTexture
-
 endif
-
-; Force trait assignment update
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" -1
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Mode" (Goo1.AuxVarGetFlt "SNV_Mode" 1)
 
 ; Update energy requirements
-if eval Goo1.AuxVarGetFlt "*SNV_INI" 8
-	if Goo1.AuxVarType "SNV_Mode" 2 == 0
-		Goo1.AuxVarSetFlt "SNV_Mode" 0 2
-	endif
-	if Goo1.AuxVarType "SNV_Mode" 3 == 0
-		Goo1.AuxVarSetFlt "SNV_Mode" 300 3
-	endif
-	float fEnergy = Goo1.AuxVarGetFlt "SNV_Mode" 2
-	float fEnergyMax = Goo1.AuxVarGetFlt "SNV_Mode" 3
-	float fEnergyUse = Goo1.AuxVarGetFlt "*SNV_INI" 9
-	string_var sEnergy = "-"
-	if eval Goo1.AuxVarGetFlt "*SNV_INI" 10 == 1
-		sEnergy = sv_Construct "%g%%" (Flr (((fEnergy / fEnergyMax) * 100) + 0.5))
-	elseif eval fEnergyUse > 0
-		sEnergy = sv_Construct "%gs" (Flr ((fEnergy / fEnergyUse) + 0.5))
-	endif
-	SetUIStringAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\string" "%z" sEnergy
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyCharge" fEnergy
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyMax" fEnergyMax
-	SetOnTimerStopHandler 1 (CompileScript "ModernNightVision\EnergyUpdate.gek") "*SNV_Energy"
-	sv_Destruct sEnergy
-else
-	Goo1.AuxVarSetFlt "SNV_Mode" 1 2
-	Goo1.AuxVarSetFlt "SNV_Mode" 1 3
+if Goo1.AuxVarType "SNV_Mode" 2 == 0
+	Goo1.AuxVarSetFlt "SNV_Mode" 0 2
 endif
+if Goo1.AuxVarType "SNV_Mode" 3 == 0
+	Goo1.AuxVarSetFlt "SNV_Mode" 300 3
+endif
+float fEnergy = Goo1.AuxVarGetFlt "SNV_Mode" 2
+float fEnergyMax = Goo1.AuxVarGetFlt "SNV_Mode" 3
+string_var sEnergy = "-"
+if eval GetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ChargeStyle" == 1
+	sEnergy = sv_Construct "%g%%" (Flr (((fEnergy / fEnergyMax) * 100) + 0.5))
+elseif eval (float fEnergyUse = GetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyUseCalc") > 0
+	sEnergy = sv_Construct "%gs" (Flr ((fEnergy / fEnergyUse) + 0.5))
+endif
+SetUIStringAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\string" "%z" sEnergy
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyCharge" fEnergy
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyMax" fEnergyMax
+sv_Destruct sEnergy

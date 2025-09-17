@@ -2,24 +2,20 @@
 
 ; Aux Vars
 ; "SNV_Mode"
-; 0 = On/Off state
-; 1 = Vision mode state
+; 0 = Vision mode On/Off state
+; 1 = Vision mode type
 ; 2 = Remaining energy
 ; 3 = Loaded energy max charge
 
 ; "*SNV_INI"
-; 0 = Static Strength (Night Vision)
-; 1 = Static Strength (Thermal Vision)
+; 0 = Keybind
+; 1 = Controller support
 ; 2 = Pip-Boy overlay opacity mul
 ; 3 = Cyberware support
 ; 4 = Vision mode switch behavior
 ; 5 = First person anims
-; 6 = Screen Blur (Night Vision)
-; 7 = Screen Blur (Thermal Vision)
-; 8 = Requires energy
-; 9 = Current energy consumption rate
-; 10 = Remaining charge text style
-; 11 = Energy cell count text style
+; 6 = Night vision enabled for current helmet
+; 7 = Thermal vision enabled for current helmet
 
 ; "*SNV_Override"
 ; 0 = Color - Red (Night Vision)
@@ -83,15 +79,9 @@ if eval FileExists "UIO\Public\RadiationVisuals.txt" && FileExists "Textures\Int
 	MessageBoxEx "Modern Night Vision texture preload error.%rUpdate Radiation Visuals to latest version."
 	return
 endif
-Goo1.AuxVarSetFlt "*SNV_Init" 1
-
-float fINI = 0
+Goo1.AuxVarSetFlt "*SNV_Init" 1 0
 
 string_var sINIPath = "Stentorious\ModernNightVision.ini"
-if eval GetPluginVersion "NewVegasReloaded" >= 4
-	sINIPath = "Stentorious\ModernNightVision_NVR.ini"
-	Goo1.AuxVarSetFlt "*_NewVegasReloaded.dll" 1
-endif
 
 ; Init static animation
 SetUIFloatGradual "HUDMainMenu\ModernNightVision\Static\_index" 0 9.999 0.5 3
@@ -161,29 +151,55 @@ if eval IsModLoaded "TaleOfTwoWastelands.esm"
 	endif
 endif
 
-; Night vision
-; Color
-string_var sINI = GetINIString_Cached "NightVision:sColor" (sINIPath)
-if eval (int iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
-	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 0 Caps001
-	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 1 Caps001
-	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 2 Caps001
-	AuxVarSetFlt "*SNV_Override" -1 3 Caps001
-elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-	fINI = ToNumber sINI
-	if eval fINI < 6 && fINI > -1
-		AuxVarSetFlt "*SNV_Override" 255 0 Caps001
-		AuxVarSetFlt "*SNV_Override" 255 1 Caps001
-		AuxVarSetFlt "*SNV_Override" 255 2 Caps001
-		AuxVarSetFlt "*SNV_Override" fINI 3 Caps001
-	endif
-endif
-
-; Cinematic: Brightness (Add) Overall brightness
-AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "NightVision:fOverallBrightness" (sINIPath))) 4 Caps001
+; Vision mode
+AuxVarSetFlt "*MNV_NV" (eval GetINIFloat_Cached "NightVision:bEnable" (sINIPath) 1) 0 Caps001
+AuxVarSetFlt "*MNV_TV" (eval GetINIFloat_Cached "ThermalVision:bEnable" (sINIPath) 1) 0 Caps001
 
 ; Energy use multiplier
-AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "NightVision:fEnergyConsumption" (sINIPath))) 5 Caps001
+AuxVarSetFlt "*MNV_NV" (GetMaxOf 0 (GetINIFloat_Cached "NightVision:fEnergyConsumption" (sINIPath) 1)) 1 Caps001
+AuxVarSetFlt "*MNV_TV" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" (sINIPath) 1.5)) 1 Caps001
+
+; Color
+AuxVarSetFlt "*MNV_NV" (eval GetINIFloat_Cached "NightVision:bColorTint" (sINIPath) 0) 2 Caps001
+AuxVarSetFlt "*MNV_NV" (GetINIFloat_Cached "NightVision:iRed" (sINIPath) 127) 3 Caps001
+AuxVarSetFlt "*MNV_NV" (GetINIFloat_Cached "NightVision:iGreen" (sINIPath) 255) 4 Caps001
+AuxVarSetFlt "*MNV_NV" (GetINIFloat_Cached "NightVision:iBlue" (sINIPath) 127) 5 Caps001
+AuxVarSetFlt "*MNV_TV" (eval GetINIFloat_Cached "ThermalVision:bColorTint" (sINIPath) 0) 2 Caps001
+AuxVarSetFlt "*MNV_TV" (GetINIFloat_Cached "ThermalVision:iRed" (sINIPath) 255) 3 Caps001
+AuxVarSetFlt "*MNV_TV" (GetINIFloat_Cached "ThermalVision:iGreen" (sINIPath) 255) 4 Caps001
+AuxVarSetFlt "*MNV_TV" (GetINIFloat_Cached "ThermalVision:iBlue" (sINIPath) 255) 5 Caps001
+
+; Static Noise
+AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fStaticStrength" (sINIPath) 0.25) 0 0.75) 6 Caps001
+AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fStaticStrength" (sINIPath) 0.275) 0 0.75) 6 Caps001
+
+; Brightness (Overall)
+AuxVarSetFlt "*MNV_NV" (GetMaxOf 1 (GetINIFloat_Cached "NightVision:fOverallBrightness" (sINIPath) 2.5)) 7 Caps001
+AuxVarSetFlt "*MNV_TV" (GetMaxOf 1 (GetINIFloat_Cached "ThermalVision:fOverallBrightness" (sINIPath) 1)) 7 Caps001
+
+; Brightness (Sky)
+AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fMoonlightBrightness" (sINIPath) 1) 0 10) 8 Caps001
+AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fMoonlightBrightness" (sINIPath) 0) 0 10) 8 Caps001
+
+; Motion blur
+AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fMotionBlur" (sINIPath) 0.1) 0 4) 9 Caps001
+AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fMotionBlur" (sINIPath) 2) 0 4) 9 Caps001
+
+; Depth of Field
+AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fDepthBlur" (sINIPath) 5.75) 0 10) 10 Caps001
+AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fDepthBlur" (sINIPath) 5.75) 0 10) 10 Caps001
+
+; Overlay (Opacity)
+AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fOverlayOpacity" (sINIPath) 1) 0 100) 11 Caps001
+AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fOverlayOpacity" (sINIPath) 1) 0 100) 11 Caps001
+
+; Overlay (Scale)
+AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fOverlayScale" (sINIPath) 1.1) 1 1.5) 12 Caps001
+AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fOverlayScale" (sINIPath) 1.1) 1 1.5) 12 Caps001
+
+; Overlay (Texture)
+AuxVarSetStr "*MNV_NV" "night_vision" 13 Caps001
+AuxVarSetStr "*MNV_TV" "thermal_vision" 13 Caps001
 
 ; IMOD traits
 ; Default traits
@@ -199,6 +215,7 @@ SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 55 0			; Radial Blur: Strength
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 56 0			; Radial Blur: Rampup
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 57 0			; Radial Blur: Up Start
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 50 255		; Cinematic: Tint: Alpha
+SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 67 1			; Depth of Field: Mode (Front)
 
 ; Mode specific
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 10 5			; HDR: Emissive Mult (Add) 			Emissive bloom strength
@@ -207,58 +224,6 @@ SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 17 0.75		; HDR: Bright Clamp (
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 19 1			; HDR: LUM Ramp No Tex (Multiply) 	Sky Brightness
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 39 0.1;25		; Cinematic: Contrast (Multiply) 	Decrease color contrast
 SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 42 1			; Cinematic: Contrast Avg Lum (Add) Increase brightness contrast
-
-; Configurable traits
-fINI = GetMaxOf 0 (GetINIFloat_Cached "NightVision:fMoonlightBrightness" (sINIPath))
-SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 25 fINI				; HDR: Sunlight Dimmer (Multiply) 	Skylight brightness
-SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 27 (fINI * 1.75)		; HDR: Grass Dimmer (Multiply) 		Grass brightness
-SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 63 ((GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "NightVision:fMotionBlur" (sINIPath)))) * 2)			; Full-Screen Motion Blur: Strength
-;Goo1.AuxVarSetFlt "*SNV_INI" (INI = GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "NightVision:fScreenBlur" (sINIPath)))) 6
-;SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 45 INI		; Blur: Blur Radius (Screen Blur)
-
-; Depth of field
-if eval (fINI = ((GetMaxOf 0 (GetMinOf 10 (GetINIFloat_Cached "NightVision:fDepthBlur" (sINIPath)))) * 69.99104)) > 0
-	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 60 1				; Depth of Field: Strength
-	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 67 1				; Depth of Field: Mode (Front)
-	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 61 fINI			; Depth of Field: Distance
-	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 62 (fINI * 0.75)	; Depth of Field: Range
-endif
-
-; New Vegas Reloaded support
-;if eval Goo1.AuxVarGetFlt "*_NewVegasReloaded.dll"
-;endif
-
-Goo1.AuxVarSetFlt "*SNV_INI" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "NightVision:fStaticStrength" (sINIPath)))) * 255) 0
-SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Alpha_0" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "NightVision:fHUDOverlayStrength" (sINIPath)))) * 255)
-SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Scale_0" ((GetMaxOf 1 (GetMinOf 1.5 (GetINIFloat_Cached "NightVision:fHUDOverlayScale" (sINIPath)))) * 1.15)
-
-; Thermal vision
-; Set color
-sINI = GetINIString_Cached "ThermalVision:sColor" (sINIPath)
-if eval (iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
-	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 6 Caps001
-	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 7 Caps001
-	AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 8 Caps001
-	AuxVarSetFlt "*SNV_Override" -1 9 Caps001
-elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-	fINI = ToNumber sINI
-	if eval fINI < 6 && fINI > -1
-		AuxVarSetFlt "*SNV_Override" 255 6 Caps001
-		AuxVarSetFlt "*SNV_Override" 255 7 Caps001
-		AuxVarSetFlt "*SNV_Override" 255 8 Caps001
-		AuxVarSetFlt "*SNV_Override" fINI 9 Caps001
-	endif
-endif
-
-; Cinematic: Brightness (Add) Overall brightness
-AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "ThermalVision:fOverallBrightness" (sINIPath))) 10 Caps001
-
-; Energy use multiplier
-AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" (sINIPath))) 11 Caps001
-
-; Overlay textures
-AuxVarSetStr "*SNV_Override" (GetINIString_Cached "NightVision:sOverlayTexture" (sINIPath) "night_vision") 12 Caps001
-AuxVarSetStr "*SNV_Override" (GetINIString_Cached "ThermalVision:sOverlayTexture" (sINIPath) "thermal_vision") 13 Caps001
 
 ; IMOD traits
 ; Default traits
@@ -274,39 +239,16 @@ SetImageSpaceModTrait NVDLC04RedNightvisionISFX 55 0			; Radial Blur: Strength
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 56 0			; Radial Blur: Rampup
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 57 0			; Radial Blur: Up Start
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 50 255			; Cinematic: Tint: Alpha
+SetImageSpaceModTrait NVDLC04RedNightvisionISFX 67 1			; Depth of Field: Mode (Front)
 
 ; Mode specific
 ;SetImageSpaceModTrait NVDLC04RedNightvisionISFX 10 5			; HDR: Emissive Mult (Add) 			Emissive bloom strength
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 16 1			; HDR: Bright Scale (Add) 			General bloom strength
 ;SetImageSpaceModTrait NVDLC04RedNightvisionISFX 17 1.0			; HDR: Bright Clamp (Multiply) 		Prevents overblown bloom
 SetImageSpaceModTrait NVDLC04RedNightvisionISFX 19 0.75			; HDR: LUM Ramp No Tex (Multiply) 	Sky Brightness
+SetImageSpaceModTrait NVDLC04RedNightvisionISFX 27 0			; HDR: Grass Dimmer (Multiply) 		Grass brightness
 ;SetImageSpaceModTrait NVDLC04RedNightvisionISFX 39 0.125		; Cinematic: Contrast (Multiply) 	Decrease color contrast
 ;SetImageSpaceModTrait NVDLC04RedNightvisionISFX 42 1			; Cinematic: Contrast Avg Lum (Add) Increase brightness contrast
-
-; Configurable traits
-fINI = (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fMoonlightBrightness" (sINIPath)))
-SetImageSpaceModTrait NVDLC04RedNightvisionISFX 25 fINI						; HDR: Sunlight Dimmer (Multiply) 	Skylight brightness
-SetImageSpaceModTrait NVDLC04RedNightvisionISFX 27 0						; HDR: Grass Dimmer (Multiply) 		Grass brightness
-SetImageSpaceModTrait NVDLC04RedNightvisionISFX 28 (GetMaxOf 2.5 (fINI * 1.75)); HDR: Grass Dimmer (Add) 			Grass brightness
-SetImageSpaceModTrait NVDLC04RedNightvisionISFX 63 ((GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "ThermalVision:fMotionBlur" (sINIPath)))) * 2)		; Full-Screen Motion Blur: Strength
-;Goo1.AuxVarSetFlt "*SNV_INI" (INI = GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "ThermalVision:fScreenBlur" (sINIPath)))) 6
-;SetImageSpaceModTrait NVDLC04RedNightvisionISFX 45 INI		; Blur: Blur Radius (Screen Blur)
-
-; Depth of field
-if eval (fINI = ((GetMaxOf 0 (GetMinOf 10 (GetINIFloat_Cached "ThermalVision:fDepthBlur" (sINIPath)))) * 69.99104)) > 0
-	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 60 1				; Depth of Field: Strength
-	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 67 1				; Depth of Field: Mode (Front)
-	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 61 fINI				; Depth of Field: Distance
-	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 62 (fINI * 0.75)	; Depth of Field: Range
-endif
-
-; New Vegas Reloaded support
-;if eval Goo1.AuxVarGetFlt "*_NewVegasReloaded.dll"
-;endif
-
-Goo1.AuxVarSetFlt "*SNV_INI" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "ThermalVision:fStaticStrength" (sINIPath)))) * 255 * 1.1) 1
-SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Alpha_1" ((GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "ThermalVision:fHUDOverlayStrength" (sINIPath)))) * 255)
-SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Scale_1" ((GetMaxOf 1 (GetMinOf 1.5 (GetINIFloat_Cached "ThermalVision:fHUDOverlayScale" (sINIPath)))) * 1.15)
 
 ; Thermal vision shader traits
 SetEffectShaderTraitNumeric effectAbsorb 0 24					; Flags
@@ -329,12 +271,7 @@ SetEffectShaderTraitNumeric effectAbsorb 14 16777215			; Edge Effect - Color (RG
 ;SetEffectShaderTraitNumeric effectAbsorb 23 2
 ;SetEffectShaderTraitNumeric effectAbsorb 14 3355443
 
-Goo1.AuxVarSetFlt "*SNV_INI" (GetMaxOf 0 (GetMinOf 1 (GetINIFloat_Cached "General:fPipBoyStrength" (sINIPath)))) 2
-
 ;Set event handlers
-fINI = GetINIFloat_Cached "General:iKeybind" (sINIPath)
-SetOnKeyDownEventHandler (CompileScript "ModernNightVision\OnKeyDown.gek") 1 fINI
-SetOnKeyUpEventHandler (CompileScript "ModernNightVision\OnKeyUp.gek") 1 fINI
 SetEventHandler "OnCellEnter" (CompileScript "ModernNightVision\OnCellEnter.gek")
 SetOnMenuOpenEventHandler (CompileScript "ModernNightVision\OnMenuOpen.gek") 1 1002
 SetOnMenuOpenEventHandler (CompileScript "ModernNightVision\OnMenuOpen.gek") 1 1003
@@ -342,142 +279,71 @@ SetOnMenuOpenEventHandler (CompileScript "ModernNightVision\OnMenuOpen.gek") 1 1
 SetOnMenuCloseEventHandler (CompileScript "ModernNightVision\OnMenuClose.gek") 1 1002
 SetOnMenuCloseEventHandler (CompileScript "ModernNightVision\OnMenuClose.gek") 1 1003
 SetOnMenuCloseEventHandler (CompileScript "ModernNightVision\OnMenuClose.gek") 1 1023
+SetOnMenuOpenEventHandler (CompileScript "ModernNightVision\MCMExtender\OnMenuOpen.gek") 1013
+SetEventHandler "OnActorEquip" (CompileScript "ModernNightVision\OnEquip.gek") "first"::Player
+SetEventHandler "OnActorUnequip" (CompileScript "ModernNightVision\OnUnequip.gek") "first"::Player
 
+; MCM Extender event
+SetEventHandler "MCMExtUpdate" (CompileScript "ModernNightVision\MCMExtender\UpdateMenu.gek")
+
+; KB&M keybind
+Goo1.AuxVarSetFlt "*SNV_INI" (Flr (GetMaxOf 0 (GetINIFloat_Cached "General:iKeybind" (sINIPath) 49))) 0
 ; Controller support
-if eval GetINIFloat_Cached "General:bControllerSupport" (sINIPath)
-	SetEventHandler "OnControlDown:27" (begin function {int iKeyCode}
-		if eval GetController
-			DisableButton 1
-		endif
-	end)
-	SetEventHandler "OnControlUp:27" (begin function {int iKeyCode}
-		if eval GetController
-			EnableButton 1
-		endif
-	end)
-	SetEventHandler "OnButtonDown:1" (begin function {int iKeyCode}
-		if eval GetController && IsControlPressed 27
-			Call (CompileScript "ModernNightVision\OnKeyDown.gek")
-		endif
-	end)
-	SetEventHandler "OnButtonUp:1" (begin function {int iKeyCode}
-		if eval GetController
-			Call (CompileScript "ModernNightVision\OnKeyUp.gek")
-		endif
-	end)
-endif
+Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:bControllerSupport" (sINIPath) 1) 1
+SetEventHandler "OnControlDown:27" (begin function {int iKeyCode}
+	if eval GetController == 0 || Goo1.AuxVarGetFlt "*SNV_INI" 1 == 0
+		return
+	endif
+	DisableButton 1
+end)
+SetEventHandler "OnControlUp:27" (begin function {int iKeyCode}
+	if eval GetController == 0 || Goo1.AuxVarGetFlt "*SNV_INI" 1 == 0
+		return
+	endif
+	EnableButton 1
+end)
+SetEventHandler "OnButtonDown:1" (begin function {int iKeyCode}
+	if eval GetController == 0 || IsControlPressed 27 == 0 || Goo1.AuxVarGetFlt "*SNV_INI" 1 == 0
+		return
+	endif
+	Call (CompileScript "ModernNightVision\OnKeyDown.gek")
+end)
+SetEventHandler "OnButtonUp:1" (begin function {int iKeyCode}
+	if eval GetController == 0 || Goo1.AuxVarGetFlt "*SNV_INI" 1 == 0
+		return
+	endif
+	Call (CompileScript "ModernNightVision\OnKeyUp.gek")
+end)
 
 ; Cyberware support
-if eval IsModLoaded "Cyberware.esm" && GetINIFloat_Cached "General:bOverrideCyberware" (sINIPath) == 1
+if eval IsModLoaded "Cyberware.esm" && GetINIFloat_Cached "ModSupport:bOverrideCyberware" (sINIPath) == 1
 	SetOnRemovePerkEventHandler 1 (CompileScript "ModernNightVision\OnRemovePerkCyb.gek") 0 (EditorIDToFormID "CWxImplantVisionModePerk")
 	SetOnQuestStageEventHandler (CompileScript "ModernNightVision\OnQuestStageCyb.gek") 1 (EditorIDToFormID "CWxBionicEyesQuest") 1 1
 	Goo1.AuxVarSetFlt "*SNV_INI" 1 3
 endif
 
-Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:iSwitchMode" (sINIPath)) 4								; Vision mode control
-Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:b1stPersonAnimations" (sINIPath)) 5						; Animation support
-
-; Energy consumption
-Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:bRequireEnergy" (sINIPath)) 8
-if eval Goo1.AuxVarGetFlt "*SNV_INI" 8 == 0
-	AuxVarSetFlt "*SNV_Override" 0 5 Caps001
-	AuxVarSetFlt "*SNV_Override" 0 11 Caps001
-endif
+Goo1.AuxVarSetFlt "*SNV_INI" (Clamp (GetINIFloat_Cached "General:fPipBoyStrength" (sINIPath) 50) 0 100) 2
+Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:iSwitchMode" (sINIPath)) 4			; Vision mode control
+Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:b1stPersonAnimations" (sINIPath)) 5	; Animation support
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyRequired" (eval GetINIFloat_Cached "General:bRequireEnergy" (sINIPath) 1)		; Energy usage
 
 ; Energy display UI
-Goo1.AuxVarSetFlt "*SNV_INI" (GetMaxOf 0 (GetMinOf 2 (GetINIFloat_Cached "EnergyDisplay:iChargeStyle" (sINIPath)))) 10	; Text style
-if eval Goo1.AuxVarGetFlt "*SNV_INI" 10 == 0
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ChargeText" 0
-endif
-if eval GetINIFloat_Cached "EnergyDisplay:bShowItemName" (sINIPath) 1 == 0
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ItemName\visible" 0
-endif
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ItemName" (GetINIFloat_Cached "EnergyDisplay:bShowItemName" (sINIPath) 1)
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconScale" (GetINIFloat_Cached "EnergyDisplay:fScale" (sINIPath))
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_OffsetX" (GetINIFloat_Cached "EnergyDisplay:fOffsetX" (sINIPath))
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_OffsetY" (GetINIFloat_Cached "EnergyDisplay:fOffsetY" (sINIPath))
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconStyle" (eval GetINIFloat_Cached "EnergyDisplay:iIconStyle" (sINIPath))
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ChargeStyle" (Clamp (GetINIFloat_Cached "EnergyDisplay:iChargeStyle" (sINIPath) 1) 0 2)
 if eval IsModLoaded "DarNifiedUINV.esp"
 	SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\font" 6
 	ModUIFloat "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\x" (3 * (GetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconScale"))
 endif
 
 ; Overlay inertia
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Inertia" (GetINIFloat_Cached "General:fOverlayInertia" (sINIPath))
-
-; Config override support
-array_var aOverrideINIs = GetFilesInFolder "Config\Stentorious\ModernNightVision" "*.ini"
-int iSize = 0
-if eval (iSize = Ar_Size aOverrideINIs) > 0
-	while (iSize -= 1) > -1
-		sINI = aOverrideINIs[iSize]
-		sINI = sINI[0:-5]
-		if eval IsBaseForm (rHelmet = EditorIDToFormID (sINI)) == 0
-			continue
-		endif
-
-		; Override keyword
-		AssignKeyword rHelmet "SNV_Override"
-		AssignKeyword rHelmet "ModernNightVision"
-
-		; Night vision
-		; Color
-		sINI = GetINIString_Cached "NightVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "NightVision:sColor" (sINIPath))
-		if eval (iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
-			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 0 rHelmet
-			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 1 rHelmet
-			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 2 rHelmet
-			AuxVarSetFlt "*SNV_Override" -1 3 rHelmet
-		elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-			fINI = ToNumber sINI
-			if eval fINI < 6 && fINI > -1
-				AuxVarSetFlt "*SNV_Override" 255 0 rHelmet
-				AuxVarSetFlt "*SNV_Override" 255 1 rHelmet
-				AuxVarSetFlt "*SNV_Override" 255 2 rHelmet
-				AuxVarSetFlt "*SNV_Override" fINI 3 rHelmet
-			endif
-		endif
-
-		; Brightness
-		AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "NightVision:fOverallBrightness" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 4 Caps001))) 4 rHelmet
-
-		; Energy consumption
-		AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "NightVision:fEnergyConsumption" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 5 Caps001))) 5 rHelmet
-
-		; Thermal vision
-		; Color
-		sINI = GetINIString_Cached "ThermalVision:sColor" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (GetINIString_Cached "ThermalVision:sColor" (sINIPath))
-		if eval (iLength = Sv_Length sINI) == 6 && TestExpr (ToNumber sINI 1 1)
-			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[0:1]) 1) 6 rHelmet
-			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[2:3]) 1) 7 rHelmet
-			AuxVarSetFlt "*SNV_Override" (ToNumber (sINI[4:5]) 1) 8 rHelmet
-			AuxVarSetFlt "*SNV_Override" -1 9 rHelmet
-		elseif eval iLength == 1 && TestExpr (ToNumber sINI 0 1)
-			fINI = ToNumber sINI
-			if eval fINI < 6 && fINI > -1
-				AuxVarSetFlt "*SNV_Override" 255 6 rHelmet
-				AuxVarSetFlt "*SNV_Override" 255 7 rHelmet
-				AuxVarSetFlt "*SNV_Override" 255 8 rHelmet
-				AuxVarSetFlt "*SNV_Override" fINI 9 rHelmet
-			endif
-		endif
-
-		; Thermal vision brightness
-		AuxVarSetFlt "*SNV_Override" (GetMaxOf 1 (GetINIFloat_Cached "ThermalVision:fOverallBrightness" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 10 Caps001))) 10 rHelmet
-
-		; Energy consumption
-		AuxVarSetFlt "*SNV_Override" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetFlt "*SNV_Override" 11 Caps001))) 11 rHelmet
-
-		; Overlay textures
-		AuxVarSetStr "*SNV_Override" (GetINIString_Cached "NightVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 12 Caps001)) 12 rHelmet
-		AuxVarSetStr "*SNV_Override" (GetINIString_Cached "ThermalVision:sOverlayTexture" ("Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) (AuxVarGetStr "*SNV_Override" 13 Caps001)) 13 rHelmet
-
-		CloseFileSO ("Config\Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])) 0
-
-	loop
-endif
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Inertia" (Clamp (GetINIFloat_Cached "General:fOverlayInertia" (sINIPath)) 0 2)
 
 ; Energy consumption
-aOverrideINIs = GetINISection "EnergyConsumption" (sINIPath)
+array_var aOverrideINIs = GetINISection "EnergyConsumption" (sINIPath)
 if eval (ar_Size aOverrideINIs) < 2
 	aOverrideINIs = ar_Construct "stringmap"
 	aOverrideINIs["0"] = "AmmoSmallEnergyCell|300"
@@ -492,5 +358,78 @@ foreach array_var aForE <- aOverrideINIs
 loop
 
 CloseFileSO (sINIPath) 0
+
+; Config override support
+string_var sTemp = ""
+aOverrideINIs = GetFilesInFolder "Config\Stentorious\ModernNightVision" "*.ini"
+if eval (int iSize = Ar_Size aOverrideINIs) > 0
+	while (iSize -= 1) > -1
+		sTemp = aOverrideINIs[iSize]
+		if eval IsBaseForm (rHelmet = EditorIDToFormID (sTemp[0:-5])) == 0
+			continue
+		endif
+
+		; Override keyword
+		AssignKeyword rHelmet "SNV_Override"
+		AssignKeyword rHelmet "ModernNightVision"
+
+		sINIPath = "Stentorious\ModernNightVision\" + (aOverrideINIs[iSize])
+
+		; Vision mode
+		AuxVarSetFlt "*MNV_NV" (eval GetINIFloat_Cached "NightVision:bEnable" (sINIPath) (AuxVarGetFlt "*MNV_NV" 0 Caps001)) 0 rHelmet
+		AuxVarSetFlt "*MNV_TV" (eval GetINIFloat_Cached "ThermalVision:bEnable" (sINIPath) (AuxVarGetFlt "*MNV_TV" 0 Caps001)) 0 rHelmet
+
+		; Energy use multiplier
+		AuxVarSetFlt "*MNV_NV" (GetMaxOf 0 (GetINIFloat_Cached "NightVision:fEnergyConsumption" (sINIPath) (AuxVarGetFlt "*MNV_NV" 1 Caps001))) 1 rHelmet
+		AuxVarSetFlt "*MNV_TV" (GetMaxOf 0 (GetINIFloat_Cached "ThermalVision:fEnergyConsumption" (sINIPath) (AuxVarGetFlt "*MNV_TV" 1 Caps001))) 1 rHelmet
+
+		; Color
+		AuxVarSetFlt "*MNV_NV" (eval GetINIFloat_Cached "NightVision:bColorTint" (sINIPath) (AuxVarGetFlt "*MNV_NV" 2 Caps001)) 2 rHelmet
+		AuxVarSetFlt "*MNV_NV" (GetINIFloat_Cached "NightVision:iRed" (sINIPath) (AuxVarGetFlt "*MNV_NV" 3 Caps001)) 3 rHelmet
+		AuxVarSetFlt "*MNV_NV" (GetINIFloat_Cached "NightVision:iGreen" (sINIPath) (AuxVarGetFlt "*MNV_NV" 4 Caps001)) 4 rHelmet
+		AuxVarSetFlt "*MNV_NV" (GetINIFloat_Cached "NightVision:iBlue" (sINIPath) (AuxVarGetFlt "*MNV_NV" 5 Caps001)) 5 rHelmet
+		AuxVarSetFlt "*MNV_TV" (eval GetINIFloat_Cached "ThermalVision:bColorTint" (sINIPath) (AuxVarGetFlt "*MNV_TV" 2 Caps001)) 2 rHelmet
+		AuxVarSetFlt "*MNV_TV" (GetINIFloat_Cached "ThermalVision:iRed" (sINIPath) (AuxVarGetFlt "*MNV_TV" 3 Caps001)) 3 rHelmet
+		AuxVarSetFlt "*MNV_TV" (GetINIFloat_Cached "ThermalVision:iGreen" (sINIPath) (AuxVarGetFlt "*MNV_TV" 4 Caps001)) 4 rHelmet
+		AuxVarSetFlt "*MNV_TV" (GetINIFloat_Cached "ThermalVision:iBlue" (sINIPath) (AuxVarGetFlt "*MNV_TV" 5 Caps001)) 5 rHelmet
+
+		; Static Noise
+		AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fStaticStrength" (sINIPath) (AuxVarGetFlt "*MNV_NV" 6 Caps001)) 0 0.75) 6 rHelmet
+		AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fStaticStrength" (sINIPath) (AuxVarGetFlt "*MNV_TV" 6 Caps001)) 0 0.75) 6 rHelmet
+
+		; Brightness (Overall)
+		AuxVarSetFlt "*MNV_NV" (GetMaxOf 1 (GetINIFloat_Cached "NightVision:fOverallBrightness" (sINIPath) (AuxVarGetFlt "*MNV_NV" 7 Caps001))) 7 rHelmet
+		AuxVarSetFlt "*MNV_TV" (GetMaxOf 1 (GetINIFloat_Cached "ThermalVision:fOverallBrightness" (sINIPath) (AuxVarGetFlt "*MNV_TV" 7 Caps001))) 7 rHelmet
+
+		; Brightness (Sky)
+		AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fMoonlightBrightness" (sINIPath) (AuxVarGetFlt "*MNV_NV" 8 Caps001)) 0 10) 8 rHelmet
+		AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fMoonlightBrightness" (sINIPath) (AuxVarGetFlt "*MNV_TV" 8 Caps001)) 0 10) 8 rHelmet
+
+		; Motion blur
+		AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fMotionBlur" (sINIPath) (AuxVarGetFlt "*MNV_NV" 9 Caps001)) 0 4) 9 rHelmet
+		AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fMotionBlur" (sINIPath) (AuxVarGetFlt "*MNV_TV" 9 Caps001)) 0 4) 9 rHelmet
+
+		; Depth of Field
+		AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fDepthBlur" (sINIPath) (AuxVarGetFlt "*MNV_NV" 10 Caps001)) 0 10) 10 rHelmet
+		AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fDepthBlur" (sINIPath) (AuxVarGetFlt "*MNV_TV" 10 Caps001)) 0 10) 10 rHelmet
+
+		; Overlay (Opacity)
+		AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fOverlayOpacity" (sINIPath) (AuxVarGetFlt "*MNV_NV" 11 Caps001)) 0 100) 11 rHelmet
+		AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fOverlayOpacity" (sINIPath) (AuxVarGetFlt "*MNV_TV" 11 Caps001)) 0 100) 11 rHelmet
+
+		; Overlay (Scale)
+		AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fOverlayScale" (sINIPath) (AuxVarGetFlt "*MNV_NV" 12 Caps001)) 1 1.5) 12 rHelmet
+		AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fOverlayScale" (sINIPath) (AuxVarGetFlt "*MNV_TV" 12 Caps001)) 1 1.5) 12 rHelmet
+
+		; Overlay (Texture)
+		AuxVarSetStr "*MNV_NV" (GetINIString_Cached "NightVision:sOverlayTexture" (sINIPath) (AuxVarGetStr "*MNV_NV" 13 Caps001)) 13 rHelmet
+		AuxVarSetStr "*MNV_TV" (GetINIString_Cached "ThermalVision:sOverlayTexture" (sINIPath) (AuxVarGetStr "*MNV_TV" 13 Caps001)) 13 rHelmet
+
+		; Close INI cache
+		CloseFileSO (sINIPath) 0
+
+	loop
+endif
+
 aOverrideINIs = aTemp = aForE = Ar_Null
-Sv_Destruct sINI sINIPath
+Sv_Destruct sINIPath sTemp

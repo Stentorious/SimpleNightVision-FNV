@@ -40,7 +40,6 @@ begin Function {iFlag}
 	endif
 
 	; Reset HUD
-	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_State" 0
 	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" 0
 	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaOverlay" 1 0 0.2
 	SetUIFloatGradual "HUDMainMenu\ModernNightVision\_EnergyAlpha" 1 0 0.2

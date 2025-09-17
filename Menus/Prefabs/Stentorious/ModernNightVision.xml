@@ -5,7 +5,6 @@
 	<height> <copy src="screen()" trait="height" /> </height>
 
 	<!-- Vision mode -->
-	<_State> 0 </_State>
 	<_Mode> -1 </_Mode>
 	<_Random> 0 </_Random>
 
@@ -18,17 +17,51 @@
 	<_EnergyCharge> 1 </_EnergyCharge>
 	<_EnergyCount> 0 </_EnergyCount>
 	<_EnergyAlpha> 0 </_EnergyAlpha>
+	<_EnergyRequired> 0 </_EnergyRequired>
+
+	<!-- Energy Use -->
+	<_EnergyUse_0> 1 </_EnergyUse_0>
+	<_EnergyUse_1> 1 </_EnergyUse_1>
+	<_EnergyUse>
+		<copy src="me()" trait="_Mode"/>
+		<copy src="me()" trait="_EnergyUse_"/>
+	</_EnergyUse>
+	<_EnergyUseCalc>
+		<copy src="me()" trait="_EnergyUse"/>
+		<mul src="me()" trait="_EnergyRequired"/>
+	</_EnergyUseCalc>
+
+	<!-- Static -->
+	<_Static_0> 1 </_Static_0>
+	<_Static_1> 1 </_Static_1>
+	<_Static>
+		<copy src="me()" trait="_Mode"/>
+		<copy src="me()" trait="_Static_"/>
+	</_Static>
 
 	<!-- Alpha control -->
 	<_AlphaStatic> 0 </_AlphaStatic>
 	<_AlphaOverlay> 0 </_AlphaOverlay>
-	<_AlphaMenu> 1 </_AlphaMenu>
+	<_AlphaMenu> 100 </_AlphaMenu>
+	<_AlphaMenuMul>
+		<copy src="me()" trait="_AlphaMenu" />
+		<div> 100 </div>
+	</_AlphaMenuMul>
+
+	<!-- Color -->
+	<_red_0> 255 </_red_0>
+	<_red_1> 255 </_red_1>
+	<_green_0> 255 </_green_0>
+	<_green_1> 255 </_green_1>
+	<_blue_0> 255 </_blue_0>
+	<_blue_1> 255 </_blue_1>
 
 	<image name="Static">
 		<visible> 1 </visible>
 		<alpha>
 			<copy src="parent()" trait="_AlphaStatic" />
-			<mul src="parent()" trait="_AlphaMenu" />
+			<mul src="parent()" trait="_AlphaMenuMul" />
+			<mul> 255 </mul>
 		</alpha>
 		<rotateaxisx>
 			<copy src="me()" trait="width" />
@@ -48,9 +81,18 @@
 		<height> <copy src="parent()" trait="height" /> </height>
 		<zoom> -1 </zoom>
 		<systemcolor> 0 </systemcolor>
-		<red> 255 </red>
-		<green> 255 </green>
-		<blue> 255 </blue>
+		<red>
+			<copy src="parent()" trait="_Mode"/>
+			<copy src="parent()" trait="_red_"/>
+		</red>
+		<green>
+			<copy src="parent()" trait="_Mode"/>
+			<copy src="parent()" trait="_green_"/>
+		</green>
+		<blue>
+			<copy src="parent()" trait="_Mode"/>
+			<copy src="parent()" trait="_blue_"/>
+		</blue>
 
 		<_index> 0 </_index>
 		<_filename_0> Interface\Stentorious\_Common\Static\0.dds </_filename_0>
@@ -80,8 +122,9 @@
 			<mul> 2 </mul>
 			<sub> 1 </sub>
 			<max> 0 </max>
-			<mul src="parent()" trait="_AlphaMenu" />
+			<mul src="parent()" trait="_AlphaMenuMul" />
 			<mul src="me()" trait="_Alpha" />
+			<mul> 2.55 </mul>
 		</alpha>
 		<depth> -4999 </depth>
 		<x>
@@ -126,10 +169,12 @@
 		<width>
 			<copy src="parent()" trait="width" />
 			<mul src="me()" trait="_Scale" />
+			<mul> 1.15 </mul>
 		</width>
 		<height>
 			<copy src="parent()" trait="height" />
 			<mul src="me()" trait="_Scale" />
+			<mul> 1.15 </mul>
 		</height>
 		<zoom> -1 </zoom>
 		<systemcolor> 0 </systemcolor>
@@ -161,8 +206,9 @@
 		<visible> <copy src="sibling(Overlay)" trait="visible" /> </visible>
 		<alpha>
 			<copy src="parent()" trait="_AlphaOverlay" />
-			<mul src="parent()" trait="_AlphaMenu" />
+			<mul src="parent()" trait="_AlphaMenuMul" />
 			<mul src="sibling(Overlay)" trait="_Alpha" />
+			<mul> 2.55 </mul>
 		</alpha>
 		<depth> -5000 </depth>
 		<x>
@@ -237,8 +283,13 @@
 		<_OffsetY> 0 </_OffsetY>
 		<_IconScale> 1 </_IconScale>
 		<_EnergyPerc>
-			<copy src="parent()" trait="_EnergyCharge" />
-			<div src="parent()" trait="_EnergyMax" />
+			<copy> 1 </copy>
+			<onlyifnot src="parent()" trait="_EnergyRequired" />
+			<add>
+				<copy src="parent()" trait="_EnergyCharge" />
+				<div src="parent()" trait="_EnergyMax" />
+				<onlyif src="parent()" trait="_EnergyRequired" />
+			</add>
 		</_EnergyPerc>
 		<_ColorCharge>
 			<copy> &hudmain; </copy>
@@ -249,12 +300,13 @@
 		</_ColorCharge>
 		<_IconPath> Interface\Stentorious\ModernNightVision\Battery.dds </_IconPath>
 
+		<_ItemName> 1 </_ItemName>
 		<_IconWidth>
 			<copy> 32 </copy>
 			<mul src="me()" trait="_IconScale" />
 		</_IconWidth>
 		<_IconStyle> 1 </_IconStyle>
-		<_ChargeText> 1 </_ChargeText>
+		<_ChargeStyle> 1 </_ChargeStyle>
 		<_AlphaMul>
 			<copy src="parent()" trait="_EnergyAlpha" />
 			<min> 1 </min>
@@ -263,7 +315,8 @@
 		<text name="ChargeText">
 			<visible>
 				<not src="sibling(CountText)" trait="alpha" />
-				<and src="parent()" trait="_ChargeText" />
+				<and src="parent()" trait="_ChargeStyle" />
+				<and src="grandparent()" trait="_EnergyRequired" />
 			</visible>
 			<alpha>
 				<copy> 255 </copy>
@@ -318,6 +371,7 @@
 			<visible>
 				<copy src="grandparent()" trait="_EnergyCount" />
 				<gt> 0 </gt>
+				<and src="parent()" trait="_ItemName" />
 			</visible>
 			<alpha> <copy src="sibling(CountText)" trait="_Alpha" /> </alpha>
 			<depth> 3 </depth>

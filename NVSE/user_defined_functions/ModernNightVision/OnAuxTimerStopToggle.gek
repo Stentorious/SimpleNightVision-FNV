@@ -6,7 +6,7 @@ begin Function {sTimerName, rOwner}
 	sv_Destruct sTimerName
 
 	; Toggle vision modes off
-	if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 == 0
+	if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 == 0 || Goo1.AuxVarGetFlt "*SNV_INI" 4
 		return
 	endif
 

@@ -1,0 +1,33 @@
+array_var aUpdatedMods
+
+int iVisionMode
+ref rArmor
+
+begin Function {array_var aUpdatedMods}
+
+	; Refresh vision modes
+	if eval (Ar_Find "ModernNightVision" aUpdatedMods) != Ar_BadNumericIndex
+		if eval IsFormValid (rArmor = Player.GetEqObj 10) && HasKeyword rArmor "SNV_Override"
+		elseif eval IsFormValid (rArmor = Player.GetEqObj 11) && HasKeyword rArmor "SNV_Override"
+		else
+			rArmor = Caps001
+		endif
+		Call (CompileScript "ModernNightVision\UpdateEffect.gek") rArmor
+
+		; Update static
+		if eval GetUIFloatAlt "HUDMainMenu\ModernNightVision\_AlphaStatic" > 0
+			SetUIFloatGradual "HUDMainMenu\ModernNightVision\_AlphaStatic" (GetUIFloatAlt "HUDMainMenu\ModernNightVision\_Static")
+		endif
+
+		; Validate vision mode state
+		iVisionMode = Goo1.AuxVarGetFlt "SNV_Mode" 1
+		if eval Goo1.AuxVarGetFlt "SNV_Mode" 0 && ((iVisionMode == 0 && Goo1.AuxVarGetFlt "*SNV_INI" 6 == 0) || (iVisionMode == 1 && Goo1.AuxVarGetFlt "*SNV_INI" 7 == 0))
+			AuxTimerStop "*SNV_KeyToggle"
+			Call (CompileScript "ModernNightVision/ToggleOff.gek") 1
+		endif
+
+	endif
+
+	aUpdatedMods = ar_Null
+
+end

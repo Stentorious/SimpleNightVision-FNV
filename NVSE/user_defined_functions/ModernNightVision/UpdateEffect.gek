@@ -1,0 +1,109 @@
+int iRed
+int iGreen
+int iBlue
+float fTemp
+ref rArmor
+string_var sTexture
+
+begin Function {rArmor}
+
+	; Does armor have override
+	if eval HasKeyword rArmor "SNV_Override" == 0
+		rArmor = Caps001
+	endif
+
+	; Vision mode enabled
+	Goo1.AuxVarSetFlt "*SNV_INI" (AuxVarGetFlt "*MNV_NV" 0 rArmor) 6
+	Goo1.AuxVarSetFlt "*SNV_INI" (AuxVarGetFlt "*MNV_TV" 0 rArmor) 7
+
+	; Energy usage
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyUse_0" (AuxVarGetFlt "*MNV_NV" 1 rArmor)
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyUse_1" (AuxVarGetFlt "*MNV_TV" 1 rArmor)
+
+	; Color tint
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 47 (iRed = AuxVarGetFlt "*MNV_NV" 3 rArmor)
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 48 (iGreen = AuxVarGetFlt "*MNV_NV" 4 rArmor)
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 49 (iBlue = AuxVarGetFlt "*MNV_NV" 5 rArmor)
+	if eval AuxVarGetFlt "*MNV_NV" 2 rArmor == 0
+		iRed = iGreen = iBlue = 255
+		SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 50 0
+	else
+		SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 50 255
+	endif
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_red_0" iRed
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_green_0" iGreen
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_blue_0" iBlue
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 47 (iRed = AuxVarGetFlt "*MNV_TV" 3 rArmor)
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 48 (iGreen = AuxVarGetFlt "*MNV_TV" 4 rArmor)
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 49 (iBlue = AuxVarGetFlt "*MNV_TV" 5 rArmor)
+	if eval AuxVarGetFlt "*MNV_TV" 2 rArmor == 0
+		iRed = iGreen = iBlue = 255
+		SetImageSpaceModTrait NVDLC04RedNightvisionISFX 50 0
+	else
+		SetImageSpaceModTrait NVDLC04RedNightvisionISFX 50 255
+	endif
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_red_1" iRed
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_green_1" iGreen
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_blue_1" iBlue
+
+	; Static noise
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Static_0" (AuxVarGetFlt "*MNV_NV" 6 rArmor)
+	SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Static_1" (AuxVarGetFlt "*MNV_TV" 6 rArmor)
+
+	; Brightness (Overall)
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 43 (AuxVarGetFlt "*MNV_NV" 7 rArmor)
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 43 (AuxVarGetFlt "*MNV_TV" 7 rArmor)
+
+	; Brightness (Skylight)
+	fTemp = AuxVarGetFlt "*MNV_NV" 8 rArmor
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 25 fTemp
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 27 fTemp
+	fTemp = AuxVarGetFlt "*MNV_TV" 8 rArmor
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 25 fTemp
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 28 (GetMaxOf 1 (fTemp * 1.75))
+
+	; Motion blur
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 63 (AuxVarGetFlt "*MNV_NV" 9 rArmor)
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 63 (AuxVarGetFlt "*MNV_TV" 9 rArmor)
+
+	; Depth of field
+	fTemp = (AuxVarGetFlt "*MNV_NV" 10 rArmor) * 69.99104
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 61 fTemp
+	SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 62 (fTemp * 0.75)
+	if eval fTemp > 0
+		SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 60 1
+	else
+		SetImageSpaceModTrait NVDLC03GhostNightvisionISFX 60 0
+	endif
+	fTemp = (AuxVarGetFlt "*MNV_TV" 10 rArmor) * 69.99104
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 61 fTemp
+	SetImageSpaceModTrait NVDLC04RedNightvisionISFX 62 (fTemp * 0.75)
+	if eval fTemp > 0
+		SetImageSpaceModTrait NVDLC04RedNightvisionISFX 60 1
+	else
+		SetImageSpaceModTrait NVDLC04RedNightvisionISFX 60 0
+	endif
+
+	; Overlay (Alpha)
+	SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Alpha_0" (AuxVarGetFlt "*MNV_NV" 11 rArmor)
+	SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Alpha_1" (AuxVarGetFlt "*MNV_TV" 11 rArmor)
+
+	; Overlay (Scale)
+	SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Scale_0" (AuxVarGetFlt "*MNV_NV" 12 rArmor)
+	SetUIFloatAlt "HudMainMenu\ModernNightVision\Overlay\_Scale_1" (AuxVarGetFlt "*MNV_TV" 12 rArmor)
+
+	; Overlay (Texture)
+	sTexture = AuxVarGetStr "*MNV_NV" 13 rArmor
+	SetUIStringAlt "HUDMainMenu\ModernNightVision\Overlay\_filename_0" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + ".dds")
+	SetUIStringAlt "HUDMainMenu\ModernNightVision\Eyebox\_filename_0" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + "_eyebox.dds")
+	sTexture = AuxVarGetStr "*MNV_TV" 13 rArmor
+	SetUIStringAlt "HUDMainMenu\ModernNightVision\Overlay\_filename_1" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + ".dds")
+	SetUIStringAlt "HUDMainMenu\ModernNightVision\Eyebox\_filename_1" ("Interface\Stentorious\ModernNightVision\Overlay\" + (sTexture) + "_eyebox.dds")
+
+	; Force trait assignment update
+	ModUIFloat "HUDMainMenu\ModernNightVision\_Mode" 1
+	ModUIFloat "HUDMainMenu\ModernNightVision\_Mode" -1
+
+	sv_Destruct sTexture
+
+end
