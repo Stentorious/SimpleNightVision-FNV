@@ -323,16 +323,16 @@ if eval IsModLoaded "Cyberware.esm" && GetINIFloat_Cached "ModSupport:bOverrideC
 endif
 
 Goo1.AuxVarSetFlt "*SNV_INI" (Clamp (GetINIFloat_Cached "General:fPipBoyStrength" (sINIPath) 50) 0 100) 2
-Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:iSwitchMode" (sINIPath)) 4			; Vision mode control
-Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:b1stPersonAnimations" (sINIPath)) 5	; Animation support
+Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:iSwitchMode" (sINIPath) 0) 4			; Vision mode control
+Goo1.AuxVarSetFlt "*SNV_INI" (eval GetINIFloat_Cached "General:b1stPersonAnimations" (sINIPath) 1) 5	; Animation support
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\_EnergyRequired" (eval GetINIFloat_Cached "General:bRequireEnergy" (sINIPath) 1)		; Energy usage
 
 ; Energy display UI
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ItemName" (GetINIFloat_Cached "EnergyDisplay:bShowItemName" (sINIPath) 1)
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconScale" (GetINIFloat_Cached "EnergyDisplay:fScale" (sINIPath))
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_OffsetX" (GetINIFloat_Cached "EnergyDisplay:fOffsetX" (sINIPath))
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_OffsetY" (GetINIFloat_Cached "EnergyDisplay:fOffsetY" (sINIPath))
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconStyle" (eval GetINIFloat_Cached "EnergyDisplay:iIconStyle" (sINIPath))
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconScale" (GetINIFloat_Cached "EnergyDisplay:fScale" (sINIPath) 1)
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_OffsetX" (GetINIFloat_Cached "EnergyDisplay:fOffsetX" (sINIPath) 0)
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_OffsetY" (GetINIFloat_Cached "EnergyDisplay:fOffsetY" (sINIPath) 0)
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_IconStyle" (eval GetINIFloat_Cached "EnergyDisplay:iIconStyle" (sINIPath) 1)
 SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\_ChargeStyle" (Clamp (GetINIFloat_Cached "EnergyDisplay:iChargeStyle" (sINIPath) 1) 0 2)
 if eval IsModLoaded "DarNifiedUINV.esp"
 	SetUIFloatAlt "HUDMainMenu\ModernNightVision\EnergyDisplay\ChargeText\font" 6
@@ -340,7 +340,7 @@ if eval IsModLoaded "DarNifiedUINV.esp"
 endif
 
 ; Overlay inertia
-SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Inertia" (Clamp (GetINIFloat_Cached "General:fOverlayInertia" (sINIPath)) 0 2)
+SetUIFloatAlt "HUDMainMenu\ModernNightVision\_Inertia" (Clamp (GetINIFloat_Cached "General:fOverlayInertia" (sINIPath) 1) 0 2)
 
 ; Energy consumption
 array_var aOverrideINIs = GetINISection "EnergyConsumption" (sINIPath)
