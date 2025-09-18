@@ -270,7 +270,7 @@
 					"type": 2.5,
 					"mouse": "$OverlayScaleMouse",
 					"suffix": "x",
-					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 12, "configINI": "NightVision:fOverlayScale", "default": 1.1 }],
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_NV", "key": 12, "configINI": "NightVision:fOverlayScale", "default": 1.25 }],
 					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
 				},
 
@@ -373,7 +373,7 @@
 					"type": 2.5,
 					"mouse": "$OverlayScaleMouse",
 					"suffix": "x",
-					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 12, "configINI": "ThermalVision:fOverlayScale", "default": 1.1 }],
+					"vars": [{ "form": "Caps001", "auxVar": "*MNV_TV", "key": 12, "configINI": "ThermalVision:fOverlayScale", "default": 1.25 }],
 					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
 				}
 			}
@@ -484,7 +484,7 @@
 					"type": 2.5,
 					"mouse": "$OverlayScaleMouse",
 					"suffix": "x",
-					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 12, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fOverlayScale", "default": 1.1 }],
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_NV", "key": 12, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "NightVision:fOverlayScale", "default": 1.25 }],
 					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
 				},
 
@@ -587,7 +587,7 @@
 					"type": 2.5,
 					"mouse": "$OverlayScaleMouse",
 					"suffix": "x",
-					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 12, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fOverlayScale", "default": 1.1 }],
+					"vars": [{ "form": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 4}, "auxVar": "*MNV_TV", "key": 12, "iniPath": {"form": "Goo1", "auxVar": "*MNV_Menu", "key": 3}, "configINI": "ThermalVision:fOverlayScale", "default": 1.25 }],
 					"scale": { "valueDecimal": 2, "valueIncrement": 0.01, "valueMin": 1, "valueMax": 1.5, "suffix": "x" }
 				}
 			}

@@ -194,8 +194,8 @@ AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fOverlayOpacity" 
 AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fOverlayOpacity" (sINIPath) 1) 0 100) 11 Caps001
 
 ; Overlay (Scale)
-AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fOverlayScale" (sINIPath) 1.1) 1 1.5) 12 Caps001
-AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fOverlayScale" (sINIPath) 1.1) 1 1.5) 12 Caps001
+AuxVarSetFlt "*MNV_NV" (Clamp (GetINIFloat_Cached "NightVision:fOverlayScale" (sINIPath) 1.25) 1 1.5) 12 Caps001
+AuxVarSetFlt "*MNV_TV" (Clamp (GetINIFloat_Cached "ThermalVision:fOverlayScale" (sINIPath) 1.25) 1 1.5) 12 Caps001
 
 ; Overlay (Texture)
 AuxVarSetStr "*MNV_NV" "night_vision" 13 Caps001
