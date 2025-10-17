@@ -39,10 +39,11 @@
 				"7": {
 					"title": "$SwitchMode",
 					"enable": 1,
-					"type": 1,
+					"type": 6,
 					"mouse": "$SwitchModeMouse",
 					"vars": [ { "form": "Goo1", "auxVar": "*SNV_INI", "key": 4, "configINI": "General:iSwitchMode", "default": 0 } ],
-					"strings": [ "$Toggle", "$Wrap"]
+					"textOff": "$Toggle",
+					"textOn": "$Wrap"
 				},
 				"9": {
 					"title": "$RequireEnergy",
@@ -111,10 +112,11 @@
 				"4": {
 					"title": "$StyleIcon",
 					"enable": 1,
-					"type": 1,
+					"type": 6,
 					"mouse": "$StyleIconMouse",
 					"vars": [ { "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_IconStyle", "configINI": "EnergyDisplay:iIconStyle", "default": 1 } ],
-					"strings": [ "$Static", "$Dynamic" ]
+					"textOff": "$Static",
+					"textOn": "$Dynamic"
 				},
 				"6": {
 					"title": "$StyleText",
