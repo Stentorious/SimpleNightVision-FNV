@@ -149,7 +149,7 @@
 					"mouse": "$PositionOffsetMouse",
 					"vars": [
 						{ "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_OffsetX", "configINI": "EnergyDisplay:fOffsetX", "default": 0 },
-						{ "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_OffsetY", "configINI": "EnergyDisplay:fOffsetX", "default": 0 }
+						{ "uiTrait": "HUDMainMenu/ModernNightVision/EnergyDisplay/_OffsetY", "configINI": "EnergyDisplay:fOffsetY", "default": 0 }
 					],
 					"scale": {
 						"setting1": "X:",
